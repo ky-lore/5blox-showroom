@@ -91,12 +91,22 @@
     .panel-close:hover { color: var(--bone); }
     .panel-region { color: var(--faint); }
     .panel h2 { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 6vw, 58px); line-height: 1; letter-spacing: -0.01em; margin: 12px 0 6px; }
-    .panel-count { color: var(--ash); font-size: 13px; margin-bottom: 28px; }
-    .mat { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line-2); }
-    .mat:last-of-type { border-bottom: 1px solid var(--line-2); }
-    .mat-swatch { width: 60px; height: 60px; object-fit: cover; flex-shrink: 0; background: var(--raise); }
-    .mat-name { font-family: var(--display); font-size: 20px; font-weight: 400; }
-    .mat-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+    /* Cartographic ORIGIN plate — coordinate/contour motif in place of slab photos.
+       Framed slot: a real region photo can drop into .origin-plate later. */
+    .origin-plate { position: relative; height: 156px; margin: 6px 0 22px; border: 1px solid var(--line-2); background: var(--void); overflow: hidden; display: flex; align-items: flex-end; }
+    .origin-topo { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.5; }
+    .origin-topo path { fill: none; stroke: var(--line); stroke-width: 0.6; }
+    .origin-topo .lead-ring { stroke: var(--faint); stroke-width: 0.8; }
+    .origin-mark { position: absolute; top: 12px; left: 14px; z-index: 2; font-family: var(--mono); font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--faint); }
+    .origin-coord { position: relative; z-index: 2; padding: 12px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--ash); }
+    .panel-lead { color: var(--ash); font-size: 13.5px; font-weight: 300; line-height: 1.72; margin-bottom: 10px; max-width: 42ch; }
+    .prov-group { margin-top: 18px; }
+    .prov-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 4px; }
+    .prov-head .prov-name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--bone); }
+    .prov-head .prov-coord { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--faint); white-space: nowrap; }
+    .mat { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 13px 0; border-top: 1px solid var(--line-2); }
+    .mat-name { font-family: var(--display); font-size: 18px; font-weight: 400; color: var(--bone); }
+    .mat-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
     .panel-cta { margin-top: auto; padding-top: 34px; }
     .panel-cta a { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 15px 26px; transition: gap 0.4s; }
     .panel-cta a:hover { gap: 20px; }
@@ -125,7 +135,7 @@
     .intro h1 { text-transform: uppercase; font-weight: 300; letter-spacing: -0.005em; line-height: 0.94; }
     .intro h1 em, .panel-region { font-style: normal; color: var(--ash); }
     .panel h2 { text-transform: uppercase; font-weight: 300; letter-spacing: 0; }
-    .mat-name { font-weight: 500; }
+    .prov-head .prov-name { font-weight: 400; }
 
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
     .reveal.in { opacity: 1; transform: none; }
@@ -174,7 +184,8 @@
     <button class="panel-close" id="panelClose">Close ✕</button>
     <div class="panel-region label" id="panelRegion"></div>
     <h2 id="panelName"></h2>
-    <div class="panel-count" id="panelCount"></div>
+    <div class="origin-plate" id="originPlate"></div>
+    <div class="panel-lead" id="panelLead"></div>
     <div id="panelMats"></div>
     <div class="panel-cta"><a href="index.html#invite">Reserve a viewing
       <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
@@ -216,29 +227,59 @@
     // Projection band must match the dotted PNG: lon [-180,180], lat [74,-56].
     var LAT_TOP = 74, LAT_BOT = -56;
     var ORIGIN = { name: 'Los Angeles', lat: 34.0, lon: -118.2 };
-    var SWATCH = 'assets/img/material/swatch/';
+    // Origins shown by REGION, not slab photos (client won't show exact slabs).
+    // prov = quarry province (blank => "Provenance on request"). * = confirm with Cal.
     var ORIGINS = [
-      { c: 'Italy', region: 'Europe', lat: 43.0, lon: 12.5, mats: [
-        { n: 'Calacatta Antico', t: 'Marble', s: 'marble' },
-        { n: 'Paonazzo Nero Extra', t: 'Marble', s: 'marble' },
-        { n: 'Arabescato', t: 'Marble', s: 'marble' },
-        { n: 'Calacatta Viola Antico', t: 'Marble', s: 'marble' },
-        { n: 'Cristallo Juliet', t: 'Quartzite', s: 'onyx' },
-        { n: 'Cristallo Tiffany', t: 'Quartzite', s: 'onyx' },
-        { n: 'Luminescence', t: 'Quartzite', s: 'onyx' } ] },
-      { c: 'Brazil', region: 'South America', lat: -10.0, lon: -52.0, mats: [
-        { n: 'Taj Mahal', t: 'Quartzite', s: 'onyx' },
-        { n: 'Patagonia Sky', t: 'Granite', s: 'marble' },
-        { n: 'Ocean Green', t: 'Quartzite', s: 'onyx' },
-        { n: 'Acqua Mare', t: 'Quartzite', s: 'onyx' },
-        { n: 'Arturo Crystal', t: 'Quartzite', s: 'onyx' },
-        { n: 'Volcano', t: 'Granite', s: 'marble' } ] },
-      { c: 'Turkey', region: 'Anatolia', lat: 39.0, lon: 35.0, mats: [
-        { n: 'Onyx Ivory', t: 'Onyx', s: 'onyx' } ] },
-      { c: 'Spain', region: 'Iberia', lat: 40.2, lon: -3.7, mats: [
-        { n: 'Trance', t: 'Sintered Stone', s: 'tile' },
-        { n: 'Bergen', t: 'Porcelain', s: 'tile' } ] }
+      { c: 'Italy', region: 'Europe', lat: 43.0, lon: 12.5,
+        lead: 'Quarried in the Apuan Alps of Carrara — Tuscan beds worked since Roman times.', mats: [
+        { n: 'Calacatta Antico', t: 'Marble', prov: 'Carrara' },
+        { n: 'Paonazzo Nero Extra', t: 'Marble', prov: 'Carrara' },
+        { n: 'Calacatta Viola Antico', t: 'Marble', prov: 'Carrara' },
+        { n: 'Arabescato', t: 'Marble', prov: 'Carrara' },
+        { n: 'Cristallo Juliet', t: 'Quartzite', prov: '' },
+        { n: 'Cristallo Tiffany', t: 'Quartzite', prov: '' },
+        { n: 'Luminescence', t: 'Quartzite', prov: '' } ] },
+      { c: 'Brazil', region: 'South America', lat: -10.0, lon: -52.0,
+        lead: 'Cut from the quartzite and granite belts of Bahia and Espírito Santo.', mats: [
+        { n: 'Taj Mahal', t: 'Quartzite', prov: 'Bahia' },
+        { n: 'Ocean Green', t: 'Quartzite', prov: 'Bahia' },
+        { n: 'Acqua Mare', t: 'Quartzite', prov: 'Bahia' },
+        { n: 'Patagonia Sky', t: 'Granite', prov: 'Espírito Santo' },
+        { n: 'Arturo Crystal', t: 'Quartzite', prov: 'Espírito Santo' },
+        { n: 'Volcano', t: 'Granite', prov: 'Espírito Santo' } ] },
+      { c: 'Turkey', region: 'Anatolia', lat: 39.0, lon: 35.0,
+        lead: 'Banded onyx from the Anatolian highlands.', mats: [
+        { n: 'Onyx Ivory', t: 'Onyx', prov: 'Afyon' } ] },
+      { c: 'Spain', region: 'Iberia', lat: 40.2, lon: -3.7,
+        lead: 'Engineered surfaces — pressed and fired in Castellón, Spain\'s ceramic heartland.', mats: [
+        { n: 'Trance', t: 'Sintered Stone', prov: 'Castellón' },
+        { n: 'Bergen', t: 'Porcelain', prov: 'Castellón' } ] }
     ];
+    var PROVCOORD = {
+      'Carrara': '44.08°N 10.10°E',
+      'Bahia': '12.97°S 41.50°W',
+      'Espírito Santo': '20.85°S 41.11°W',
+      'Afyon': '38.76°N 30.54°E',
+      'Castellón': '39.99°N 0.04°W'
+    };
+    function fmtCoord(lat, lon) {
+      return Math.abs(lat).toFixed(2) + '°' + (lat >= 0 ? 'N' : 'S') + '   ' + Math.abs(lon).toFixed(2) + '°' + (lon >= 0 ? 'E' : 'W');
+    }
+    function makeTopo() {
+      var cx = 100, cy = 60, rings = 8, seg = 46, out = '';
+      for (var k = 0; k < rings; k++) {
+        var base = 8 + k * 10, d = '';
+        for (var i = 0; i <= seg; i++) {
+          var a = i / seg * Math.PI * 2;
+          var rr = base + Math.sin(a * 3 + k * 0.9) * 3.2 + Math.cos(a * 2 - k * 0.6) * 2.2;
+          var x = cx + Math.cos(a) * rr * 1.7, y = cy + Math.sin(a) * rr;
+          d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
+        }
+        out += '<path class="' + (k === 2 ? 'lead-ring' : '') + '" d="' + d + 'Z"/>';
+      }
+      return '<svg class="origin-topo" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + out + '</svg>';
+    }
+    var TOPO_SVG = makeTopo();
 
     function projX(lon) { return (lon + 180) / 360; }               // 0..1
     function projY(lat) { return (LAT_TOP - lat) / (LAT_TOP - LAT_BOT); } // 0..1
@@ -282,17 +323,29 @@
     // ── PANEL ──
     var panel = document.getElementById('panel'), scrim = document.getElementById('scrim');
     var pName = document.getElementById('panelName'), pRegion = document.getElementById('panelRegion'),
-      pCount = document.getElementById('panelCount'), pMats = document.getElementById('panelMats');
+      pPlate = document.getElementById('originPlate'), pLead = document.getElementById('panelLead'),
+      pMats = document.getElementById('panelMats');
     var activePin = null;
 
     function openPanel(i, pin) {
       var o = ORIGINS[i];
       pRegion.textContent = o.region;
       pName.textContent = o.c;
-      pCount.textContent = o.mats.length + (o.mats.length === 1 ? ' material carried' : ' materials carried');
-      pMats.innerHTML = o.mats.map(function (m) {
-        return '<div class="mat"><img class="mat-swatch" src="' + SWATCH + m.s + '.jpg" alt="' + m.n + '">' +
-          '<div><div class="mat-name">' + m.n + '</div><div class="mat-type">' + m.t + '</div></div></div>';
+      pPlate.innerHTML = TOPO_SVG + '<span class="origin-mark">Origin</span><div class="origin-coord">' + fmtCoord(o.lat, o.lon) + '</div>';
+      pLead.textContent = o.lead || '';
+      var groups = [], idx = {};
+      o.mats.forEach(function (m) {
+        var key = m.prov || '__req';
+        if (!(key in idx)) { idx[key] = groups.length; groups.push({ prov: m.prov, items: [] }); }
+        groups[idx[key]].items.push(m);
+      });
+      pMats.innerHTML = groups.map(function (g) {
+        var label = g.prov || 'Provenance on request';
+        var coord = (g.prov && PROVCOORD[g.prov]) ? '<span class="prov-coord">' + PROVCOORD[g.prov] + '</span>' : '';
+        var rows = g.items.map(function (m) {
+          return '<div class="mat"><div class="mat-name">' + m.n + '</div><div class="mat-type">' + m.t + '</div></div>';
+        }).join('');
+        return '<div class="prov-group"><div class="prov-head"><span class="prov-name">' + label + '</span>' + coord + '</div>' + rows + '</div>';
       }).join('');
       panel.classList.add('open'); scrim.classList.add('open');
       panel.setAttribute('aria-hidden', 'false');
