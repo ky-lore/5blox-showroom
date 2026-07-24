@@ -1,0 +1,20 @@
+# Node
+node_modules/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Full-resolution originals — keep locally, ship only web-optimized exports
+assets/img/**/originals/
+
+# assets/img/material/ holds the optimized real showroom photography (crops +
+# swatches). The full-res raws live under assets/img/showroom/ (gitignored).
+
+# Raw showroom photos (client drop) — keep locally, ship only the optimized crops in material/
+assets/img/showroom/
+# Raw 4K DJI clips (hundreds of MB) — keep locally, ship only the re-encoded web mp4s
+assets/video/web/DJI_*.MP4

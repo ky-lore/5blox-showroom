@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5blox Showroom — By Appointment</title>
+  <meta name="description"
+    content="A private showroom of stone, cabinetry, and tile, sourced from around the world. Los Angeles. By appointment only.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Suisse Intl — pulled from the premium project; a main font alongside Bodoni. */
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      /* Warm near-black void + bone. Deliberately zero UI color — the material
+         photography is the ONLY color on the page. */
+      --void: #0A0908;
+      --coal: #121010;
+      --raise: #191614;
+      --bone: #E7E3DB;
+      --ash: #928B82;
+      --faint: rgba(231, 227, 219, 0.46);
+      --line: rgba(231, 227, 219, 0.14);
+      --line-2: rgba(231, 227, 219, 0.07);
+      /* Reusable coarse film grain — overlaid on images so grit reads on light OR dark. */
+      --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+
+      /* Trying an all-Suisse system: grotesk display (uppercase, light, tight) in
+         place of Bodoni. One family, styled three ways. */
+      --display: 'Suisse Intl', 'Inter', system-ui, sans-serif;
+      --mono: 'Suisse Intl', 'Inter', system-ui, sans-serif;
+      --sans: 'Suisse Intl', 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--bone);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: var(--bone); color: var(--void); }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* Grain over the whole void so the black reads as a surface, not a value. */
+    /* Film grain over the ENTIRE page (fixed, above content) — the gritty
+       Chrome-Hearts texture. Screen = light specks on the dark field. */
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: 200; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 300px; opacity: 0.1; mix-blend-mode: screen;
+    }
+
+    /* ── shared label / eyebrow ── */
+    .label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    .rule { display: inline-block; width: 34px; height: 1px; background: var(--line); vertical-align: middle; margin-right: 14px; }
+
+    /* ═══════════ NAV ═══════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 26px clamp(20px, 4vw, 56px);
+      mix-blend-mode: difference;   /* stays legible over black type or color photo */
+    }
+    .nav-brand {
+      font-family: var(--display); font-size: 21px; font-weight: 500; letter-spacing: 0.02em; color: #fff;
+    }
+    .nav-brand span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.32em; vertical-align: super; margin-left: 8px; opacity: 0.7; }
+    .nav-links { display: flex; gap: clamp(20px, 3vw, 44px); align-items: center; }
+    .nav-links a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #fff; opacity: 0.82; transition: opacity 0.3s; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-appt { border: 1px solid rgba(255,255,255,0.45); padding: 8px 16px; border-radius: 0; }
+    .nav-burger { display: none; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; color: #fff; text-transform: uppercase; background: none; border: none; cursor: pointer; }
+
+    @media (max-width: 820px) {
+      .nav-links a:not(.nav-appt) { display: none; }
+    }
+
+    /* ═══════════ HERO ═══════════ */
+    .hero {
+      position: relative; min-height: 100svh; overflow: hidden;
+      display: flex; align-items: stretch; background: var(--void);
+    }
+
+    /* Full-bleed video plate — the footage IS the hero; type sits over it in the dark. */
+    /* Poster painted underneath so imagery shows instantly; the video fades in over it. */
+    .hero-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: var(--coal) url('assets/video/poster/hero.jpg') center/cover no-repeat; }
+    .hero-bg video, .hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* Slow settle-in so the loop never hard-cuts onto the page. */
+    .hero-bg video { opacity: 0; transition: opacity 1.4s ease; }
+    .hero-bg.playing video { opacity: 1; }
+    /* Directional scrim: heavy void on the left (where the type lives), a clean
+       reveal of the footage toward the right; plus top (nav) + bottom darkening. */
+    .hero-bg::after {
+      content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        linear-gradient(97deg, var(--void) 6%, rgba(10,9,8,0.86) 30%, rgba(10,9,8,0.46) 58%, rgba(10,9,8,0.12) 100%),
+        linear-gradient(180deg, rgba(10,9,8,0.72) 0%, transparent 22%, transparent 68%, rgba(10,9,8,0.92) 100%);
+    }
+    /* Chrome-Hearts grit over the moving image. */
+    .hero-bg::before {
+      content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background-image: var(--grain); background-size: 240px; opacity: 0.22; mix-blend-mode: overlay;
+    }
+    @media (max-width: 900px) {
+      /* Narrow screens can't lean on a left-to-right scrim — darken the whole field. */
+      .hero-bg::after {
+        background: linear-gradient(180deg, rgba(10,9,8,0.86) 0%, rgba(10,9,8,0.5) 38%, rgba(10,9,8,0.62) 66%, rgba(10,9,8,0.92) 100%);
+      }
+    }
+
+    .hero-type {
+      position: relative; z-index: 3;
+      padding: clamp(120px, 18vh, 220px) clamp(20px, 4vw, 56px) clamp(96px, 15vh, 156px);
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: min(760px, 94%);
+    }
+    .hero-eyebrow { margin-bottom: clamp(28px, 5vh, 52px); }
+    .hero h1 {
+      font-family: var(--display); font-weight: 400;
+      font-size: clamp(46px, 8.2vw, 128px); line-height: 0.98;
+      letter-spacing: -0.015em; color: var(--bone);
+    }
+    .hero h1 em { font-style: italic; font-weight: 400; color: #fff; }
+    .hero-sub {
+      max-width: 40ch; margin-top: clamp(26px, 4vh, 42px);
+      font-size: clamp(14px, 1.15vw, 16px); font-weight: 300; color: var(--ash); line-height: 1.75;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 12px; margin-top: clamp(32px, 5vh, 52px);
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone);
+      align-self: flex-start; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+      transition: border-color 0.4s, gap 0.4s;
+    }
+    .hero-cta:hover { border-color: var(--bone); gap: 20px; }
+
+
+    /* Hero footer meta strip */
+    .hero-meta {
+      position: absolute; left: 0; right: 0; bottom: 0; z-index: 5;
+      display: flex; justify-content: space-between; gap: 16px;
+      padding: 0 clamp(20px, 4vw, 56px) 24px; pointer-events: none;
+    }
+    .hero-meta span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); }
+    @media (max-width: 620px) { .hero-meta .hide-sm { display: none; } }
+    /* On stacked mobile the meta strip collides with the image caption — drop it. */
+    @media (max-width: 900px) { .hero-meta { display: none; } }
+
+    /* ═══════════ SECTION SHELL ═══════════ */
+    section { position: relative; z-index: 2; }
+    .more { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); padding-bottom: 6px; border-bottom: 1px solid var(--line); transition: gap 0.4s, border-color 0.4s; }
+    .more:hover { gap: 20px; border-color: var(--bone); }
+
+    em { font-style: normal; }   /* Suisse has no italic — accents are tonal, not slanted */
+
+    /* ── MANIFESTO — a quiet credo in vast negative space ── */
+    .manifesto { min-height: 84vh; display: grid; place-content: center; text-align: center; border-top: 1px solid var(--line-2); padding: clamp(90px, 18vh, 200px) clamp(20px, 4vw, 56px); }
+    .manifesto .m-mark { margin-bottom: clamp(26px, 5vh, 52px); }
+    .manifesto .line { font-family: var(--display); font-weight: 300; font-size: clamp(23px, 3.2vw, 44px); line-height: 1.32; letter-spacing: -0.01em; color: var(--bone); }
+    .manifesto .l2 { color: var(--ash); }
+
+    /* ── SCENES — one material image floating in black, a small caption ── */
+    .scene { min-height: 100vh; display: grid; align-content: center; border-top: 1px solid var(--line-2); padding: clamp(96px, 16vh, 200px) clamp(20px, 5vw, 80px); }
+    .scene-media { position: relative; overflow: hidden; background: var(--coal); }
+    .scene-media img { position: absolute; left: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; display: block; will-change: transform; }
+    .scene-cap .label { display: block; margin-bottom: 20px; }
+    .scene-title { font-family: var(--display); font-weight: 300; font-size: clamp(26px, 3.1vw, 44px); line-height: 1.12; letter-spacing: -0.01em; color: var(--bone); }
+    .scene-title em { color: var(--ash); }
+    .scene-cap p { color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.85; max-width: 30ch; margin: 22px 0 0; }
+    .scene-cap .more { margin-top: 28px; }
+
+    @media (min-width: 900px) {
+      .scene { grid-template-columns: repeat(12, 1fr); align-items: center; column-gap: clamp(24px, 5vw, 72px); }
+      .scene-1 .scene-media { grid-column: 7 / 12; height: 58vh; }
+      .scene-1 .scene-cap   { grid-column: 2 / 5; }
+      .scene-2 .scene-media { grid-column: 3 / 6; height: 76vh; }
+      .scene-2 .scene-cap   { grid-column: 8 / 11; }
+      .scene-3 .scene-media { grid-column: 7 / 12; height: 56vh; }
+      .scene-3 .scene-cap   { grid-column: 2 / 5; }
+    }
+    @media (max-width: 899px) {
+      .scene { min-height: auto; }
+      .scene-media { aspect-ratio: 4 / 5; margin-bottom: 30px; }
+    }
+
+    /* ── SOURCING — minimal ── */
+    .sourcing { min-height: 82vh; display: grid; align-content: center; border-top: 1px solid var(--line-2); padding: clamp(96px, 16vh, 190px) clamp(20px, 5vw, 80px); }
+    .sourcing .big { font-family: var(--display); font-weight: 300; font-size: clamp(26px, 3.6vw, 54px); line-height: 1.2; letter-spacing: -0.01em; max-width: 20ch; }
+    .sourcing .big em { color: var(--ash); }
+    .countries { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: clamp(34px, 6vh, 56px) 0 0; max-width: 640px; }
+    .countries span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); transition: color 0.3s; }
+    .countries span.on { color: var(--bone); }
+    .sourcing .more { margin-top: clamp(38px, 6vh, 56px); }
+
+    /* ── INVITATION — minimal, centered, vast space ── */
+    .invite { min-height: 92vh; display: grid; place-content: center; text-align: center; border-top: 1px solid var(--line-2); padding: clamp(110px, 22vh, 260px) clamp(20px, 4vw, 56px); }
+    .invite .label { margin-bottom: 30px; }
+    .invite h2 { font-family: var(--display); font-weight: 300; font-size: clamp(32px, 4.6vw, 68px); line-height: 1.12; letter-spacing: -0.015em; }
+    .invite h2 em { color: var(--ash); }
+    .invite p { max-width: 40ch; margin: 26px auto 0; color: var(--ash); font-size: 14px; font-weight: 300; }
+    .invite-cta { display: inline-flex; align-items: center; gap: 12px; margin-top: 42px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 15px 30px; transition: gap 0.4s, background 0.3s; }
+    .invite-cta:hover { gap: 20px; background: #fff; }
+
+    /* ── EXCLUSIVITY / WAITLIST ── */
+    /* A static status mark: a bone dot inside a thin concentric ring — cold, permanent, not "live". */
+    .live { position: relative; width: 5px; height: 5px; border-radius: 50%; background: var(--bone); flex: none; }
+    .live::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid rgba(231,227,219,0.3); }
+
+    .status-chip { display: inline-flex; align-items: center; gap: 11px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); border: 1px solid var(--line); padding: 8px 15px; }
+    .status-chip .muted { color: var(--faint); }
+
+    /* Slim status strip under the hero */
+    .xstrip { border-bottom: 1px solid var(--line-2); padding: 16px clamp(20px, 4vw, 56px); display: flex; align-items: center; justify-content: center; gap: clamp(12px, 2.6vw, 34px); flex-wrap: wrap; }
+    .xstrip span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); }
+    .xstrip .sep { opacity: 0.4; }
+    .xstrip .live { display: inline-block; vertical-align: middle; margin-right: 8px; }
+
+    /* Invite: exclusive access block */
+    .access-status { display: inline-flex; align-items: center; gap: 11px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); margin-bottom: 28px; }
+    .access-meta { display: flex; justify-content: center; gap: clamp(30px, 6vw, 76px); flex-wrap: wrap; margin: clamp(38px, 6vh, 56px) 0 0; }
+    .am { text-align: center; }
+    .am-n { display: block; font-family: var(--display); font-weight: 300; font-size: clamp(32px, 4vw, 54px); color: var(--bone); line-height: 1; letter-spacing: -0.02em; }
+    .am-l { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); margin-top: 13px; }
+    .access-fine { margin-top: clamp(38px, 6vh, 54px); font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+
+    /* ── FULL-BLEED IMAGE STATEMENTS (Chrome-Hearts-style grainy image sections) ── */
+    .statement { position: relative; height: 100vh; min-height: 520px; overflow: hidden; border-top: 1px solid var(--line-2); }
+    .statement > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    /* Heavy grit grain over the image — overlay works on light OR dark frames. */
+    .statement::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-image: var(--grain); background-size: 220px; opacity: 0.3; mix-blend-mode: overlay; }
+    .statement::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(180deg, rgba(10,9,8,0.36) 0%, transparent 24%, transparent 58%, rgba(10,9,8,0.8) 100%); }
+    .st-cap { position: absolute; left: clamp(20px, 4vw, 56px); bottom: clamp(26px, 5vh, 54px); z-index: 2; }
+    .st-cap .label { color: rgba(231,227,219,0.72); }
+    .st-title { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.005em; font-size: clamp(22px, 2.8vw, 40px); line-height: 1.06; color: #fff; margin-top: 13px; }
+
+    /* ── DETAIL BAND (tight row of material stills) ── */
+    .detail-band { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2px; border-block: 1px solid var(--line-2); }
+    .detail-band figure { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: var(--coal); }
+    .detail-band img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
+    .detail-band figure:hover img { transform: scale(1.05); }
+    .detail-band figcaption { position: absolute; left: 12px; bottom: 12px; z-index: 3; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.88); }
+    @media (max-width: 720px) { .detail-band { grid-auto-flow: row; grid-template-columns: 1fr 1fr; } }
+
+    /* Grit grain over the material photos so the texture reads on the imagery too. */
+    .scene-media::after, .detail-band figure::after {
+      content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background-image: var(--grain); background-size: 220px; opacity: 0.24; mix-blend-mode: overlay;
+    }
+
+    /* ── MOTION (split flythrough video + copy) ── */
+    .motion { display: grid; grid-template-columns: 1fr; min-height: 100vh; border-top: 1px solid var(--line-2); }
+    @media (min-width: 900px) { .motion { grid-template-columns: 1.05fr 1fr; } }
+    .motion-video { position: relative; overflow: hidden; background: var(--coal); min-height: 58vh; }
+    @media (min-width: 900px) { .motion-video { min-height: auto; } }
+    .motion-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .motion-video::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.22; mix-blend-mode: overlay; }
+    .motion-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(60px,12vh,140px) clamp(24px,5vw,90px); }
+    .motion-copy .label { margin-bottom: 22px; }
+    .motion-copy h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(30px,4.2vw,64px); line-height: 1.04; letter-spacing: -0.015em; }
+    .motion-copy h2 em { color: var(--ash); }
+    .motion-copy p { max-width: 34ch; margin-top: 22px; color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.85; }
+
+    /* ── B-ROLL REEL (horizontal moving-video bar) ── */
+    .reel { position: relative; overflow: hidden; border-block: 1px solid var(--line-2); }
+    .reel-track { display: flex; gap: 2px; width: max-content; animation: reel 68s linear infinite; }
+    .reel:hover .reel-track { animation-play-state: paused; }
+    .reel-item { position: relative; flex: none; width: clamp(280px, 34vw, 520px); aspect-ratio: 16 / 9; overflow: hidden; background: var(--coal); }
+    .reel-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .reel-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.2; mix-blend-mode: overlay; }
+    .reel-cap { position: absolute; left: 14px; bottom: 12px; z-index: 3; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.85); }
+    @keyframes reel { to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .reel-track { animation: none; } }
+
+    /* ═══════════ FOOTER ═══════════ */
+    footer { border-top: 1px solid var(--line-2); padding: clamp(48px, 8vh, 90px) clamp(20px, 4vw, 56px) 40px; }
+    .foot-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+    @media (min-width: 760px) { .foot-grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+    .foot-brand { font-family: var(--display); font-size: 30px; font-weight: 500; }
+    .foot-brand span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em; vertical-align: super; opacity: 0.6; margin-left: 8px; }
+    .foot-blurb { margin-top: 16px; max-width: 34ch; color: var(--ash); font-size: 13px; }
+    .foot-col h4 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); margin-bottom: 16px; }
+    .foot-col a, .foot-col li { display: block; list-style: none; font-size: 13px; color: var(--ash); margin-bottom: 9px; transition: color 0.3s; }
+    .foot-col a:hover { color: var(--bone); }
+    .foot-legal { margin-top: clamp(48px, 8vh, 88px); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .foot-legal span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+
+    /* ═══════════ REVEAL ═══════════ */
+    /* ── SUISSE DISPLAY TREATMENT ── */
+    /* The hero keeps a bold uppercase statement; the rest of the page is deliberately
+       minimal (small type, lots of negative space) so it stays quiet and exclusive. */
+    .nav-brand, .foot-brand { font-weight: 700; letter-spacing: -0.01em; }
+    .hero h1 { text-transform: uppercase; font-weight: 300; letter-spacing: -0.005em; line-height: 0.92; }
+    .hero h1 em { color: var(--ash); }
+
+    /* ── INLINE SOURCING MAP ── */
+    .maparea { border-top: 1px solid var(--line-2); padding: clamp(80px, 14vh, 170px) clamp(20px, 5vw, 80px) clamp(80px, 12vh, 150px); }
+    .map-inner { max-width: 1560px; margin: 0 auto; }
+    .map-head { text-align: center; margin-bottom: clamp(44px, 7vh, 80px); }
+    .map-head .label { display: inline-flex; }
+    .map-lead { font-family: var(--display); font-weight: 300; font-size: clamp(22px, 2.8vw, 38px); line-height: 1.25; letter-spacing: -0.01em; color: var(--bone); max-width: 24ch; margin: 22px auto 0; }
+    .mapstage { position: relative; width: 100%; aspect-ratio: 2400 / 867; background: url("assets/img/map/world-dots.png") center / 100% 100% no-repeat; }
+    .arc-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+    .arc { fill: none; stroke: var(--bone); stroke-width: 0.6; opacity: 0.14; stroke-dasharray: 2 3; }
+    .pin { position: absolute; transform: translate(-50%, -50%); z-index: 3; width: 26px; height: 26px; cursor: pointer; display: grid; place-items: center; background: none; border: none; padding: 0; -webkit-appearance: none; appearance: none; }
+    .pin-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bone); position: relative; transition: transform 0.3s; }
+    .pin-dot::after { content: ""; position: absolute; inset: -6px; border: 1px solid var(--line); border-radius: 50%; opacity: 0; transition: opacity 0.3s, inset 0.3s; }
+    .pin:hover .pin-dot, .pin.active .pin-dot { transform: scale(1.15); }
+    .pin:hover .pin-dot::after, .pin.active .pin-dot::after { opacity: 1; inset: -9px; }
+    .pin-label { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone); opacity: 0; transition: opacity 0.25s; pointer-events: none; background: rgba(10,9,8,0.7); padding: 3px 8px; }
+    .pin:hover .pin-label, .pin.active .pin-label { opacity: 1; }
+    .pin.origin { z-index: 4; }
+    .pin.origin .pin-dot { width: 7px; height: 7px; background: #fff; }
+    .pin.origin .pin-dot::before { content: ""; position: absolute; inset: -7px; border-radius: 50%; border: 1px solid rgba(231,227,219,0.5); animation: ping 3.4s ease-out infinite; }
+    @keyframes ping { 0% { transform: scale(0.5); opacity: 0.9; } 100% { transform: scale(2.4); opacity: 0; } }
+    .pin.origin .pin-label { opacity: 1; background: none; bottom: 20px; color: var(--faint); }
+    .map-legend { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .map-legend span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+
+    /* material drawer panel */
+    .scrim { position: fixed; inset: 0; z-index: 70; background: rgba(6,5,4,0.5); opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
+    .scrim.open { opacity: 1; visibility: visible; }
+    .panel { position: fixed; top: 0; right: 0; bottom: 0; z-index: 80; width: min(440px, 92vw); background: var(--coal); border-left: 1px solid var(--line); transform: translateX(100%); transition: transform 0.5s cubic-bezier(.2,.7,.2,1); display: flex; flex-direction: column; padding: clamp(28px, 5vh, 52px) clamp(24px, 4vw, 40px); overflow-y: auto; }
+    .panel.open { transform: none; }
+    .panel-close { align-self: flex-end; background: none; border: none; color: var(--ash); font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; margin-bottom: 30px; }
+    .panel-close:hover { color: var(--bone); }
+    .panel-region { color: var(--faint); }
+    .panel h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(34px, 5.4vw, 54px); line-height: 1; letter-spacing: 0; margin: 12px 0 6px; }
+    .panel-count { color: var(--ash); font-size: 13px; margin-bottom: 28px; }
+    .mat { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line-2); }
+    .mat:last-of-type { border-bottom: 1px solid var(--line-2); }
+    .mat-swatch { width: 60px; height: 60px; object-fit: cover; flex-shrink: 0; background: var(--raise); }
+    .mat-name { font-family: var(--display); font-size: 20px; font-weight: 500; }
+    .mat-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+    .panel-cta { margin-top: auto; padding-top: 34px; }
+    .panel-cta a { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 15px 26px; transition: gap 0.4s; }
+    .panel-cta a:hover { gap: 20px; }
+    @media (max-width: 620px) {
+      .panel { width: 100%; top: auto; height: 82vh; border-left: none; border-top: 1px solid var(--line); transform: translateY(100%); }
+      .panel.open { transform: none; }
+      .pin-label { font-size: 9px; }
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .plate-media img { transform: none !important; }
+      .live::after, .pin.origin .pin-dot::before { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#" class="nav-brand">5blox<span>SHOWROOM</span></a>
+    <div class="nav-links">
+      <a href="stone.html">Stone</a>
+      <a href="cabinetry.html">Cabinetry</a>
+      <a href="tile.html">Tile</a>
+      <a href="#sourcing">Sourcing</a>
+      <a href="#invite" class="nav-appt">Appointments</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg" id="heroBg">
+      <video muted loop playsinline preload="auto" poster="assets/video/poster/hero.jpg" data-autoplay data-src="assets/video/web/hero-montage.mp4"></video>
+    </div>
+    <div class="hero-type">
+      <div class="hero-eyebrow label"><span class="rule"></span>5blox Showroom · Los Angeles</div>
+      <h1>Material,<br><em>considered.</em></h1>
+      <p class="hero-sub">A private showroom of stone, cabinetry, and tile — sourced from quarries and
+        makers around the world. Shown by appointment.</p>
+      <a href="#invite" class="hero-cta">Request an appointment
+        <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+      </a>
+      <div class="status-chip reveal" style="margin-top: 28px; align-self: flex-start;"><span class="live"></span> By invitation <span class="muted">· introductions by referral</span></div>
+    </div>
+    <div class="hero-meta">
+      <span>Est. MMXXV</span>
+      <span class="hide-sm">By appointment only</span>
+      <span>Scroll ↓</span>
+    </div>
+  </header>
+
+  <!-- STATUS STRIP -->
+  <div class="xstrip">
+    <span><span class="live"></span>By invitation only</span>
+    <span class="sep">/</span>
+    <span>Introductions by referral</span>
+    <span class="sep">/</span>
+    <span>Not open to the public</span>
+  </div>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <span class="label m-mark reveal">Ethos</span>
+    <div class="line l1 reveal">We show a little.</div>
+    <div class="line l2 reveal">The rest, in person.</div>
+  </section>
+
+  <!-- INLINE SOURCING MAP -->
+  <section class="maparea" id="sourcing">
+    <div class="map-inner">
+      <div class="map-head reveal">
+        <div class="label"><span class="rule"></span>Sourcing</div>
+        <div class="map-lead">Drawn from quarries &amp; makers across three continents. Select a point to see what we carry.</div>
+      </div>
+      <div class="mapstage reveal" id="mapstage">
+        <svg class="arc-layer" id="arcs" viewBox="0 0 1000 361" preserveAspectRatio="none" aria-hidden="true"></svg>
+      </div>
+      <div class="map-legend reveal">
+        <span>● Origin — Los Angeles</span>
+        <span>4 sources · 3 continents</span>
+        <span>Current collection · subject to availability</span>
+      </div>
+    </div>
+  </section>
+  <div class="scrim" id="scrim"></div>
+  <aside class="panel" id="panel" aria-hidden="true">
+    <button class="panel-close" id="panelClose">Close ✕</button>
+    <div class="panel-region label" id="panelRegion"></div>
+    <h2 id="panelName"></h2>
+    <div class="panel-count" id="panelCount"></div>
+    <div id="panelMats"></div>
+    <div class="panel-cta"><a href="#invite">Reserve a viewing
+      <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+    </a></div>
+  </aside>
+
+  <!-- MOTION — showroom flythrough (real DJI footage) -->
+  <section class="motion">
+    <div class="motion-video">
+      <video muted loop playsinline preload="none" poster="assets/video/poster/showroom-flythrough.jpg" data-autoplay data-src="assets/video/web/showroom-flythrough.mp4"></video>
+    </div>
+    <div class="motion-copy">
+      <div class="label reveal"><span class="rule"></span>The showroom</div>
+      <h2 class="reveal">Walk the floor,<br><em>by appointment.</em></h2>
+      <p class="reveal">A private room of slabs, cabinetry and tile under one roof — sourced, numbered,
+        and set aside. What you see here is a fraction of it.</p>
+    </div>
+  </section>
+
+  <!-- B-ROLL REEL (horizontal moving-video bar) -->
+  <section class="reel" aria-label="Showroom in motion">
+    <div class="reel-track" id="reelTrack">
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-01.jpg" data-src="assets/video/web/reel-01.mp4"></video><span class="reel-cap">Cabinetry</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-03.jpg" data-src="assets/video/web/reel-03.mp4"></video><span class="reel-cap">Stone</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-04.jpg" data-src="assets/video/web/reel-04.mp4"></video><span class="reel-cap">The floor</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-02.jpg" data-src="assets/video/web/reel-02.mp4"></video><span class="reel-cap">Tile</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-05.jpg" data-src="assets/video/web/reel-05.mp4"></video><span class="reel-cap">Showroom</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-06.jpg" data-src="assets/video/web/reel-06.mp4"></video><span class="reel-cap">Backsplash</span></div>
+      <!-- duplicate set for a seamless loop -->
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-01.jpg" data-src="assets/video/web/reel-01.mp4"></video><span class="reel-cap">Cabinetry</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-03.jpg" data-src="assets/video/web/reel-03.mp4"></video><span class="reel-cap">Stone</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-04.jpg" data-src="assets/video/web/reel-04.mp4"></video><span class="reel-cap">The floor</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-02.jpg" data-src="assets/video/web/reel-02.mp4"></video><span class="reel-cap">Tile</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-05.jpg" data-src="assets/video/web/reel-05.mp4"></video><span class="reel-cap">Showroom</span></div>
+      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-06.jpg" data-src="assets/video/web/reel-06.mp4"></video><span class="reel-cap">Backsplash</span></div>
+    </div>
+  </section>
+
+  <!-- MATERIAL SCENES -->
+  <div class="scenes">
+
+    <section class="scene scene-1" id="stone">
+      <div class="scene-media reveal"><img data-par="34" src="assets/img/material/onyx.jpg" alt="Stone"></div>
+      <div class="scene-cap reveal">
+        <span class="label">01 — Stone</span>
+        <h2 class="scene-title">Slabs, by the <em>vein.</em></h2>
+        <p>Marble, quartzite, and travertine — chosen by colour and movement, not catalogue.</p>
+        <a href="#" class="more">View the stone
+          <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="scene scene-2" id="cabinetry">
+      <div class="scene-media reveal"><img data-par="40" src="assets/img/material/wood.jpg" alt="Cabinetry"></div>
+      <div class="scene-cap reveal">
+        <span class="label">02 — Cabinetry</span>
+        <h2 class="scene-title">By style &amp; <em>colour.</em></h2>
+        <p>Door profiles and finishes first — the brand follows. Oak, lacquer, and stained walnut.</p>
+        <a href="#" class="more">View cabinetry
+          <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="scene scene-3" id="tile">
+      <div class="scene-media reveal"><img data-par="30" src="assets/img/material/tile.jpg" alt="Tile"></div>
+      <div class="scene-cap reveal">
+        <span class="label">03 — Tile</span>
+        <h2 class="scene-title">Surface, up <em>close.</em></h2>
+        <p>Zellige, stone mosaic, and hand-glazed field tile — the detail that decides a room.</p>
+        <a href="#" class="more">View tile
+          <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- DETAIL BAND -->
+  <div class="detail-band">
+    <figure><img src="assets/img/material/marble.jpg" alt="Nero Marquina"><figcaption>Nero Marquina</figcaption></figure>
+    <figure><img src="assets/img/material/onyx.jpg" alt="Onyx"><figcaption>Backlit Onyx</figcaption></figure>
+    <figure><img src="assets/img/material/wood.jpg" alt="Oak"><figcaption>Fluted Oak</figcaption></figure>
+    <figure><img src="assets/img/material/tile.jpg" alt="Stone Tile"><figcaption>Limestone</figcaption></figure>
+    <figure><img src="assets/img/material/brass.jpg" alt="Brass"><figcaption>Aged Brass</figcaption></figure>
+  </div>
+
+  <!-- FULL-BLEED STATEMENT (light) -->
+  <section class="statement">
+    <img src="assets/img/material/statement-2.jpg" alt="Showroom detail">
+    <div class="st-cap reveal">
+      <div class="label">The showroom</div>
+      <div class="st-title">Seen best<br>in person.</div>
+    </div>
+  </section>
+
+
+  <!-- INVITATION -->
+  <section class="invite" id="invite">
+    <div class="access-status reveal"><span class="live"></span> By invitation only</div>
+    <h2 class="reveal">A private <em>viewing.</em></h2>
+    <p class="reveal">The showroom is not open to the public. Access is by introduction and referral —
+      each request is reviewed personally, and we respond only to those we're able to receive.</p>
+    <div class="reveal"><a href="#" class="invite-cta">Request an introduction
+      <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+    </a></div>
+    <div class="access-fine reveal">By referral · Reviewed personally · We do not sell online</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">5blox<span>SHOWROOM</span></div>
+        <p class="foot-blurb">Stone, cabinetry, and tile for considered homes. Los Angeles. By appointment.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Showroom</h4>
+        <ul>
+          <li>Los Angeles, CA</li>
+          <li>By appointment only</li>
+          <li><a href="#invite">Request an appointment</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Explore</h4>
+        <a href="stone.html">Stone</a>
+        <a href="cabinetry.html">Cabinetry</a>
+        <a href="tile.html">Tile</a>
+        <a href="#sourcing">Sourcing</a>
+      </div>
+    </div>
+    <div class="foot-legal">
+      <span>© MMXXV 5blox</span>
+      <span>Opening Fall 2026</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── INLINE SOURCING MAP (data from the working slab list, Jul 2026) ──
+    (function () {
+      var stage = document.getElementById('mapstage');
+      if (!stage) return;
+      var LAT_TOP = 74, LAT_BOT = -56;
+      var ORIGIN = { name: 'Los Angeles', lat: 34.0, lon: -118.2 };
+      var SWATCH = 'assets/img/material/swatch/';
+      // Sourcing drawn from the working slab list (Jul 2026). Colour/pattern names
+      // only — no vendor names (per client: vendors may be shown for cabinetry only).
+      var ORIGINS = [
+        { c: 'Italy', region: 'Europe', lat: 43.0, lon: 12.5, mats: [
+          { n: 'Calacatta Antico', t: 'Marble', s: 'marble' },
+          { n: 'Paonazzo Nero Extra', t: 'Marble', s: 'marble' },
+          { n: 'Arabescato', t: 'Marble', s: 'marble' },
+          { n: 'Calacatta Viola Antico', t: 'Marble', s: 'marble' },
+          { n: 'Cristallo Juliet', t: 'Quartzite', s: 'onyx' },
+          { n: 'Cristallo Tiffany', t: 'Quartzite', s: 'onyx' },
+          { n: 'Luminescence', t: 'Quartzite', s: 'onyx' } ] },
+        { c: 'Brazil', region: 'South America', lat: -10.0, lon: -52.0, mats: [
+          { n: 'Taj Mahal', t: 'Quartzite', s: 'onyx' },
+          { n: 'Patagonia Sky', t: 'Granite', s: 'marble' },
+          { n: 'Ocean Green', t: 'Quartzite', s: 'onyx' },
+          { n: 'Acqua Mare', t: 'Quartzite', s: 'onyx' },
+          { n: 'Arturo Crystal', t: 'Quartzite', s: 'onyx' },
+          { n: 'Volcano', t: 'Granite', s: 'marble' } ] },
+        { c: 'Turkey', region: 'Anatolia', lat: 39.0, lon: 35.0, mats: [
+          { n: 'Onyx Ivory', t: 'Onyx', s: 'onyx' } ] },
+        { c: 'Spain', region: 'Iberia', lat: 40.2, lon: -3.7, mats: [
+          { n: 'Trance', t: 'Sintered Stone', s: 'tile' },
+          { n: 'Bergen', t: 'Porcelain', s: 'tile' } ] }
+      ];
+      function projX(lon) { return (lon + 180) / 360; }
+      function projY(lat) { return (LAT_TOP - lat) / (LAT_TOP - LAT_BOT); }
+      var arcs = document.getElementById('arcs'), VB_W = 1000, VB_H = 361;
+      var ox = projX(ORIGIN.lon), oy = projY(ORIGIN.lat);
+      ORIGINS.forEach(function (o, i) {
+        var px = projX(o.lon), py = projY(o.lat);
+        var x1 = ox * VB_W, y1 = oy * VB_H, x2 = px * VB_W, y2 = py * VB_H;
+        var cx = (x1 + x2) / 2, cy = Math.min(y1, y2) - Math.abs(x2 - x1) * 0.16 - 20;
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M' + x1 + ' ' + y1 + ' Q' + cx + ' ' + cy + ' ' + x2 + ' ' + y2);
+        path.setAttribute('class', 'arc');
+        arcs.appendChild(path);
+        var pin = document.createElement('button');
+        pin.className = 'pin';
+        pin.style.left = (px * 100) + '%'; pin.style.top = (py * 100) + '%';
+        pin.setAttribute('aria-label', o.c);
+        pin.innerHTML = '<span class="pin-label">' + o.c + '</span><span class="pin-dot"></span>';
+        pin.addEventListener('click', function () { openPanel(i, pin); });
+        stage.appendChild(pin);
+      });
+      (function () {
+        var pin = document.createElement('div');
+        pin.className = 'pin origin';
+        pin.style.left = (ox * 100) + '%'; pin.style.top = (oy * 100) + '%';
+        pin.innerHTML = '<span class="pin-label">Los Angeles</span><span class="pin-dot"></span>';
+        stage.appendChild(pin);
+      })();
+      var panel = document.getElementById('panel'), scrim = document.getElementById('scrim');
+      var pName = document.getElementById('panelName'), pRegion = document.getElementById('panelRegion'),
+        pCount = document.getElementById('panelCount'), pMats = document.getElementById('panelMats');
+      var activePin = null;
+      function openPanel(i, pin) {
+        var o = ORIGINS[i];
+        pRegion.textContent = o.region; pName.textContent = o.c;
+        pCount.textContent = o.mats.length + (o.mats.length === 1 ? ' material carried' : ' materials carried');
+        pMats.innerHTML = o.mats.map(function (m) {
+          return '<div class="mat"><img class="mat-swatch" src="' + SWATCH + m.s + '.jpg" alt="' + m.n + '"><div><div class="mat-name">' + m.n + '</div><div class="mat-type">' + m.t + '</div></div></div>';
+        }).join('');
+        panel.classList.add('open'); scrim.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
+        if (activePin) activePin.classList.remove('active');
+        if (pin) { pin.classList.add('active'); activePin = pin; }
+      }
+      function closePanel() {
+        panel.classList.remove('open'); scrim.classList.remove('open'); panel.setAttribute('aria-hidden', 'true');
+        if (activePin) { activePin.classList.remove('active'); activePin = null; }
+      }
+      document.getElementById('panelClose').addEventListener('click', closePanel);
+      scrim.addEventListener('click', closePanel);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePanel(); });
+    })();
+
+    // ── B-ROLL REEL: lazy-load + play only while in view ──
+    (function () {
+      var reel = document.querySelector('.reel');
+      if (!reel) return;
+      var vids = [].slice.call(reel.querySelectorAll('video'));
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var loaded = false;
+      function load() { if (loaded) return; loaded = true; vids.forEach(function (v) { if (v.dataset.src) { v.src = v.dataset.src; v.load(); } }); }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { load(); if (!reduce) vids.forEach(function (v) { var p = v.play(); if (p) p.catch(function () { }); }); }
+          else { vids.forEach(function (v) { v.pause(); }); }
+        });
+      }, { threshold: 0.02 });
+      io.observe(reel);
+    })();
+
+    // ── FULL-BLEED / MOTION VIDEOS: lazy-load + play only while in view ──
+    (function () {
+      var vids = [].slice.call(document.querySelectorAll('video[data-autoplay]'));
+      if (!vids.length) return;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Fade the footage in once it actually starts (poster holds the frame until then).
+      vids.forEach(function (v) {
+        var wrap = v.closest('.hero-bg');
+        if (wrap) v.addEventListener('playing', function () { wrap.classList.add('playing'); }, { once: true });
+        // Belt-and-suspenders loop: some browsers drop the `loop` attr when src is
+        // set late — force a restart on `ended` so the hero never freezes.
+        v.loop = true;
+        v.addEventListener('ended', function () { v.currentTime = 0; var p = v.play(); if (p) p.catch(function () { }); });
+      });
+      if (reduce) {
+        // No autoplay: reveal the poster frame (video stays paused, src never loaded).
+        vids.forEach(function (v) { var w = v.closest('.hero-bg'); if (w) w.classList.add('playing'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.isIntersecting) { if (v.dataset.src && !v.src) { v.src = v.dataset.src; v.load(); } var p = v.play(); if (p) p.catch(function () { }); }
+          else { v.pause(); }
+        });
+      }, { threshold: 0.25 });
+      vids.forEach(function (v) { io.observe(v); });
+    })();
+
+    // Reveal on scroll
+    (function () {
+      var els = [].slice.call(document.querySelectorAll('.reveal'));
+      if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        els.forEach(function (e) { e.classList.add('in'); }); return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (e) { io.observe(e); });
+    })();
+
+    // Parallax — drift material images as they pass (subtle, reduced-motion safe)
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var els = [].slice.call(document.querySelectorAll('[data-par]'));
+      if (!els.length) return;
+      var ticking = false;
+      function update() {
+        var vh = window.innerHeight;
+        els.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          var d = ((r.top + r.height / 2) - vh / 2) / vh;      // ~ -1 .. 1
+          var amt = parseFloat(el.dataset.par) || 30;
+          el.style.transform = 'translateY(' + (d * -amt).toFixed(1) + 'px)';
+        });
+        ticking = false;
+      }
+      function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      update();
+    })();
+  </script>
+
+</body>
+
+</html>
