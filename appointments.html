@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5blox Showroom — Appointments</title>
+  <meta name="description" content="Choose your profile — designer, architect, builder, private client or agent. The 5blox showroom, by introduction. Los Angeles.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+    :root {
+      --void: #0A0908; --coal: #121010; --raise: #191614; --bone: #E7E3DB; --ash: #928B82;
+      --faint: rgba(231,227,219,0.46); --line: rgba(231,227,219,0.14); --line-2: rgba(231,227,219,0.07);
+      --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      --display: 'Suisse Intl','Inter',system-ui,sans-serif; --mono: 'Suisse Intl','Inter',system-ui,sans-serif; --sans: 'Suisse Intl','Inter',system-ui,sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--void); color: var(--bone); font-family: var(--sans); font-weight: 300; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    ::selection { background: var(--bone); color: var(--void); }
+    a { color: inherit; text-decoration: none; }
+    em { font-style: normal; color: var(--ash); }
+    body::before { content: ""; position: fixed; inset: 0; z-index: 200; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 300px; opacity: 0.09; mix-blend-mode: screen; }
+    .label { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: var(--faint); }
+    .rule { display: inline-block; width: 34px; height: 1px; background: var(--line); vertical-align: middle; margin-right: 14px; }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(20px,4vw,56px); mix-blend-mode: difference; }
+    .nav-brand { font-family: var(--display); font-size: 21px; font-weight: 700; letter-spacing: -0.01em; color: #fff; }
+    .nav-brand span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.32em; vertical-align: super; margin-left: 8px; opacity: 0.7; font-weight: 400; }
+    .nav-links { display: flex; gap: clamp(20px,3vw,44px); align-items: center; }
+    .nav-links a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #fff; opacity: 0.82; transition: opacity 0.3s; }
+    .nav-links a:hover, .nav-links a.on { opacity: 1; }
+    .nav-appt { border: 1px solid rgba(255,255,255,0.45); padding: 8px 16px; }
+    @media (max-width: 820px) { .nav-links a:not(.nav-appt) { display: none; } }
+
+    /* ── APPOINTMENTS: the picker IS the page ── */
+    .appt { min-height: 100svh; display: flex; flex-direction: column; }
+    .appt-top { padding: clamp(112px,16vh,180px) clamp(20px,5vw,80px) clamp(22px,3.5vh,42px); display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .appt-top h1 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(38px,7vw,104px); line-height: 0.9; letter-spacing: -0.02em; }
+    .appt-top h1 em { color: var(--ash); }
+    .appt-top .hint { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--faint); padding-bottom: 8px; }
+
+    /* expanding panels */
+    .selector { flex: 1; display: flex; min-height: 62vh; border-top: 1px solid var(--line-2); }
+    .panel-p { position: relative; flex: 1; overflow: hidden; cursor: pointer; border: none; background: var(--coal); padding: 0; -webkit-appearance: none; appearance: none; border-right: 1px solid var(--line-2); transition: flex 0.75s cubic-bezier(.4,0,.2,1); }
+    .panel-p:last-child { border-right: none; }
+    .selector.hovering .panel-p { flex: 0.72; }
+    .panel-p:hover, .panel-p.active { flex: 3 !important; }
+    .panel-p > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.92;
+      filter: grayscale(1) brightness(0.3) contrast(1.05); transition: filter 0.85s ease, transform 5s ease; }
+    .panel-p:hover > img, .panel-p.active > img { filter: grayscale(0) brightness(0.66); transform: scale(1.05); }
+    .panel-p::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,9,8,0.18) 0%, rgba(10,9,8,0.42) 45%, rgba(10,9,8,0.88) 100%); }
+    .panel-p::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.16; mix-blend-mode: overlay; }
+    .p-num { position: absolute; top: 22px; left: 22px; z-index: 3; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: rgba(231,227,219,0.65); }
+    /* collapsed: vertical short label */
+    .p-vert { position: absolute; bottom: 28px; left: 0; right: 0; z-index: 3; text-align: center; writing-mode: vertical-rl; margin: 0 auto; height: max-content; max-height: 46%; top: 0; display: flex; align-items: flex-end; justify-content: center;
+      font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(15px,1.5vw,20px); letter-spacing: 0.03em; color: #fff; white-space: nowrap; transition: opacity 0.4s; }
+    .panel-p:hover .p-vert, .panel-p.active .p-vert { opacity: 0; }
+    /* expanded: horizontal content */
+    .p-open { position: absolute; left: clamp(22px,2.4vw,42px); right: clamp(22px,2.4vw,42px); bottom: clamp(26px,4vh,44px); z-index: 3; display: flex; flex-direction: column; align-items: flex-start; opacity: 0; transform: translateY(16px); transition: opacity 0.55s 0.12s, transform 0.55s 0.12s; }
+    .panel-p:hover .p-open, .panel-p.active .p-open { opacity: 1; transform: none; }
+    .p-open .p-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(26px,2.9vw,46px); line-height: 1; letter-spacing: -0.012em; color: #fff; white-space: nowrap; }
+    .p-open .p-tag { color: rgba(231,227,219,0.82); font-size: 13.5px; line-height: 1.6; margin-top: 12px; max-width: 34ch; }
+    .p-open .p-cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.42); padding-bottom: 5px; transition: gap 0.4s; }
+    .panel-p:hover .p-open .p-cta, .panel-p.active .p-open .p-cta { gap: 16px; }
+
+    @media (max-width: 820px) {
+      .selector { flex-direction: column; min-height: auto; }
+      .panel-p { flex: none; height: 108px; border-right: none; border-bottom: 1px solid var(--line-2); transition: height 0.65s cubic-bezier(.4,0,.2,1); }
+      .panel-p:last-child { border-bottom: none; }
+      .selector.hovering .panel-p, .panel-p:hover { flex: none; }
+      .panel-p.active { height: 348px; }
+      .panel-p:hover > img { filter: grayscale(1) brightness(0.3) contrast(1.05); transform: none; }
+      .panel-p.active > img { filter: grayscale(0) brightness(0.66); transform: scale(1.04); }
+      .p-vert { writing-mode: horizontal-tb; inset: 0 auto 0 24px; top: 0; height: 100%; align-items: center; max-height: none; text-align: left; font-size: 22px; }
+      .panel-p:hover .p-vert { opacity: 1; }
+      .panel-p.active .p-vert { opacity: 0; }
+      .p-open { left: 24px; right: 24px; }
+      .panel-p:hover .p-open { opacity: 0; transform: translateY(16px); }
+      .panel-p.active .p-open { opacity: 1; transform: none; }
+    }
+
+    /* ── REQUEST (minimal) ── */
+    .request { position: relative; overflow: hidden; border-top: 1px solid var(--line-2); padding: clamp(76px,13vh,170px) clamp(20px,5vw,80px); }
+    .request > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.2; }
+    .request::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, var(--void) 8%, rgba(10,9,8,0.72) 50%, var(--void) 100%); }
+    .request::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.12; mix-blend-mode: overlay; }
+    .request .inner { position: relative; z-index: 2; max-width: 640px; margin: 0 auto; }
+    .request .rq-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 34px; }
+    .request .rq-head .label { display: block; }
+    .request .rq-role { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone); border: 1px solid var(--line); padding: 7px 13px; }
+    form { text-align: left; }
+    .field { margin-bottom: 20px; }
+    .field label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); margin-bottom: 10px; }
+    .field input, .field select, .field textarea { width: 100%; background: rgba(18,16,16,0.7); border: 1px solid var(--line); color: var(--bone); font-family: var(--sans); font-size: 15px; padding: 14px 16px; border-radius: 0; -webkit-appearance: none; appearance: none; transition: border-color 0.3s; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--ash); }
+    .field textarea { resize: vertical; min-height: 104px; }
+    .field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23928B82'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+    .field-row { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 620px) { .field-row { grid-template-columns: 1fr 1fr; } }
+    .form-submit { width: 100%; margin-top: 6px; background: var(--bone); color: var(--void); border: none; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; padding: 18px; cursor: pointer; transition: background 0.3s; }
+    .form-submit:hover { background: #fff; }
+    .form-fine { margin-top: 20px; text-align: center; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+    .form-done { display: none; text-align: center; padding: 30px 0; }
+    .form-done.show { display: block; }
+    .form-done .fd-mark { font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); }
+    .form-done h3 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(26px,3.4vw,44px); margin-top: 16px; letter-spacing: -0.01em; }
+    .form-done p { color: var(--ash); font-size: 14px; margin-top: 14px; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--line-2); padding: clamp(48px,8vh,90px) clamp(20px,4vw,56px) 40px; }
+    .foot-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+    @media (min-width: 760px) { .foot-grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+    .foot-brand { font-family: var(--display); font-size: 30px; font-weight: 700; }
+    .foot-brand span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em; vertical-align: super; opacity: 0.6; margin-left: 8px; font-weight: 400; }
+    .foot-blurb { margin-top: 16px; max-width: 34ch; color: var(--ash); font-size: 13px; }
+    .foot-col h4 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); margin-bottom: 16px; }
+    .foot-col a, .foot-col li { display: block; list-style: none; font-size: 13px; color: var(--ash); margin-bottom: 9px; transition: color 0.3s; }
+    .foot-col a:hover { color: var(--bone); }
+    .foot-legal { margin-top: clamp(48px,8vh,88px); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .foot-legal span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } .panel-p, .panel-p > img { transition: none; } html { scroll-behavior: auto; } }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">5blox<span>SHOWROOM</span></a>
+    <div class="nav-links">
+      <a href="stone.html">Stone</a>
+      <a href="cabinetry.html">Cabinetry</a>
+      <a href="tile.html">Tile</a>
+      <a href="index.html#sourcing">Sourcing</a>
+      <a href="appointments.html" class="on nav-appt">Appointments</a>
+    </div>
+  </nav>
+
+  <section class="appt">
+    <div class="appt-top">
+      <h1>Who's<br><em>asking?</em></h1>
+      <span class="hint">Choose your profile</span>
+    </div>
+    <div class="selector" id="selector"></div>
+  </section>
+
+  <section class="request" id="request">
+    <img src="assets/img/material/statement-1.jpg" alt="">
+    <div class="inner">
+      <div class="rq-head">
+        <span class="label">Request an introduction</span>
+        <span class="rq-role" id="rqRole">Interior Designer</span>
+      </div>
+      <form id="requestForm" novalidate>
+        <div class="field">
+          <label for="role">I am a</label>
+          <select id="role" name="role">
+            <option value="Interior Designer">Interior Designer</option>
+            <option value="Architect">Architect</option>
+            <option value="Builder / Contractor">Builder / Contractor</option>
+            <option value="Homeowner / Private client">Homeowner / Private client</option>
+            <option value="Realtor / Agent">Realtor / Agent</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name"></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"></div>
+        </div>
+        <div class="field"><label for="project">The project</label><textarea id="project" name="project" placeholder="A few words on what you're working on."></textarea></div>
+        <button type="submit" class="form-submit">Request an introduction</button>
+        <div class="form-fine">By referral · reviewed personally · we do not sell online</div>
+      </form>
+      <div class="form-done" id="formDone">
+        <div class="fd-mark">Received</div>
+        <h3>We'll be in touch.</h3>
+        <p>Your request is with the studio.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">5blox<span>SHOWROOM</span></div>
+        <p class="foot-blurb">Stone, cabinetry, and tile for considered homes. Los Angeles. By appointment.</p>
+      </div>
+      <div class="foot-col"><h4>Showroom</h4><ul><li>Los Angeles, CA</li><li>By invitation only</li><li><a href="appointments.html">Request an introduction</a></li></ul></div>
+      <div class="foot-col"><h4>Explore</h4><a href="stone.html">Stone</a><a href="cabinetry.html">Cabinetry</a><a href="tile.html">Tile</a><a href="index.html#sourcing">Sourcing</a></div>
+    </div>
+    <div class="foot-legal"><span>© MMXXV 5blox</span><span>Opening Fall 2026</span></div>
+  </footer>
+
+  <script>
+    // ══ PROFILE SELECTOR — picking the profile IS the page (client: make it the primary,
+    //    interactive action; very little copy elsewhere). One short line per profile. ══
+    // Copy is DRAFT (awaiting Cal). Imagery reuses showroom/material stills, desaturated
+    // until engaged so the material photography is the reward on hover/tap.
+    var IMG = 'assets/img/';
+    var ROLES = [
+      { short: 'Designer',  id: 'Interior Designer',          tag: 'Trade terms, samples, and slabs held in your client’s name.', img: IMG + 'material/statement-1.jpg' },
+      { short: 'Architect', id: 'Architect',                  tag: 'Specification and sourcing support, to your drawing set.',    img: IMG + 'cabinetry/cab-04.jpg' },
+      { short: 'Builder',   id: 'Builder / Contractor',       tag: 'Direct supply and volume terms, delivered to the jobsite.',   img: IMG + 'cabinetry/cab-05.jpg' },
+      { short: 'Homeowner', id: 'Homeowner / Private client', tag: 'Buy direct — no designer required. By appointment.',          img: IMG + 'material/statement-2.jpg' },
+      { short: 'Realtor',   id: 'Realtor / Agent',            tag: 'Staging and finish work, on fast turnarounds.',               img: IMG + 'material/onyx.jpg' }
+    ];
+
+    var ARROW = '<svg width="18" height="8" viewBox="0 0 20 8" fill="none" aria-hidden="true"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>';
+    var selector = document.getElementById('selector');
+    var roleSelect = document.getElementById('role');
+    var rqRole = document.getElementById('rqRole');
+
+    ROLES.forEach(function (r, i) {
+      var panel = document.createElement('button');
+      panel.className = 'panel-p';
+      panel.type = 'button';
+      panel.setAttribute('aria-label', r.id);
+      panel.innerHTML =
+        '<img src="' + r.img + '" alt="" loading="lazy">' +
+        '<span class="p-num">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span class="p-vert">' + r.short + '</span>' +
+        '<span class="p-open"><span class="p-name">' + r.id + '</span>' +
+        '<span class="p-tag">' + r.tag + '</span>' +
+        '<span class="p-cta">Request an introduction ' + ARROW + '</span></span>';
+      panel.addEventListener('click', function (e) {
+        var onCta = !!e.target.closest('.p-cta');
+        if (isDesktop() || panel.classList.contains('active') || onCta) { commit(i); }
+        else { setActive(i); }
+      });
+      selector.appendChild(panel);
+    });
+    var panels = [].slice.call(selector.querySelectorAll('.panel-p'));
+
+    function isDesktop() { return window.matchMedia('(min-width: 821px)').matches; }
+    function setActive(i) { panels.forEach(function (p, k) { p.classList.toggle('active', k === i); }); }
+    function commit(i) {
+      roleSelect.value = ROLES[i].id;
+      rqRole.textContent = ROLES[i].id;
+      document.getElementById('request').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    selector.addEventListener('mouseenter', function () { if (isDesktop()) selector.classList.add('hovering'); });
+    selector.addEventListener('mouseleave', function () { selector.classList.remove('hovering'); });
+
+    // keep the little role chip in sync if they change the dropdown directly
+    roleSelect.addEventListener('change', function () { rqRole.textContent = roleSelect.value; });
+
+    // Form (client-side only — wire to the studio inbox / SMTP when the showroom
+    // backend is scaffolded, same as the interior site's server).
+    document.getElementById('requestForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      this.style.display = 'none';
+      document.getElementById('formDone').classList.add('show');
+    });
+  </script>
+</body>
+
+</html>

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5blox Showroom — Cabinetry</title>
-  <meta name="description" content="Cabinetry by door style and colour — fluted, slab, shaker and beaded, in oak, walnut and lacquer. By appointment, Los Angeles.">
+  <meta name="description" content="Cabinetry by the maker — Pronorm, Fabuwood, Eclipse, Aspect and Shiloh, represented in the 5blox showroom. Los Angeles, by appointment.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     :root {
       --void: #0A0908; --coal: #121010; --raise: #191614; --bone: #E7E3DB; --ash: #928B82;
       --faint: rgba(231,227,219,0.46); --line: rgba(231,227,219,0.14); --line-2: rgba(231,227,219,0.07);
-      --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+      --grain: none;
       --display: 'Suisse Intl','Inter',system-ui,sans-serif; --mono: 'Suisse Intl','Inter',system-ui,sans-serif; --sans: 'Suisse Intl','Inter',system-ui,sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,11 +27,9 @@
     em { font-style: normal; color: var(--ash); }
     body::before { content: ""; position: fixed; inset: 0; z-index: 200; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 300px; opacity: 0.1; mix-blend-mode: screen; }
+      background-size: 300px; opacity: 0; mix-blend-mode: screen; display: none; }
     .label { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: var(--faint); }
     .rule { display: inline-block; width: 34px; height: 1px; background: var(--line); vertical-align: middle; margin-right: 14px; }
-    .more { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); padding-bottom: 6px; border-bottom: 1px solid var(--line); transition: gap 0.4s, border-color 0.4s; }
-    .more:hover { gap: 20px; border-color: var(--bone); }
 
     /* NAV */
     .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(20px,4vw,56px); mix-blend-mode: difference; }
@@ -51,65 +49,55 @@
     .cat-hero .inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; }
     .cat-hero .label { margin-bottom: 26px; }
     .cat-hero h1 { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(44px,8.4vw,124px); line-height: 0.92; }
-    .cat-hero p { max-width: 46ch; margin-top: 26px; color: var(--ash); font-size: 15px; font-weight: 300; }
+    .cat-hero p { max-width: 52ch; margin-top: 26px; color: var(--ash); font-size: 15px; font-weight: 300; line-height: 1.7; }
 
-    /* SECTION */
-    .cat-section { max-width: 1400px; margin: 0 auto; padding: clamp(72px,11vh,140px) clamp(20px,5vw,80px); }
-    .cat-section + .cat-section { border-top: 1px solid var(--line-2); }
-    .cat-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: clamp(38px,6vh,64px); }
-    .cat-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3vw,42px); letter-spacing: -0.01em; }
-    .cat-head .n { font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; color: var(--faint); }
+    /* MAKERS INTRO NOTE */
+    .makers { max-width: 1400px; margin: 0 auto; padding: clamp(72px,11vh,140px) clamp(20px,5vw,80px) clamp(20px,3vh,40px); }
+    .makers-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(48px,8vh,96px); }
+    .makers-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3vw,42px); letter-spacing: -0.01em; }
+    .makers-head .note { max-width: 40ch; color: var(--ash); font-size: 13px; line-height: 1.7; }
 
-    /* STYLE GRID */
-    .style-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
-    @media (min-width: 760px) { .style-grid { grid-template-columns: repeat(3,1fr); } }
-    .style-tile { position: relative; aspect-ratio: 4/5; overflow: hidden; background: var(--coal); cursor: pointer; border: none; padding: 0; display: block; width: 100%; }
-    .style-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.3s cubic-bezier(.2,.7,.2,1); }
-    .style-tile:hover img { transform: scale(1.06); }
-    .style-tile::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, transparent 45%, rgba(10,9,8,0.72)), var(--grain); background-size: cover, 220px; background-blend-mode: normal, overlay; }
-    .style-tile .st-meta { position: absolute; left: 18px; right: 18px; bottom: 16px; z-index: 2; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
-    .style-tile .st-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(15px,1.8vw,23px); color: #fff; letter-spacing: -0.005em; }
-    .style-tile .st-more { font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.7); white-space: nowrap; }
+    /* FEATURED MAKER — alternating feature rows */
+    .maker { display: grid; grid-template-columns: 1fr; gap: clamp(28px,4vw,64px); align-items: center; }
+    .maker + .maker { margin-top: clamp(64px,11vh,128px); padding-top: clamp(64px,11vh,128px); border-top: 1px solid var(--line-2); }
+    @media (min-width: 900px) { .maker { grid-template-columns: 1.12fr 1fr; } .maker.flip .maker-media { order: 2; } }
+    .maker-media { position: relative; aspect-ratio: 3/2; overflow: hidden; background: var(--coal); }
+    .maker-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s cubic-bezier(.2,.7,.2,1); }
+    .maker:hover .maker-media img { transform: scale(1.04); }
+    .maker-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.18; mix-blend-mode: overlay; }
+    .maker-idx { font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; color: var(--faint); text-transform: uppercase; }
+    .maker-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(40px,6.2vw,88px); line-height: 0.94; letter-spacing: -0.012em; margin-top: 14px; }
+    .maker-line { color: var(--ash); font-size: 15px; font-weight: 300; line-height: 1.72; max-width: 42ch; margin-top: 20px; }
+    .maker-meta { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 24px; }
+    .maker-meta span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); border: 1px solid var(--line-2); padding: 6px 12px; }
+    .maker-link { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); padding-bottom: 6px; border-bottom: 1px solid var(--line); transition: gap 0.4s, border-color 0.4s; }
+    .maker-link:hover { gap: 20px; border-color: var(--bone); }
+    .maker-link svg { flex-shrink: 0; }
 
-    /* COLOUR GRID */
-    .colour-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 22px 24px; }
-    @media (min-width: 620px) { .colour-grid { grid-template-columns: repeat(3,1fr); } }
-    @media (min-width: 1000px) { .colour-grid { grid-template-columns: repeat(5,1fr); } }
-    .colour { cursor: pointer; border: none; background: none; padding: 0; display: block; text-align: left; width: 100%; }
-    .colour-sw { position: relative; width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--coal); }
-    .colour-sw img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
-    .colour:hover .colour-sw img { transform: scale(1.06); }
-    .colour-sw::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: var(--grain); background-size: 200px; opacity: 0.2; mix-blend-mode: overlay; }
-    .colour-name { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-top: 13px; transition: color 0.3s; }
-    .colour:hover .colour-name { color: var(--bone); }
+    /* ALSO REPRESENTED — compact cards */
+    .also-sec { max-width: 1400px; margin: 0 auto; padding: clamp(72px,11vh,140px) clamp(20px,5vw,80px); }
+    .also-sec .makers-head { margin-bottom: clamp(34px,6vh,56px); }
+    .also-grid { display: grid; grid-template-columns: 1fr; gap: 2px; }
+    @media (min-width: 760px) { .also-grid { grid-template-columns: 1fr 1fr; } }
+    .also { position: relative; overflow: hidden; background: var(--coal); aspect-ratio: 16/10; display: block; }
+    .also img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.3s cubic-bezier(.2,.7,.2,1); }
+    .also:hover img { transform: scale(1.05); }
+    .also::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 36%, rgba(10,9,8,0.86)); }
+    .also::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.18; mix-blend-mode: overlay; }
+    .also-body { position: absolute; left: clamp(20px,3vw,34px); right: clamp(20px,3vw,34px); bottom: clamp(20px,3vh,30px); z-index: 2; }
+    .also-idx { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(231,227,219,0.6); }
+    .also-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(26px,3.4vw,42px); color: #fff; line-height: 1; margin-top: 8px; }
+    .also-line { color: rgba(231,227,219,0.82); font-size: 13px; line-height: 1.6; margin-top: 10px; max-width: 36ch; }
+    .also-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 16px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; transition: gap 0.4s; }
+    .also:hover .also-link { gap: 16px; }
 
     /* CLOSING CTA */
     .cat-cta { text-align: center; padding: clamp(100px,20vh,240px) clamp(20px,4vw,56px); border-top: 1px solid var(--line-2); }
     .cat-cta .label { display: inline-flex; margin-bottom: 26px; }
     .cat-cta h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(30px,4.4vw,64px); line-height: 1.1; letter-spacing: -0.015em; }
-    .cat-cta p { max-width: 40ch; margin: 24px auto 0; color: var(--ash); font-size: 14px; }
+    .cat-cta p { max-width: 44ch; margin: 24px auto 0; color: var(--ash); font-size: 14px; line-height: 1.7; }
     .cat-cta a.btn { display: inline-flex; align-items: center; gap: 12px; margin-top: 40px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 16px 30px; transition: gap 0.4s, background 0.3s; }
     .cat-cta a.btn:hover { gap: 20px; background: #fff; }
-
-    /* DRILLDOWN PANEL (reused from the sourcing map) */
-    .scrim { position: fixed; inset: 0; z-index: 70; background: rgba(6,5,4,0.55); opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
-    .scrim.open { opacity: 1; visibility: visible; }
-    .panel { position: fixed; top: 0; right: 0; bottom: 0; z-index: 80; width: min(460px,94vw); background: var(--coal); border-left: 1px solid var(--line); transform: translateX(100%); transition: transform 0.5s cubic-bezier(.2,.7,.2,1); display: flex; flex-direction: column; padding: clamp(28px,5vh,52px) clamp(24px,4vw,40px); overflow-y: auto; }
-    .panel.open { transform: none; }
-    .panel-close { align-self: flex-end; background: none; border: none; color: var(--ash); font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; margin-bottom: 30px; }
-    .panel-close:hover { color: var(--bone); }
-    .panel-region { color: var(--faint); }
-    .panel h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(32px,5vw,52px); line-height: 1; letter-spacing: 0; margin: 12px 0 6px; }
-    .panel-count { color: var(--ash); font-size: 13px; margin-bottom: 28px; }
-    .mat { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line-2); }
-    .mat:last-of-type { border-bottom: 1px solid var(--line-2); }
-    .mat-swatch { width: 60px; height: 60px; object-fit: cover; flex-shrink: 0; background: var(--raise); }
-    .mat-name { font-family: var(--display); font-size: 19px; font-weight: 500; }
-    .mat-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
-    .panel-cta { margin-top: auto; padding-top: 34px; }
-    .panel-cta a { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 15px 26px; transition: gap 0.4s; }
-    .panel-cta a:hover { gap: 20px; }
-    @media (max-width: 620px) { .panel { width: 100%; top: auto; height: 84vh; border-left: none; border-top: 1px solid var(--line); transform: translateY(100%); } .panel.open { transform: none; } }
 
     /* FOOTER */
     footer { border-top: 1px solid var(--line-2); padding: clamp(48px,8vh,90px) clamp(20px,4vw,56px) 40px; }
@@ -138,49 +126,42 @@
       <a href="cabinetry.html" class="on">Cabinetry</a>
       <a href="tile.html">Tile</a>
       <a href="index.html#sourcing">Sourcing</a>
-      <a href="index.html#invite" class="nav-appt">Appointments</a>
+      <a href="appointments.html" class="nav-appt">Appointments</a>
     </div>
   </nav>
 
   <header class="cat-hero">
-    <img id="heroImg" src="" alt="">
+    <img src="assets/img/material/statement-2.jpg" alt="Cabinetry in the showroom">
     <div class="inner">
-      <div class="label reveal"><span class="rule"></span><span id="catName"></span></div>
-      <h1 class="reveal" id="catTitle"></h1>
-      <p class="reveal" id="catIntro"></p>
+      <div class="label reveal"><span class="rule"></span>Cabinetry</div>
+      <h1 class="reveal">Cabinetry,<br>by <em>name.</em></h1>
+      <p class="reveal">People come for the maker. We represent five cabinet houses — from a top-ten German atelier
+        to America's most-specified names — each built, finished and standing in the showroom. Explore a house below,
+        or come see them in person.</p>
     </div>
   </header>
 
-  <section class="cat-section">
-    <div class="cat-head reveal"><h2 id="styleLabel"></h2><span class="n" id="styleN"></span></div>
-    <div class="style-grid reveal" id="styleGrid"></div>
+  <section class="makers">
+    <div class="makers-head reveal">
+      <h2>The makers</h2>
+      <p class="note">Cabinetry is the one category we name — every maker here markets alongside us. Full door ranges and finishes are shown in the Los Angeles showroom.</p>
+    </div>
+    <div id="makerRows"></div>
   </section>
 
-  <section class="cat-section">
-    <div class="cat-head reveal"><h2 id="colourLabel"></h2><span class="n" id="colourN"></span></div>
-    <div class="colour-grid reveal" id="colourGrid"></div>
+  <section class="also-sec">
+    <div class="makers-head reveal"><h2>Also represented</h2></div>
+    <div class="also-grid" id="alsoGrid"></div>
   </section>
 
   <section class="cat-cta">
     <div class="label reveal">By invitation only</div>
     <h2 class="reveal">Bring what<br>you're <em>building.</em></h2>
-    <p class="reveal">Every profile and finish is shown in person. Tell us the project — we'll set aside what's worth seeing.</p>
+    <p class="reveal">Every door, drawer and finish is shown in person — and we can walk any of these houses with you. Tell us the project; we'll set aside what's worth seeing.</p>
     <div class="reveal"><a href="index.html#invite" class="btn">Request an introduction
       <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
     </a></div>
   </section>
-
-  <div class="scrim" id="scrim"></div>
-  <aside class="panel" id="panel" aria-hidden="true">
-    <button class="panel-close" id="panelClose">Close ✕</button>
-    <div class="panel-region label" id="panelRegion"></div>
-    <h2 id="panelName"></h2>
-    <div class="panel-count" id="panelCount"></div>
-    <div id="panelMats"></div>
-    <div class="panel-cta"><a href="index.html#invite">Request an introduction
-      <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
-    </a></div>
-  </aside>
 
   <footer>
     <div class="foot-grid">
@@ -195,75 +176,62 @@
   </footer>
 
   <script>
-    // ══ CATEGORY DATA (placeholder — swap for real style/colour photography + the client's brand list) ══
-    var SWATCH = 'assets/img/material/swatch/';
-    var IMG = 'assets/img/material/';
-    var CATEGORY = {
-      name: 'Cabinetry', hero: IMG + 'wood.jpg',
-      title: 'By style,<br>by <em>colour.</em>',
-      intro: "Chosen by profile and finish, not by brand. Fluted, slab, shaker and beaded doors in oak, walnut and lacquer — the label follows the look. Every door is shown in person.",
-      styleLabel: 'By door style',
-      styles: [
-        { key: 'Fluted', img: IMG + 'wood.jpg', items: [ { b: 'Officine Gullo', f: 'Rift White Oak', s: 'wood' }, { b: 'Poliform', f: 'Fumé Oak', s: 'wood' }, { b: '5blox Bespoke', f: 'Stained Walnut', s: 'wood' } ] },
-        { key: 'Slab', img: IMG + 'tile.jpg', items: [ { b: 'Boffi', f: 'Matte Lacquer', s: 'tile' }, { b: 'Poliform', f: 'Bone Gloss', s: 'tile' } ] },
-        { key: 'Shaker', img: IMG + 'brass.jpg', items: [ { b: 'Christopher Peacock', f: 'Hand-Painted', s: 'brass' }, { b: '5blox Bespoke', f: 'Rift Oak', s: 'wood' } ] },
-        { key: 'Beaded', img: IMG + 'marble.jpg', items: [ { b: 'Plain English', f: 'Bone', s: 'marble' } ] },
-        { key: 'Flat Panel', img: IMG + 'onyx.jpg', items: [ { b: 'Boffi', f: 'Fumé Oak', s: 'wood' }, { b: 'Poliform', f: 'Espresso', s: 'marble' } ] },
-        { key: 'Raised Panel', img: IMG + 'statement-1.jpg', items: [ { b: 'Christopher Peacock', f: 'Estate White', s: 'tile' } ] }
-      ],
-      colourLabel: 'By colour',
-      colours: [
-        { name: 'Rift Oak', s: 'wood', items: [ { b: 'Officine Gullo', f: 'Fluted', s: 'wood' }, { b: '5blox Bespoke', f: 'Slab', s: 'wood' } ] },
-        { name: 'Walnut', s: 'wood', items: [ { b: 'Poliform', f: 'Flat Panel', s: 'wood' } ] },
-        { name: 'Matte Black', s: 'marble', items: [ { b: 'Boffi', f: 'Slab', s: 'marble' } ] },
-        { name: 'Bone Lacquer', s: 'tile', items: [ { b: 'Poliform', f: 'Slab', s: 'tile' }, { b: 'Plain English', f: 'Shaker', s: 'tile' } ] },
-        { name: 'Estate White', s: 'brass', items: [ { b: 'Christopher Peacock', f: 'Shaker', s: 'brass' } ] }
-      ]
-    };
+    // ══ CABINET MAKERS — brand-first (client: cabinets are the ONE category we can name;
+    //    focus on the manufacturer, link out to their sites, use their marketing assets). ══
+    // Names + URLs are from the client's spreadsheet. Positioning copy is DRAFT (only
+    // Pronorm's "top-10 German maker" is a confirmed fact) — awaiting Cal's approved copy.
+    // Card imagery is real showroom cabinetry, not yet confirmed brand-by-brand (Cal to map).
+    var IMG = 'assets/img/cabinetry/';
+    var MAKERS = [
+      { name: 'Pronorm', origin: 'Germany', url: 'https://pronormusa.com/', img: IMG + 'cab-01.jpg', featured: true,
+        line: 'Handleless, precision-engineered German cabinetry — one of the ten largest kitchen makers in the world. The architectural end of the floor.',
+        meta: ['Germany', 'Handleless', 'Engineered'] },
+      { name: 'Fabuwood', origin: 'United States', url: 'https://www.fabuwood.com/', img: IMG + 'cab-04.jpg', featured: true,
+        line: 'A deep-finish American cabinet line with a devoted following — and the black, backlit-Crystallo kitchen on the showroom floor.',
+        meta: ['United States', 'Deep finishes', 'House favourite'] },
+      { name: 'Eclipse', origin: 'United States', url: 'https://www.eclipsecabinetry.com/', img: IMG + 'cab-02.jpg', featured: true,
+        line: 'Frameless, full-access construction across a broad range of doors and finishes — clean lines, generous interiors.',
+        meta: ['United States', 'Frameless'] },
+      { name: 'Aspect', origin: 'United States', url: 'https://www.aspectcabinetry.com/', img: IMG + 'cab-05.jpg', featured: false,
+        line: 'Considered semi-custom cabinetry, styled for the way a kitchen is actually used.' },
+      { name: 'Shiloh', origin: 'United States', url: 'https://www.shilohcabinetry.com/', img: IMG + 'cab-03.jpg', featured: false,
+        line: 'American-built semi-custom cabinetry, known for finish quality and precision.' }
+    ];
 
-    // ── RENDER ──
-    document.getElementById('heroImg').src = CATEGORY.hero;
-    document.getElementById('catName').textContent = CATEGORY.name;
-    document.getElementById('catTitle').innerHTML = CATEGORY.title;
-    document.getElementById('catIntro').textContent = CATEGORY.intro;
-    document.getElementById('styleLabel').textContent = CATEGORY.styleLabel;
-    document.getElementById('colourLabel').textContent = CATEGORY.colourLabel;
-    document.getElementById('styleN').textContent = String(CATEGORY.styles.length).padStart(2, '0');
-    document.getElementById('colourN').textContent = String(CATEGORY.colours.length).padStart(2, '0');
+    var ARROW = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M4.5 3H11v6.5" stroke="currentColor" stroke-width="1"/></svg>';
 
-    var styleGrid = document.getElementById('styleGrid');
-    CATEGORY.styles.forEach(function (st, i) {
-      var b = document.createElement('button');
-      b.className = 'style-tile';
-      b.innerHTML = '<img src="' + st.img + '" alt="' + st.key + '"><div class="st-meta"><span class="st-name">' + st.key + '</span><span class="st-more">' + st.items.length + ' options →</span></div>';
-      b.addEventListener('click', function () { openDrill('Door style', st.key, st.items); });
-      styleGrid.appendChild(b);
+    var rows = document.getElementById('makerRows');
+    MAKERS.filter(function (m) { return m.featured; }).forEach(function (m, i) {
+      var row = document.createElement('div');
+      row.className = 'maker reveal' + (i % 2 ? ' flip' : '');
+      var meta = (m.meta || []).map(function (t) { return '<span>' + t + '</span>'; }).join('');
+      row.innerHTML =
+        '<div class="maker-media"><img src="' + m.img + '" alt="' + m.name + ' cabinetry in the showroom" loading="lazy"></div>' +
+        '<div class="maker-body">' +
+          '<div class="maker-idx">' + String(i + 1).padStart(2, '0') + ' · ' + m.origin + '</div>' +
+          '<div class="maker-name">' + m.name + '</div>' +
+          '<p class="maker-line">' + m.line + '</p>' +
+          (meta ? '<div class="maker-meta">' + meta + '</div>' : '') +
+          '<a class="maker-link" href="' + m.url + '" target="_blank" rel="noopener">Explore ' + m.name + ' ' + ARROW + '</a>' +
+        '</div>';
+      rows.appendChild(row);
     });
 
-    var colourGrid = document.getElementById('colourGrid');
-    CATEGORY.colours.forEach(function (c) {
-      var b = document.createElement('button');
-      b.className = 'colour';
-      b.innerHTML = '<div class="colour-sw"><img src="' + SWATCH + c.s + '.jpg" alt="' + c.name + '"></div><span class="colour-name">' + c.name + '</span>';
-      b.addEventListener('click', function () { openDrill('Colour', c.name, c.items); });
-      colourGrid.appendChild(b);
+    var also = document.getElementById('alsoGrid');
+    MAKERS.filter(function (m) { return !m.featured; }).forEach(function (m, i) {
+      var a = document.createElement('a');
+      a.className = 'also reveal';
+      a.href = m.url; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML =
+        '<img src="' + m.img + '" alt="' + m.name + ' cabinetry" loading="lazy">' +
+        '<div class="also-body">' +
+          '<div class="also-idx">' + String(i + 4).padStart(2, '0') + ' · ' + m.origin + '</div>' +
+          '<div class="also-name">' + m.name + '</div>' +
+          '<p class="also-line">' + m.line + '</p>' +
+          '<span class="also-link">Explore ' + m.name + ' ' + ARROW + '</span>' +
+        '</div>';
+      also.appendChild(a);
     });
-
-    // ── DRILLDOWN PANEL ──
-    var panel = document.getElementById('panel'), scrim = document.getElementById('scrim');
-    function openDrill(region, name, items) {
-      document.getElementById('panelRegion').textContent = region;
-      document.getElementById('panelName').textContent = name;
-      document.getElementById('panelCount').textContent = items.length + (items.length === 1 ? ' option' : ' options') + ' — shown in the showroom';
-      document.getElementById('panelMats').innerHTML = items.map(function (m) {
-        return '<div class="mat"><img class="mat-swatch" src="' + SWATCH + m.s + '.jpg" alt="' + m.b + '"><div><div class="mat-name">' + m.b + '</div><div class="mat-type">' + m.f + '</div></div></div>';
-      }).join('');
-      panel.classList.add('open'); scrim.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
-    }
-    function closeDrill() { panel.classList.remove('open'); scrim.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); }
-    document.getElementById('panelClose').addEventListener('click', closeDrill);
-    scrim.addEventListener('click', closeDrill);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrill(); });
 
     // Reveal
     (function () {
