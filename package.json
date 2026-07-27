@@ -1,0 +1,15 @@
+{
+  "name": "5blox-showroom",
+  "version": "1.0.0",
+  "private": true,
+  "description": "5blox showroom — static site served via Express with clean (extensionless) URLs.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
