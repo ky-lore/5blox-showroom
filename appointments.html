@@ -88,6 +88,35 @@
       .panel-p.active .p-open { opacity: 1; transform: none; }
     }
 
+    /* ── FULL-SCREEN "SOUND LIKE YOU?" MODAL ── */
+    .modal { position: fixed; inset: 0; z-index: 120; background: var(--void); opacity: 0; visibility: hidden; transition: opacity 0.55s ease, visibility 0.55s ease; }
+    .modal.open { opacity: 1; visibility: visible; }
+    .modal-inner { position: relative; height: 100%; display: grid; grid-template-columns: 1fr; transform: scale(1.015); transition: transform 0.6s cubic-bezier(.2,.7,.2,1); }
+    .modal.open .modal-inner { transform: none; }
+    @media (min-width: 900px) { .modal-inner { grid-template-columns: 1.05fr 1fr; } }
+    .modal-media { position: relative; overflow: hidden; background: var(--coal); min-height: 34vh; }
+    @media (min-width: 900px) { .modal-media { min-height: auto; } }
+    .modal-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .modal-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,9,8,0.24), rgba(10,9,8,0.6)), var(--grain); background-size: cover, 240px; background-blend-mode: normal, overlay; opacity: 1; }
+    .modal-body { position: relative; display: flex; flex-direction: column; justify-content: center; padding: clamp(72px,10vh,120px) clamp(24px,5vw,90px) clamp(40px,7vh,80px); }
+    .modal-close { position: absolute; top: clamp(20px,3vh,32px); right: clamp(20px,4vw,40px); z-index: 3; background: none; border: none; color: var(--ash); font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: color 0.3s; }
+    .modal-close:hover { color: var(--bone); }
+    .modal-scroll { max-height: 100%; overflow-y: auto; }
+    .m-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--faint); }
+    .m-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(34px,4.6vw,72px); line-height: 0.96; letter-spacing: -0.015em; margin: 16px 0 0; }
+    .m-lead { color: var(--ash); font-size: clamp(14px,1.15vw,16px); font-weight: 300; line-height: 1.75; max-width: 44ch; margin-top: 22px; }
+    .m-points { list-style: none; margin: 30px 0 0; border-top: 1px solid var(--line-2); max-width: 46ch; }
+    .m-points li { display: flex; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line-2); font-size: 14px; color: var(--bone); }
+    .m-points li .pm { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--faint); flex-shrink: 0; }
+    .m-foot { display: flex; align-items: center; gap: clamp(18px,3vw,38px); flex-wrap: wrap; margin-top: 36px; }
+    .m-prompt { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(18px,1.8vw,26px); color: var(--bone); letter-spacing: -0.005em; }
+    .m-cta { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 15px 28px; transition: gap 0.4s, background 0.3s; }
+    .m-cta:hover { gap: 20px; background: #fff; }
+    .m-switch { display: flex; justify-content: space-between; gap: 16px; margin-top: clamp(40px,7vh,72px); padding-top: 24px; border-top: 1px solid var(--line-2); }
+    .m-switch button { background: none; border: none; cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); transition: color 0.3s; }
+    .m-switch button:hover { color: var(--bone); }
+    body.modal-lock { overflow: hidden; }
+
     /* ── REQUEST (minimal) ── */
     .request { position: relative; overflow: hidden; border-top: 1px solid var(--line-2); padding: clamp(76px,13vh,170px) clamp(20px,5vw,80px); }
     .request > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.2; }
@@ -188,6 +217,32 @@
     </div>
   </section>
 
+  <!-- Full-screen "Sound like you?" modal (populated by JS) -->
+  <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Profile detail">
+    <div class="modal-inner">
+      <div class="modal-media"><img id="mImg" src="" alt=""></div>
+      <div class="modal-body">
+        <button class="modal-close" id="modalClose" aria-label="Back to profiles">Close ✕</button>
+        <div class="modal-scroll">
+          <div class="m-eyebrow" id="mEyebrow"></div>
+          <h2 class="m-name" id="mName"></h2>
+          <p class="m-lead" id="mLead"></p>
+          <ul class="m-points" id="mPoints"></ul>
+          <div class="m-foot">
+            <span class="m-prompt">Sound like you?</span>
+            <a class="m-cta" id="mCta" href="#request">Request an introduction
+              <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+            </a>
+          </div>
+          <div class="m-switch">
+            <button class="m-prev" id="mPrev" aria-label="Previous profile">← <span id="mPrevName"></span></button>
+            <button class="m-next" id="mNext" aria-label="Next profile"><span id="mNextName"></span> →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="foot-grid">
       <div>
@@ -207,11 +262,31 @@
     // until engaged so the material photography is the reward on hover/tap.
     var IMG = 'assets/img/';
     var ROLES = [
-      { short: 'Designer',  id: 'Interior Designer',          tag: 'Trade terms, samples, and slabs held in your client’s name.', img: IMG + 'material/statement-1.jpg' },
-      { short: 'Architect', id: 'Architect',                  tag: 'Specification and sourcing support, to your drawing set.',    img: IMG + 'cabinetry/cab-04.jpg' },
-      { short: 'Builder',   id: 'Builder / Contractor',       tag: 'Direct supply and volume terms, delivered to the jobsite.',   img: IMG + 'cabinetry/cab-05.jpg' },
-      { short: 'Homeowner', id: 'Homeowner / Private client', tag: 'Buy direct — no designer required. By appointment.',          img: IMG + 'material/statement-2.jpg' },
-      { short: 'Realtor',   id: 'Realtor / Agent',            tag: 'Staging and finish work, on fast turnarounds.',               img: IMG + 'material/onyx.jpg' }
+      { short: 'Designer', id: 'Interior Designer', tag: 'Trade terms, samples, and slabs held in your client’s name.',
+        eyebrow: 'For the trade',
+        lead: 'You bring the vision; we stay behind it. Trade pricing, full sample access, and material reserved in your client’s name — the work stays yours, unbranded in the room.',
+        points: ['Trade pricing & sample access', 'Slabs reserved, numbered, held', 'Presentation support — unbranded', 'One contact for stone, cabinetry & tile'],
+        img: IMG + 'material/statement-1.jpg' },
+      { short: 'Architect', id: 'Architect', tag: 'Specification and sourcing support, to your drawing set.',
+        eyebrow: 'For the drawing set',
+        lead: 'Specify to the vein. We support your sourcing and specification — exact stone, exact finish — and hold what your drawings call for until the set is ready.',
+        points: ['Specification & sample support', 'Sourcing to your schedule', 'Finishes documented to spec', 'Held for the project timeline'],
+        img: IMG + 'cabinetry/cab-04.jpg' },
+      { short: 'Builder', id: 'Builder / Contractor', tag: 'Direct supply and volume terms, delivered to the jobsite.',
+        eyebrow: 'For the build',
+        lead: 'One source, delivered. Direct supply and volume terms across stone, cabinetry and tile, coordinated to the jobsite so the trades aren’t chasing material.',
+        points: ['Direct & volume supply', 'Jobsite delivery, scheduled', 'One point of contact', 'Trade pricing across categories'],
+        img: IMG + 'cabinetry/cab-05.jpg' },
+      { short: 'Homeowner', id: 'Homeowner / Private client', tag: 'Buy direct — no designer required. By appointment.',
+        eyebrow: 'For the home',
+        lead: 'You don’t need a designer to buy here. Come in by appointment, see the real material in person, and take it home direct — with as much guidance as you want.',
+        points: ['Buy direct — no trade required', 'Private, unhurried appointment', 'Guided selection', 'Delivery on your schedule'],
+        img: IMG + 'material/statement-2.jpg' },
+      { short: 'Realtor', id: 'Realtor / Agent', tag: 'Staging and finish work, on fast turnarounds.',
+        eyebrow: 'For the close',
+        lead: 'Help a buyer see the potential. Staging and finish work on fast turnarounds — the upgrade that moves a listing and helps close the sale.',
+        points: ['Staging & finish work', 'Fast turnarounds', 'Move-in-ready selections', 'Support through the close'],
+        img: IMG + 'material/onyx.jpg' }
     ];
 
     var ARROW = '<svg width="18" height="8" viewBox="0 0 20 8" fill="none" aria-hidden="true"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>';
@@ -233,7 +308,7 @@
         '<span class="p-cta">Request an introduction ' + ARROW + '</span></span>';
       panel.addEventListener('click', function (e) {
         var onCta = !!e.target.closest('.p-cta');
-        if (isDesktop() || panel.classList.contains('active') || onCta) { commit(i); }
+        if (isDesktop() || panel.classList.contains('active') || onCta) { openModal(i); }
         else { setActive(i); }
       });
       selector.appendChild(panel);
@@ -242,11 +317,50 @@
 
     function isDesktop() { return window.matchMedia('(min-width: 821px)').matches; }
     function setActive(i) { panels.forEach(function (p, k) { p.classList.toggle('active', k === i); }); }
-    function commit(i) {
-      roleSelect.value = ROLES[i].id;
-      rqRole.textContent = ROLES[i].id;
-      document.getElementById('request').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // ── full-screen "Sound like you?" modal ──
+    var modal = document.getElementById('modal');
+    var mImg = document.getElementById('mImg'), mEyebrow = document.getElementById('mEyebrow'),
+      mName = document.getElementById('mName'), mLead = document.getElementById('mLead'), mPoints = document.getElementById('mPoints'),
+      mPrevName = document.getElementById('mPrevName'), mNextName = document.getElementById('mNextName');
+    var modalIndex = 0;
+    function fillModal(i) {
+      var r = ROLES[i];
+      modalIndex = i;
+      mImg.src = r.img; mImg.alt = r.id;
+      mEyebrow.textContent = r.eyebrow;
+      mName.textContent = r.id;
+      mLead.textContent = r.lead;
+      mPoints.innerHTML = r.points.map(function (p, k) {
+        return '<li><span class="pm">' + String(k + 1).padStart(2, '0') + '</span><span>' + p + '</span></li>';
+      }).join('');
+      mPrevName.textContent = ROLES[(i + ROLES.length - 1) % ROLES.length].short;
+      mNextName.textContent = ROLES[(i + 1) % ROLES.length].short;
+      roleSelect.value = r.id; rqRole.textContent = r.id;   // sync the form in the background
     }
+    function openModal(i) {
+      fillModal(i);
+      modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-lock');
+      document.getElementById('modalClose').focus();
+    }
+    function closeModal() {
+      modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-lock');
+    }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('mPrev').addEventListener('click', function () { fillModal((modalIndex + ROLES.length - 1) % ROLES.length); });
+    document.getElementById('mNext').addEventListener('click', function () { fillModal((modalIndex + 1) % ROLES.length); });
+    document.getElementById('mCta').addEventListener('click', function (e) {
+      e.preventDefault(); closeModal();
+      document.getElementById('request').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (!modal.classList.contains('open')) return;
+      if (e.key === 'Escape') closeModal();
+      else if (e.key === 'ArrowLeft') fillModal((modalIndex + ROLES.length - 1) % ROLES.length);
+      else if (e.key === 'ArrowRight') fillModal((modalIndex + 1) % ROLES.length);
+    });
 
     selector.addEventListener('mouseenter', function () { if (isDesktop()) selector.classList.add('hovering'); });
     selector.addEventListener('mouseleave', function () { selector.classList.remove('hovering'); });
