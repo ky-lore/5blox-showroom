@@ -63,7 +63,7 @@
     body::before {
       content: ""; position: fixed; inset: 0; z-index: 200; pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 300px; opacity: 0.1; mix-blend-mode: screen;
+      background-size: 300px; opacity: 0.04; mix-blend-mode: screen;
     }
 
     /* ── shared label / eyebrow ── */
@@ -123,7 +123,7 @@
     /* Chrome-Hearts grit over the moving image. */
     .hero-bg::before {
       content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-      background-image: var(--grain); background-size: 240px; opacity: 0.22; mix-blend-mode: overlay;
+      background-image: var(--grain); background-size: 240px; opacity: 0.1; mix-blend-mode: overlay;
     }
     @media (max-width: 900px) {
       /* Narrow screens can't lean on a left-to-right scrim — darken the whole field. */
@@ -251,7 +251,7 @@
     .statement > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     /* Heavy grit grain over the image — overlay works on light OR dark frames. */
     .statement::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background-image: var(--grain); background-size: 220px; opacity: 0.3; mix-blend-mode: overlay; }
+      background-image: var(--grain); background-size: 220px; opacity: 0.12; mix-blend-mode: overlay; }
     .statement::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: linear-gradient(180deg, rgba(10,9,8,0.36) 0%, transparent 24%, transparent 58%, rgba(10,9,8,0.8) 100%); }
     .st-cap { position: absolute; left: clamp(20px, 4vw, 56px); bottom: clamp(26px, 5vh, 54px); z-index: 2; }
@@ -269,7 +269,7 @@
     /* Grit grain over the material photos so the texture reads on the imagery too. */
     .scene-media::after, .detail-band figure::after {
       content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-      background-image: var(--grain); background-size: 220px; opacity: 0.24; mix-blend-mode: overlay;
+      background-image: var(--grain); background-size: 220px; opacity: 0.11; mix-blend-mode: overlay;
     }
 
     /* ── MOTION (split flythrough video + copy) ── */
@@ -278,25 +278,31 @@
     .motion-video { position: relative; overflow: hidden; background: var(--coal); min-height: 58vh; }
     @media (min-width: 900px) { .motion-video { min-height: auto; } }
     .motion-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .motion-video::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.22; mix-blend-mode: overlay; }
+    .motion-video::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.1; mix-blend-mode: overlay; }
     .motion-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(60px,12vh,140px) clamp(24px,5vw,90px); }
     .motion-copy .label { margin-bottom: 22px; }
     .motion-copy h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(30px,4.2vw,64px); line-height: 1.04; letter-spacing: -0.015em; }
     .motion-copy h2 em { color: var(--ash); }
     .motion-copy p { max-width: 34ch; margin-top: 22px; color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.85; }
 
-    /* ── MOOD BAND (curated material palettes — NOT showroom pieces, per client;
-       placeholder tiles now, swap for the client's mood-board photography later) ── */
-    .moodband { position: relative; overflow: hidden; border-block: 1px solid var(--line-2); }
-    .mood-track { display: flex; gap: 2px; width: max-content; animation: mood 72s linear infinite; }
+    /* ── MOOD BOARD — its own full-viewport moment (fades in/out on scroll).
+       Material palettes only, NOT showroom pieces; placeholder for the client's mood-board shots. ── */
+    .moodband { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: clamp(30px,5vh,64px); overflow: hidden; border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: clamp(80px,13vh,150px) 0; }
+    .mood-fade { opacity: var(--mf, 1); will-change: opacity; }
+    .mood-head { padding: 0 clamp(20px,4vw,56px) clamp(28px,5vh,52px); }
+    .mood-head .label { display: block; margin-bottom: 16px; }
+    .mood-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(32px,5.4vw,80px); line-height: 0.94; letter-spacing: -0.018em; }
+    .mood-head h2 em { color: var(--ash); }
+    .mood-head p { color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.7; max-width: 42ch; margin-top: 18px; }
+    .mood-track { display: flex; gap: 2px; width: max-content; animation: mood 80s linear infinite; }
     .moodband:hover .mood-track { animation-play-state: paused; }
-    .mood-item { position: relative; flex: none; width: clamp(210px, 23vw, 330px); aspect-ratio: 3 / 4; overflow: hidden; background: var(--coal); }
+    .mood-item { position: relative; flex: none; height: clamp(320px, 52vh, 580px); aspect-ratio: 3 / 4; overflow: hidden; background: var(--coal); }
     .mood-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.5s cubic-bezier(.2,.7,.2,1); }
     .mood-item:hover img { transform: scale(1.05); }
-    .mood-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, transparent 52%, rgba(10,9,8,0.72)), var(--grain); background-size: cover, 220px; background-blend-mode: normal, overlay; }
-    .mood-cap { position: absolute; left: 16px; bottom: 15px; z-index: 3; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.9); }
+    .mood-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, transparent 50%, rgba(10,9,8,0.74)); }
+    .mood-cap { position: absolute; left: 18px; bottom: 16px; z-index: 3; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.92); }
     @keyframes mood { to { transform: translateX(-50%); } }
-    @media (prefers-reduced-motion: reduce) { .mood-track { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .mood-track { animation: none; } .mood-fade { opacity: 1 !important; } }
 
     /* ═══════════ FOOTER ═══════════ */
     footer { border-top: 1px solid var(--line-2); padding: clamp(48px, 8vh, 90px) clamp(20px, 4vw, 56px) 40px; }
@@ -385,7 +391,7 @@
     .origin-topo { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.5; }
     .origin-topo path { fill: none; stroke: var(--line); stroke-width: 0.6; }
     .origin-topo .lead-ring { stroke: var(--faint); stroke-width: 0.8; }
-    .origin-plate::after { content: ""; position: absolute; inset: 0; background-image: var(--grain); background-size: 200px; opacity: 0.16; mix-blend-mode: overlay; pointer-events: none; }
+    .origin-plate::after { content: ""; position: absolute; inset: 0; background-image: var(--grain); background-size: 200px; opacity: 0.09; mix-blend-mode: overlay; pointer-events: none; }
     .origin-mark { position: absolute; top: 12px; left: 14px; z-index: 2; font-family: var(--mono); font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--faint); }
     .origin-coord { position: relative; z-index: 2; padding: 12px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--ash); }
     .panel-lead { color: var(--ash); font-size: 13.5px; font-weight: 300; line-height: 1.72; margin-bottom: 10px; max-width: 42ch; }
@@ -522,8 +528,14 @@
     </div>
   </section>
 
-  <!-- MOOD BAND (curated material palettes — placeholder for the client's mood-board photography) -->
-  <section class="moodband" aria-label="Material moods">
+  <!-- MOOD BOARD — full-viewport moment, fades in/out on scroll (placeholder for the client's mood-board photography) -->
+  <section class="moodband" id="moodband" aria-label="Material moods">
+    <div class="mood-fade" id="moodFade">
+    <div class="mood-head reveal">
+      <span class="label">Moods</span>
+      <h2>In the <em>palette.</em></h2>
+      <p>Exotic stone, chosen for its character. A rotating look at what's on the floor.</p>
+    </div>
     <div class="mood-track">
       <!-- set A — exotic stone (real variety names; slab textures OK here per client) -->
       <div class="mood-item"><img src="assets/img/material/mood/granite_Van-Gogh_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Van Gogh</span></div>
@@ -539,6 +551,7 @@
       <div class="mood-item"><img src="assets/img/material/mood/granite_Lava-Jewel_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Lava Jewel</span></div>
       <div class="mood-item"><img src="assets/img/material/mood/granite_Verde-Brasiliano_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Verde Brasiliano</span></div>
       <div class="mood-item"><img src="assets/img/material/mood/granite_Blue-Pearl-GT_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Blue Pearl</span></div>
+    </div>
     </div>
   </section>
 
@@ -868,6 +881,26 @@
           el.style.transform = 'translateY(' + (d * -amt).toFixed(1) + 'px)';
         });
         ticking = false;
+      }
+      function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      update();
+    })();
+
+    // Mood board — fade the whole section in as it centers, out as it leaves.
+    (function () {
+      var band = document.getElementById('moodband'), fade = document.getElementById('moodFade');
+      if (!band || !fade) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { fade.style.setProperty('--mf', '1'); return; }
+      var ticking = false;
+      function update() {
+        ticking = false;
+        var r = band.getBoundingClientRect(), vh = window.innerHeight;
+        var dist = Math.abs((r.top + r.height / 2) - vh / 2);   // 0 = perfectly centred
+        var start = vh * 0.22, end = vh * 0.9;                    // full opacity in the middle, fade near edges
+        var op = dist <= start ? 1 : dist >= end ? 0.04 : 1 - ((dist - start) / (end - start)) * 0.96;
+        fade.style.setProperty('--mf', op.toFixed(3));
       }
       function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
       window.addEventListener('scroll', onScroll, { passive: true });
