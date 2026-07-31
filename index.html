@@ -285,16 +285,18 @@
     .motion-copy h2 em { color: var(--ash); }
     .motion-copy p { max-width: 34ch; margin-top: 22px; color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.85; }
 
-    /* ── B-ROLL REEL (horizontal moving-video bar) ── */
-    .reel { position: relative; overflow: hidden; border-block: 1px solid var(--line-2); }
-    .reel-track { display: flex; gap: 2px; width: max-content; animation: reel 68s linear infinite; }
-    .reel:hover .reel-track { animation-play-state: paused; }
-    .reel-item { position: relative; flex: none; width: clamp(280px, 34vw, 520px); aspect-ratio: 16 / 9; overflow: hidden; background: var(--coal); }
-    .reel-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .reel-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.2; mix-blend-mode: overlay; }
-    .reel-cap { position: absolute; left: 14px; bottom: 12px; z-index: 3; font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.85); }
-    @keyframes reel { to { transform: translateX(-50%); } }
-    @media (prefers-reduced-motion: reduce) { .reel-track { animation: none; } }
+    /* ── MOOD BAND (curated material palettes — NOT showroom pieces, per client;
+       placeholder tiles now, swap for the client's mood-board photography later) ── */
+    .moodband { position: relative; overflow: hidden; border-block: 1px solid var(--line-2); }
+    .mood-track { display: flex; gap: 2px; width: max-content; animation: mood 72s linear infinite; }
+    .moodband:hover .mood-track { animation-play-state: paused; }
+    .mood-item { position: relative; flex: none; width: clamp(210px, 23vw, 330px); aspect-ratio: 3 / 4; overflow: hidden; background: var(--coal); }
+    .mood-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.5s cubic-bezier(.2,.7,.2,1); }
+    .mood-item:hover img { transform: scale(1.05); }
+    .mood-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, transparent 52%, rgba(10,9,8,0.72)), var(--grain); background-size: cover, 220px; background-blend-mode: normal, overlay; }
+    .mood-cap { position: absolute; left: 16px; bottom: 15px; z-index: 3; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.9); }
+    @keyframes mood { to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .mood-track { animation: none; } }
 
     /* ═══════════ FOOTER ═══════════ */
     footer { border-top: 1px solid var(--line-2); padding: clamp(48px, 8vh, 90px) clamp(20px, 4vw, 56px) 40px; }
@@ -340,6 +342,32 @@
     .pin.origin .pin-label { opacity: 1; background: none; bottom: 20px; color: var(--faint); }
     .map-legend { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
     .map-legend span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+
+    /* ── ORIGINS: expandable country panels (the full collection, below the map) ── */
+    .origins { max-width: 1500px; margin: 0 auto; padding: clamp(20px,3vh,40px) clamp(20px,4vw,56px) clamp(70px,11vh,130px); }
+    .origins-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(28px,4vh,48px); }
+    .origins-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3.4vw,48px); letter-spacing: -0.01em; line-height: 1; }
+    .origins-head .oh-note { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+    .country { border-top: 1px solid var(--line-2); }
+    .country:last-child { border-bottom: 1px solid var(--line-2); }
+    .country-head { display: flex; align-items: center; gap: 18px; width: 100%; text-align: left; background: none; border: none; cursor: pointer; -webkit-appearance: none; appearance: none; color: var(--bone); padding: clamp(20px,2.6vh,30px) 0; transition: color 0.35s, padding 0.4s; }
+    .country-head:hover { padding-left: 8px; }
+    .country-head .c-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3.4vw,46px); line-height: 1; letter-spacing: -0.01em; flex: 1; }
+    .country-head .c-region { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+    .country-head .c-count { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--ash); min-width: 74px; text-align: right; }
+    .country-head .c-toggle { font-family: var(--mono); font-size: 18px; color: var(--faint); width: 18px; text-align: center; transition: transform 0.4s, color 0.35s; }
+    .country.open .c-toggle { transform: rotate(45deg); color: var(--bone); }
+    .country-body { overflow: hidden; max-height: 0; transition: max-height 0.6s cubic-bezier(.2,.7,.2,1); }
+    .country.open .country-body { max-height: 900px; }
+    .country-inner { padding: 4px 0 30px; display: grid; grid-template-columns: 1fr; gap: 26px 44px; }
+    @media (min-width: 680px) { .country-inner { grid-template-columns: 1fr 1fr; } }
+    .prov-block .pb-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line-2); margin-bottom: 4px; }
+    .prov-block .pb-name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); }
+    .prov-block .pb-coord { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--faint); white-space: nowrap; }
+    .prov-block .pb-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line-2); }
+    .prov-block .pb-mat { font-family: var(--display); font-size: 17px; font-weight: 400; color: var(--bone); }
+    .prov-block .pb-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
+    @media (max-width: 560px) { .country-head .c-region { display: none; } }
 
     /* material drawer panel */
     .scrim { position: fixed; inset: 0; z-index: 70; background: rgba(6,5,4,0.5); opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
@@ -458,6 +486,16 @@
       </div>
     </div>
   </section>
+
+  <!-- FULL LIST: expandable country panels (the whole collection at a glance) -->
+  <section class="origins">
+    <div class="origins-head reveal">
+      <h2>The collection</h2>
+      <span class="oh-note">Select an origin</span>
+    </div>
+    <div id="countryList"></div>
+  </section>
+
   <div class="scrim" id="scrim"></div>
   <aside class="panel" id="panel" aria-hidden="true">
     <button class="panel-close" id="panelClose">Close ✕</button>
@@ -484,22 +522,23 @@
     </div>
   </section>
 
-  <!-- B-ROLL REEL (horizontal moving-video bar) -->
-  <section class="reel" aria-label="Showroom in motion">
-    <div class="reel-track" id="reelTrack">
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-01.jpg" data-src="assets/video/web/reel-01.mp4"></video><span class="reel-cap">Cabinetry</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-03.jpg" data-src="assets/video/web/reel-03.mp4"></video><span class="reel-cap">Stone</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-04.jpg" data-src="assets/video/web/reel-04.mp4"></video><span class="reel-cap">The floor</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-02.jpg" data-src="assets/video/web/reel-02.mp4"></video><span class="reel-cap">Tile</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-05.jpg" data-src="assets/video/web/reel-05.mp4"></video><span class="reel-cap">Showroom</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-06.jpg" data-src="assets/video/web/reel-06.mp4"></video><span class="reel-cap">Backsplash</span></div>
-      <!-- duplicate set for a seamless loop -->
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-01.jpg" data-src="assets/video/web/reel-01.mp4"></video><span class="reel-cap">Cabinetry</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-03.jpg" data-src="assets/video/web/reel-03.mp4"></video><span class="reel-cap">Stone</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-04.jpg" data-src="assets/video/web/reel-04.mp4"></video><span class="reel-cap">The floor</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-02.jpg" data-src="assets/video/web/reel-02.mp4"></video><span class="reel-cap">Tile</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-05.jpg" data-src="assets/video/web/reel-05.mp4"></video><span class="reel-cap">Showroom</span></div>
-      <div class="reel-item"><video muted loop playsinline preload="none" poster="assets/video/poster/reel-06.jpg" data-src="assets/video/web/reel-06.mp4"></video><span class="reel-cap">Backsplash</span></div>
+  <!-- MOOD BAND (curated material palettes — placeholder for the client's mood-board photography) -->
+  <section class="moodband" aria-label="Material moods">
+    <div class="mood-track">
+      <!-- set A — exotic stone (real variety names; slab textures OK here per client) -->
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Van-Gogh_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Van Gogh</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Altair_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Altair</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Blue-Bahia_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Blue Bahia</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Lava-Jewel_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Lava Jewel</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Verde-Brasiliano_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Verde Brasiliano</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Blue-Pearl-GT_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Blue Pearl</span></div>
+      <!-- set B (duplicate for a seamless loop) -->
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Van-Gogh_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Van Gogh</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Altair_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Altair</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Blue-Bahia_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Blue Bahia</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Lava-Jewel_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Lava Jewel</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Verde-Brasiliano_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Verde Brasiliano</span></div>
+      <div class="mood-item"><img src="assets/img/material/mood/granite_Blue-Pearl-GT_exotic--.gif" alt="" loading="lazy"><span class="mood-cap">Blue Pearl</span></div>
     </div>
   </section>
 
@@ -732,23 +771,43 @@
       document.getElementById('panelClose').addEventListener('click', closePanel);
       scrim.addEventListener('click', closePanel);
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePanel(); });
-    })();
 
-    // ── B-ROLL REEL: lazy-load + play only while in view ──
-    (function () {
-      var reel = document.querySelector('.reel');
-      if (!reel) return;
-      var vids = [].slice.call(reel.querySelectorAll('video'));
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var loaded = false;
-      function load() { if (loaded) return; loaded = true; vids.forEach(function (v) { if (v.dataset.src) { v.src = v.dataset.src; v.load(); } }); }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { load(); if (!reduce) vids.forEach(function (v) { var p = v.play(); if (p) p.catch(function () { }); }); }
-          else { vids.forEach(function (v) { v.pause(); }); }
+      // ── FULL LIST: expandable country panels below the map (same ORIGINS data) ──
+      (function () {
+        var clist = document.getElementById('countryList');
+        if (!clist) return;
+        ORIGINS.forEach(function (o, i) {
+          var groups = [], idx = {};
+          o.mats.forEach(function (m) {
+            var key = m.prov || '__req';
+            if (!(key in idx)) { idx[key] = groups.length; groups.push({ prov: m.prov, items: [] }); }
+            groups[idx[key]].items.push(m);
+          });
+          var blocks = groups.map(function (g) {
+            var label = g.prov || 'Provenance on request';
+            var coord = (g.prov && PROVCOORD[g.prov]) ? '<span class="pb-coord">' + PROVCOORD[g.prov] + '</span>' : '';
+            var rows = g.items.map(function (m) {
+              return '<div class="pb-row"><span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
+            }).join('');
+            return '<div class="prov-block"><div class="pb-head"><span class="pb-name">' + label + '</span>' + coord + '</div>' + rows + '</div>';
+          }).join('');
+          var el = document.createElement('div');
+          el.className = 'country' + (i === 0 ? ' open' : '');
+          el.innerHTML =
+            '<button class="country-head" aria-expanded="' + (i === 0) + '">' +
+              '<span class="c-name">' + o.c + '</span>' +
+              '<span class="c-region">' + o.region + '</span>' +
+              '<span class="c-count">' + o.mats.length + (o.mats.length === 1 ? ' stone' : ' stones') + '</span>' +
+              '<span class="c-toggle">+</span>' +
+            '</button>' +
+            '<div class="country-body"><div class="country-inner">' + blocks + '</div></div>';
+          el.querySelector('.country-head').addEventListener('click', function () {
+            var open = el.classList.toggle('open');
+            this.setAttribute('aria-expanded', open);
+          });
+          clist.appendChild(el);
         });
-      }, { threshold: 0.02 });
-      io.observe(reel);
+      })();
     })();
 
     // ── FULL-BLEED / MOTION VIDEOS: lazy-load + play only while in view ──

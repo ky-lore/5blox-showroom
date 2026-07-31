@@ -80,6 +80,32 @@
     .map-legend { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
     .map-legend span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
 
+    /* ── ORIGINS: expandable country panels (the full picture in a list, below the map) ── */
+    .origins { max-width: 1500px; margin: 0 auto; padding: clamp(40px,7vh,90px) clamp(20px,4vw,56px) clamp(80px,12vh,150px); border-top: 1px solid var(--line-2); }
+    .origins-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(30px,5vh,52px); }
+    .origins-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3.4vw,48px); letter-spacing: -0.01em; line-height: 1; }
+    .origins-head .oh-note { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+    .country { border-top: 1px solid var(--line-2); }
+    .country:last-child { border-bottom: 1px solid var(--line-2); }
+    .country-head { display: flex; align-items: center; gap: 18px; width: 100%; text-align: left; background: none; border: none; cursor: pointer; -webkit-appearance: none; appearance: none; color: var(--bone); padding: clamp(20px,2.6vh,30px) 0; transition: color 0.35s, padding 0.4s; }
+    .country-head:hover { padding-left: 8px; }
+    .country-head .c-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3.4vw,46px); line-height: 1; letter-spacing: -0.01em; flex: 1; }
+    .country-head .c-region { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+    .country-head .c-count { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--ash); min-width: 74px; text-align: right; }
+    .country-head .c-toggle { font-family: var(--mono); font-size: 18px; color: var(--faint); width: 18px; text-align: center; transition: transform 0.4s, color 0.35s; }
+    .country.open .c-toggle { transform: rotate(45deg); color: var(--bone); }
+    .country-body { overflow: hidden; max-height: 0; transition: max-height 0.6s cubic-bezier(.2,.7,.2,1); }
+    .country.open .country-body { max-height: 900px; }
+    .country-inner { padding: 4px 0 30px; display: grid; grid-template-columns: 1fr; gap: 26px 44px; }
+    @media (min-width: 680px) { .country-inner { grid-template-columns: 1fr 1fr; } }
+    .prov-block .pb-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line-2); margin-bottom: 4px; }
+    .prov-block .pb-name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); }
+    .prov-block .pb-coord { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--faint); white-space: nowrap; }
+    .prov-block .pb-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line-2); }
+    .prov-block .pb-mat { font-family: var(--display); font-size: 17px; font-weight: 400; color: var(--bone); }
+    .prov-block .pb-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
+    @media (max-width: 560px) { .country-head .c-region { display: none; } }
+
     /* PANEL (material drawer) */
     .scrim { position: fixed; inset: 0; z-index: 70; background: rgba(6,5,4,0.5); opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
     .scrim.open { opacity: 1; visibility: visible; }
@@ -176,6 +202,15 @@
       <span>4 sources · 3 continents</span>
       <span>Current collection · subject to availability</span>
     </div>
+  </section>
+
+  <!-- FULL LIST: expandable country panels (the whole collection at a glance) -->
+  <section class="origins">
+    <div class="origins-head reveal">
+      <h2>The collection</h2>
+      <span class="oh-note">Select an origin</span>
+    </div>
+    <div id="countryList"></div>
   </section>
 
   <!-- MATERIAL PANEL -->
@@ -360,6 +395,43 @@
     document.getElementById('panelClose').addEventListener('click', closePanel);
     scrim.addEventListener('click', closePanel);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePanel(); });
+
+    // ── FULL LIST: expandable country panels (same ORIGINS data as the map) ──
+    (function () {
+      var list = document.getElementById('countryList');
+      if (!list) return;
+      ORIGINS.forEach(function (o, i) {
+        var groups = [], idx = {};
+        o.mats.forEach(function (m) {
+          var key = m.prov || '__req';
+          if (!(key in idx)) { idx[key] = groups.length; groups.push({ prov: m.prov, items: [] }); }
+          groups[idx[key]].items.push(m);
+        });
+        var blocks = groups.map(function (g) {
+          var label = g.prov || 'Provenance on request';
+          var coord = (g.prov && PROVCOORD[g.prov]) ? '<span class="pb-coord">' + PROVCOORD[g.prov] + '</span>' : '';
+          var rows = g.items.map(function (m) {
+            return '<div class="pb-row"><span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
+          }).join('');
+          return '<div class="prov-block"><div class="pb-head"><span class="pb-name">' + label + '</span>' + coord + '</div>' + rows + '</div>';
+        }).join('');
+        var el = document.createElement('div');
+        el.className = 'country' + (i === 0 ? ' open' : '');
+        el.innerHTML =
+          '<button class="country-head" aria-expanded="' + (i === 0) + '">' +
+            '<span class="c-name">' + o.c + '</span>' +
+            '<span class="c-region">' + o.region + '</span>' +
+            '<span class="c-count">' + o.mats.length + (o.mats.length === 1 ? ' stone' : ' stones') + '</span>' +
+            '<span class="c-toggle">+</span>' +
+          '</button>' +
+          '<div class="country-body"><div class="country-inner">' + blocks + '</div></div>';
+        el.querySelector('.country-head').addEventListener('click', function () {
+          var open = el.classList.toggle('open');
+          this.setAttribute('aria-expanded', open);
+        });
+        list.appendChild(el);
+      });
+    })();
 
     // Reveal
     (function () {
