@@ -195,31 +195,976 @@
   </footer>
 
   <script>
-    // ══ CATEGORY DATA (placeholder — swap for real style/colour photography + the client's brand list) ══
+    // ══ CATEGORY DATA — Tile (from client SHOWROOM MATERIALS LIST · TILE PAGE sheet).
+    //    Names + material/format only — no vendor links, per client. Swatch/hero art is
+    //    still placeholder; swap for real tile photography when the client supplies it. ══
     var SWATCH = 'assets/img/material/swatch/';
     var IMG = 'assets/img/material/';
     var CATEGORY = {
-      name: 'Tile', hero: IMG + 'tile.jpg',
-      title: 'By surface,<br>by <em>hand.</em>',
-      intro: "Zellige, stone mosaic, hand-glazed field and large-format \u2014 the detail that decides a room. Cut and glazed by hand, and shown in person under the showroom's light.",
-      styleLabel: 'By format',
-      styles: [
-        { key: 'Zellige', img: IMG + 'tile.jpg', items: [ { b: 'Morocco \u00b7 Fez', f: 'Hand-glazed', s: 'tile' }, { b: 'Morocco \u00b7 Bejmat', f: 'Terracotta', s: 'wood' } ] },
-        { key: 'Stone Mosaic', img: IMG + 'statement-2.jpg', items: [ { b: 'Carrara', f: 'Leaf mosaic', s: 'tile' }, { b: 'Thassos', f: 'Pinwheel', s: 'tile' } ] },
-        { key: 'Field', img: IMG + 'tile.jpg', items: [ { b: 'Limestone', f: 'Honed', s: 'tile' } ] },
-        { key: 'Large Format', img: IMG + 'marble.jpg', items: [ { b: 'Porcelain', f: 'Marble-look', s: 'marble' }, { b: 'Sintered Stone', f: 'Matte', s: 'marble' } ] },
-        { key: 'Terracotta', img: IMG + 'wood.jpg', items: [ { b: 'Reclaimed', f: 'Aged', s: 'wood' } ] },
-        { key: 'Handmade', img: IMG + 'brass.jpg', items: [ { b: 'Artisan', f: 'Crackle glaze', s: 'brass' } ] }
-      ],
-      colourLabel: 'By colour',
-      colours: [
-        { name: 'Bone & White', s: 'tile', items: [ { b: 'Thassos', f: 'Mosaic', s: 'tile' }, { b: 'Zellige', f: 'Chalk', s: 'tile' } ] },
-        { name: 'Terracotta', s: 'wood', items: [ { b: 'Bejmat', f: 'Zellige', s: 'wood' } ] },
-        { name: 'Charcoal', s: 'marble', items: [ { b: 'Zellige', f: 'Graphite', s: 'marble' } ] },
-        { name: 'Sand', s: 'tile', items: [ { b: 'Limestone', f: 'Field', s: 'tile' } ] },
-        { name: 'Brass & Metal', s: 'brass', items: [ { b: 'Artisan', f: 'Handmade', s: 'brass' } ] }
+  "name": "Tile",
+  "hero": "assets/img/material/tile.jpg",
+  "title": "By surface,<br>by <em>hand.</em>",
+  "intro": "Marble mosaic, hand-glazed ceramic, large-format porcelain, zellige and natural stone — the detail that decides a room. Every piece shown in person under the showroom's light.",
+  "styleLabel": "By material",
+  "styles": [
+    {
+      "key": "Marble",
+      "img": "assets/img/material/marble.jpg",
+      "items": [
+        {
+          "b": "Rose Brass Mosaic Tile",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Pictoria Eclipse Rose",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Green And Thassos",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Trinity",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Chevron",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Marble And Shell Mini Scale",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Octagon And Thassos",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Santorini Swirled Petals",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Santorini Petals",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Santini Wave",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Geometria Eclipse Moon",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Geometria Star",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Panorama Triangle Mosaic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Postello Diamond And Dash Moasic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Calacatta Monet Petite Lantern Mosaic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Monet Mosaic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Monet Cross And Star",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Monet Triangle",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Blomma",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Jumbo Basketweave",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Mini Brick Mosaic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Okeanos",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Tia Verde Green",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Tundra",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Alterno Checkerd",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Primrose Marble",
+          "f": "MOSIAC",
+          "s": "marble"
+        },
+        {
+          "b": "Alaris Lovina",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Nordic",
+          "f": "12\"X12\" // 12\"X24\"",
+          "s": "marble"
+        },
+        {
+          "b": "Avanti",
+          "f": "MOSAIC // 12\" X 12\"",
+          "s": "marble"
+        },
+        {
+          "b": "Ako",
+          "f": "4\"X9\"",
+          "s": "marble"
+        },
+        {
+          "b": "Calyupso 3D Carved",
+          "f": "8\"X16\"",
+          "s": "marble"
+        },
+        {
+          "b": "Sunset Magia",
+          "f": "24\"X24\"",
+          "s": "marble"
+        },
+        {
+          "b": "Raina",
+          "f": "MOSAIC",
+          "s": "marble"
+        },
+        {
+          "b": "Fierrea",
+          "f": "11\"X24\"",
+          "s": "marble"
+        },
+        {
+          "b": "Groove Quattro",
+          "f": "12\"X24\"",
+          "s": "marble"
+        }
       ]
-    };
+    },
+    {
+      "key": "Natural Stone",
+      "img": "assets/img/material/statement-2.jpg",
+      "items": [
+        {
+          "b": "Corazza",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Prism Pearl Beveled Diamond",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Corazza White Sand Shell And Terrazzo Hexagon Tile",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Salma Stained Glass",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Santorini Spoke",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Althea",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Bajcal",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Ballantyne",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Bandera",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Bloom",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Nature Stacked",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Stretto Carved",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Trevino",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Rakestone (split)",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Bansu Carved",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Thalia 3D Carved Rosette",
+          "f": "ROSETTE // WAVE",
+          "s": "onyx"
+        },
+        {
+          "b": "Reef",
+          "f": "MOSAIC",
+          "s": "onyx"
+        }
+      ]
+    },
+    {
+      "key": "Porcelain",
+      "img": "assets/img/material/statement-1.jpg",
+      "items": [
+        {
+          "b": "Kasai Maple Sakura",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Boldara Marble",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Struktura Blue Dimensional",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Kyoto Impasto Mural",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Maramatto",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Emporio Jade Crystal-look",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Luminosa Matte",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "San Clemente Dots",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Circuit Futuristic",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "San Clemente Star",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Sultana Mesh Sienna",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Emporio Quartz 2X2",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Formidus Deco Square",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Japandi Skinny Slat Wood-look Like",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Ursa Squared",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Sultana Stella",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Emporio Natur Al Mosaic Tile",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Orenda",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Boldara",
+          "f": "2\"X2\"",
+          "s": "marble"
+        },
+        {
+          "b": "Farmhouse Living",
+          "f": "12\"X24\"",
+          "s": "marble"
+        },
+        {
+          "b": "Sini",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Kinro",
+          "f": "Porcelain",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "key": "Ceramic",
+      "img": "assets/img/material/tile.jpg",
+      "items": [
+        {
+          "b": "Rowena Impasto Cream Mural",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Brio Sage Dot 3D",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Baldwin Green Textured Kit Kat",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Cayo Sky Crackle",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Grazioso Orbit",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Grazioso Gingko",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Grazioso Ethereal",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Grazioso Aster",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Molten Brick",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Plume Feather",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Grazioso Light Concrete Deco",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Grazioso Concrete Flower",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Grazioso Monument 3D",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Panorama Marbeld",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Panorama Marbled Column",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Luna 2.5X8",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Luna 4X4",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Luna Arc",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Chloe Glossy",
+          "f": "5\"X5",
+          "s": "tile"
+        },
+        {
+          "b": "Marin",
+          "f": "2.5\"X10\"",
+          "s": "tile"
+        },
+        {
+          "b": "Los Lunas",
+          "f": "4\"X12\"",
+          "s": "tile"
+        },
+        {
+          "b": "Colorplay Inflex",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Stacy Garcia",
+          "f": "6\"X6\"",
+          "s": "tile"
+        }
+      ]
+    },
+    {
+      "key": "Glass",
+      "img": "assets/img/material/onyx.jpg",
+      "items": [
+        {
+          "b": "Illumine Silver Dust Mermaid Scale",
+          "f": "Glass",
+          "s": "onyx"
+        },
+        {
+          "b": "Illumine Silver Dust Penny Round",
+          "f": "Glass",
+          "s": "onyx"
+        }
+      ]
+    },
+    {
+      "key": "Zellige",
+      "img": "assets/img/material/wood.jpg",
+      "items": [
+        {
+          "b": "Zagora",
+          "f": "2\"X6\"",
+          "s": "wood"
+        }
+      ]
+    }
+  ],
+  "colourLabel": "By palette",
+  "colours": [
+    {
+      "name": "Green & Sage",
+      "s": "tile",
+      "items": [
+        {
+          "b": "Brio Sage Dot 3D",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Boldara Marble",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Baldwin Green Textured Kit Kat",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Emporio Jade Crystal-look",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Green And Thassos",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Marble And Shell Mini Scale",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Formidus Deco Square",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Envy Octagon And Thassos",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Salma Stained Glass",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Santorini Petals",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Luna 2.5X8",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Luna 4X4",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Luna Arc",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Boldara",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Zagora",
+          "f": "Zellige",
+          "s": "wood"
+        },
+        {
+          "b": "Chloe Glossy",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Marin",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Sini",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Los Lunas",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Nature Stacked",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Kinro",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Colorplay Inflex",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Okeanos",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Stretto Carved",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Bansu Carved",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Tia Verde Green",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Alaris Lovina",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Avanti",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Ako",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Stacy Garcia",
+          "f": "Ceramic",
+          "s": "tile"
+        }
+      ]
+    },
+    {
+      "name": "Blue & Teal",
+      "s": "onyx",
+      "items": [
+        {
+          "b": "Struktura Blue Dimensional",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Cayo Sky Crackle",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Ursa Squared",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Santorini Spoke",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Santini Wave",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Thalia 3D Carved Rosette",
+          "f": "Natural Stone",
+          "s": "onyx"
+        }
+      ]
+    },
+    {
+      "name": "Rose & Lilac",
+      "s": "marble",
+      "items": [
+        {
+          "b": "Rose Brass Mosaic Tile",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Pictoria Eclipse Rose",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Althea",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Alterno Checkerd",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Primrose Marble",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Fierrea",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Groove Quattro",
+          "f": "Marble",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "name": "Terracotta & Earth",
+      "s": "wood",
+      "items": [
+        {
+          "b": "Kasai Maple Sakura",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Sultana Mesh Sienna",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Corazza White Sand Shell And Terrazzo Hexagon Tile",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Japandi Skinny Slat Wood-look Like",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Sultana Stella",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Emporio Natur Al Mosaic Tile",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Orenda",
+          "f": "Porcelain",
+          "s": "marble"
+        },
+        {
+          "b": "Bajcal",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Ballantyne",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Bandera",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Jumbo Basketweave",
+          "f": "Marble",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "name": "Gold & Brass",
+      "s": "brass",
+      "items": [
+        {
+          "b": "Illumine Silver Dust Mermaid Scale",
+          "f": "Glass",
+          "s": "onyx"
+        },
+        {
+          "b": "Illumine Silver Dust Penny Round",
+          "f": "Glass",
+          "s": "onyx"
+        },
+        {
+          "b": "Santorini Swirled Petals",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Panorama Marbled Column",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Farmhouse Living",
+          "f": "Porcelain",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "name": "Black & Charcoal",
+      "s": "onyx",
+      "items": [
+        {
+          "b": "Monet Mosaic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Monet Cross And Star",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Monet Triangle",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Blomma",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Mini Brick Mosaic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Trevino",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Rakestone (split)",
+          "f": "Natural Stone",
+          "s": "onyx"
+        },
+        {
+          "b": "Calyupso 3D Carved",
+          "f": "Marble",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "name": "White & Cream",
+      "s": "marble",
+      "items": [
+        {
+          "b": "Rowena Impasto Cream Mural",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Panorama Triangle Mosaic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Grazioso Monument 3D",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Panorama Marbeld",
+          "f": "Ceramic",
+          "s": "tile"
+        },
+        {
+          "b": "Nordic",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Sunset Magia",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Raina",
+          "f": "Marble",
+          "s": "marble"
+        },
+        {
+          "b": "Reef",
+          "f": "Natural Stone",
+          "s": "onyx"
+        }
+      ]
+    }
+  ]
+};
 
     // ── RENDER ──
     document.getElementById('heroImg').src = CATEGORY.hero;
@@ -236,7 +1181,7 @@
       var b = document.createElement('button');
       b.className = 'style-tile';
       b.innerHTML = '<img src="' + st.img + '" alt="' + st.key + '"><div class="st-meta"><span class="st-name">' + st.key + '</span><span class="st-more">' + st.items.length + ' options →</span></div>';
-      b.addEventListener('click', function () { openDrill('Door style', st.key, st.items); });
+      b.addEventListener('click', function () { openDrill('Material', st.key, st.items); });
       styleGrid.appendChild(b);
     });
 
@@ -245,7 +1190,7 @@
       var b = document.createElement('button');
       b.className = 'colour';
       b.innerHTML = '<div class="colour-sw"><img src="' + SWATCH + c.s + '.jpg" alt="' + c.name + '"></div><span class="colour-name">' + c.name + '</span>';
-      b.addEventListener('click', function () { openDrill('Colour', c.name, c.items); });
+      b.addEventListener('click', function () { openDrill('Palette', c.name, c.items); });
       colourGrid.appendChild(b);
     });
 

@@ -362,9 +362,14 @@
     .country-head .c-region { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
     .country-head .c-count { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--ash); min-width: 74px; text-align: right; }
     .country-head .c-toggle { font-family: var(--mono); font-size: 18px; color: var(--faint); width: 18px; text-align: center; transition: transform 0.4s, color 0.35s; }
+    /* Subtle national mark per origin — greyed & dim at rest, colour on interaction
+       (matches the :root rule that colour only appears through material moments). */
+    .country-head .c-flag { flex: 0 0 auto; width: 26px; height: 17px; border-radius: 2px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line-2); opacity: 0.42; filter: grayscale(0.65) contrast(0.94); transition: opacity 0.45s, filter 0.45s; }
+    .country-head .c-flag svg { display: block; width: 100%; height: 100%; }
+    .country-head:hover .c-flag, .country.open .c-flag { opacity: 1; filter: none; }
     .country.open .c-toggle { transform: rotate(45deg); color: var(--bone); }
     .country-body { overflow: hidden; max-height: 0; transition: max-height 0.6s cubic-bezier(.2,.7,.2,1); }
-    .country.open .country-body { max-height: 900px; }
+    .country.open .country-body { max-height: 3000px; }
     .country-inner { padding: 4px 0 30px; display: grid; grid-template-columns: 1fr; gap: 26px 44px; }
     @media (min-width: 680px) { .country-inner { grid-template-columns: 1fr 1fr; } }
     .prov-block .pb-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line-2); margin-bottom: 4px; }
@@ -373,6 +378,26 @@
     .prov-block .pb-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line-2); }
     .prov-block .pb-mat { font-family: var(--display); font-size: 17px; font-weight: 400; color: var(--bone); }
     .prov-block .pb-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
+    /* On hover, a whisper of the slab itself rises behind the row — the one place
+       in the list where material colour is allowed to surface. Kept low with a
+       dark scrim + top/bottom fade so the type stays legible. Textures are generic
+       swatches (not exact inventory slabs, per client). */
+    .prov-block .pb-row { position: relative; isolation: isolate; overflow: hidden; transition: padding 0.45s ease; }
+    .prov-block .pb-row::before {
+      content: ""; position: absolute; inset: -1px -10px; z-index: -1; pointer-events: none;
+      background-image: linear-gradient(90deg, rgba(10,9,8,0.86), rgba(10,9,8,0.40) 52%, rgba(10,9,8,0.82)), var(--slab, url("assets/img/material/swatch/marble.jpg"));
+      background-size: cover, 190% auto; background-position: center, center;
+      opacity: 0; filter: saturate(0.82) brightness(0.92);
+      transition: opacity 0.55s ease;
+      -webkit-mask-image: linear-gradient(180deg, transparent, #000 20%, #000 80%, transparent);
+              mask-image: linear-gradient(180deg, transparent, #000 20%, #000 80%, transparent);
+    }
+    .prov-block .pb-row:hover::before { opacity: 0.9; }
+    .prov-block .pb-row:hover { padding-left: 12px; }
+    .prov-block .pb-row:hover .pb-mat, .prov-block .pb-row:hover .pb-type { color: var(--bone); }
+    .prov-block .pb-row[data-type="Onyx"], .prov-block .pb-row[data-type="Quartzite"] { --slab: url("assets/img/material/swatch/onyx.jpg"); }
+    .prov-block .pb-mat, .prov-block .pb-type { position: relative; z-index: 1; }
+    @media (prefers-reduced-motion: reduce) { .prov-block .pb-row, .prov-block .pb-row::before { transition: none; } }
     @media (max-width: 560px) { .country-head .c-region { display: none; } }
 
     /* material drawer panel */
@@ -480,14 +505,14 @@
     <div class="map-inner">
       <div class="map-head reveal">
         <div class="label"><span class="rule"></span>Sourcing</div>
-        <div class="map-lead">Drawn from quarries &amp; makers across three continents. Select a point to see what we carry.</div>
+        <div class="map-lead">Drawn from quarries &amp; makers across five continents. Select a point to see what we carry.</div>
       </div>
       <div class="mapstage reveal" id="mapstage">
         <svg class="arc-layer" id="arcs" viewBox="0 0 1000 361" preserveAspectRatio="none" aria-hidden="true"></svg>
       </div>
       <div class="map-legend reveal">
         <span>● Origin — Los Angeles</span>
-        <span>4 sources · 3 continents</span>
+        <span id="mapCount">7 sources · 5 continents</span>
         <span>Current collection · subject to availability</span>
       </div>
     </div>
@@ -677,7 +702,9 @@
           { n: 'Arabescato', t: 'Marble', prov: 'Carrara' },
           { n: 'Cristallo Juliet', t: 'Quartzite', prov: '' },
           { n: 'Cristallo Tiffany', t: 'Quartzite', prov: '' },
-          { n: 'Luminescence', t: 'Quartzite', prov: '' } ] },
+          { n: 'Luminescence', t: 'Quartzite', prov: '' },
+          { n: 'Bianco Carrara', t: 'Marble', prov: 'Carrara' },
+          { n: 'Calacatta Viola', t: 'Marble', prov: 'Carrara' } ] },
         { c: 'Brazil', region: 'South America', lat: -10.0, lon: -52.0,
           lead: 'Cut from the quartzite and granite belts of Bahia and Espírito Santo.', mats: [
           { n: 'Taj Mahal', t: 'Quartzite', prov: 'Bahia' },
@@ -685,14 +712,52 @@
           { n: 'Acqua Mare', t: 'Quartzite', prov: 'Bahia' },
           { n: 'Patagonia Sky', t: 'Granite', prov: 'Espírito Santo' },
           { n: 'Arturo Crystal', t: 'Quartzite', prov: 'Espírito Santo' },
-          { n: 'Volcano', t: 'Granite', prov: 'Espírito Santo' } ] },
+          { n: 'Volcano', t: 'Granite', prov: 'Espírito Santo' },
+          { n: 'Aqua Venato', t: 'Quartzite', prov: '' },
+          { n: 'Blue Tahoe', t: 'Quartzite', prov: '' },
+          { n: 'Calacatta Taupe', t: 'Quartzite', prov: '' },
+          { n: 'Mystic Jade', t: 'Quartzite', prov: '' },
+          { n: 'Fantasy Lux', t: 'Quartzite', prov: '' },
+          { n: 'Artemis', t: 'Quartzite', prov: '' },
+          { n: 'Gold Coast', t: 'Quartzite', prov: '' },
+          { n: 'Nickel', t: 'Quartzite', prov: '' },
+          { n: 'New Louise Blue', t: 'Quartzite', prov: '' },
+          { n: 'Utopia', t: 'Quartzite', prov: '' },
+          { n: 'Ebon', t: 'Quartzite', prov: '' },
+          { n: 'Avocatus Satin', t: 'Granite', prov: '' },
+          { n: 'Negresco Satin', t: 'Granite', prov: '' },
+          { n: 'Titanium', t: 'Granite', prov: '' },
+          { n: 'Viridian', t: 'Granite', prov: '' },
+          { n: 'Riviera', t: 'Quartzite', prov: '' },
+          { n: 'Sandalus', t: 'Quartzite', prov: '' },
+          { n: 'Nacarado', t: 'Quartzite', prov: '' },
+          { n: 'Leblon', t: 'Quartzite', prov: '' },
+          { n: 'Cristallo Diamond Crystal', t: 'Quartzite', prov: '' },
+          { n: 'Cristallo Vitrium', t: 'Quartzite', prov: '' },
+          { n: 'Acqua Bella', t: 'Quartzite', prov: '' },
+          { n: 'Stella Maestro', t: 'Quartzite', prov: '' },
+          { n: 'Jade Crystal', t: 'Quartzite', prov: '' },
+          { n: 'Vittara', t: 'Quartzite', prov: '' },
+          { n: 'Tempest Blue', t: 'Quartzite', prov: '' } ] },
         { c: 'Turkey', region: 'Anatolia', lat: 39.0, lon: 35.0,
           lead: 'Banded onyx from the Anatolian highlands.', mats: [
           { n: 'Onyx Ivory', t: 'Onyx', prov: 'Afyon' } ] },
         { c: 'Spain', region: 'Iberia', lat: 40.2, lon: -3.7,
           lead: 'Engineered surfaces — pressed and fired in Castellón, Spain\'s ceramic heartland.', mats: [
           { n: 'Trance', t: 'Sintered Stone', prov: 'Castellón' },
-          { n: 'Bergen', t: 'Porcelain', prov: 'Castellón' } ] }
+          { n: 'Bergen', t: 'Porcelain', prov: 'Castellón' } ] },
+        { c: 'India', region: 'South Asia', lat: 22.0, lon: 79.0,
+          lead: 'Granite and marble from the Deccan plateau and the quarry belts of Rajasthan.', mats: [
+          { n: 'Blizzard', t: 'Granite', prov: '' },
+          { n: 'Desert Canyon', t: 'Granite', prov: '' },
+          { n: 'Kalahari', t: 'Granite', prov: '' },
+          { n: 'Fantasy Black', t: 'Marble', prov: '' } ] },
+        { c: 'Namibia', region: 'Southern Africa', lat: -22.0, lon: 17.0,
+          lead: 'Deep granite drawn from the Erongo highlands of the Namib interior.', mats: [
+          { n: 'Belvedere Satin', t: 'Granite', prov: '' } ] },
+        { c: 'Mexico', region: 'North America', lat: 20.5, lon: -99.0,
+          lead: 'Soft highland limestone, quarried and honed in central Mexico.', mats: [
+          { n: 'Crema Vosscione', t: 'Limestone', prov: '' } ] }
       ];
       var PROVCOORD = {
         'Carrara': '44.08°N 10.10°E',
@@ -700,6 +765,17 @@
         'Espírito Santo': '20.85°S 41.11°W',
         'Afyon': '38.76°N 30.54°E',
         'Castellón': '39.99°N 0.04°W'
+      };
+      // Simplified national marks (crest/lettering omitted) — small, subtle, greyed
+      // at rest via CSS; used only as a quiet origin cue beside each country name.
+      var FLAGS = {
+        'Italy': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#F1F2F1"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>',
+        'Brazil': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#009C3B"/><polygon points="1.5,0.25 2.72,1 1.5,1.75 0.28,1" fill="#FFDF00"/><circle cx="1.5" cy="1" r="0.42" fill="#002776"/></svg>',
+        'Turkey': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#E30A17"/><circle cx="1.35" cy="1" r="0.42" fill="#fff"/><circle cx="1.5" cy="1" r="0.34" fill="#E30A17"/><polygon points="1.95,0.80 2.00,0.935 2.14,0.938 2.03,1.025 2.07,1.162 1.95,1.08 1.83,1.162 1.87,1.025 1.76,0.938 1.90,0.935" fill="#fff"/></svg>',
+        'Spain': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#AA151B"/><rect y="0.5" width="3" height="1" fill="#F1BF00"/></svg>',
+        'India': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#FF9933"/><rect y="0.667" width="3" height="0.666" fill="#fff"/><rect y="1.333" width="3" height="0.667" fill="#138808"/><circle cx="1.5" cy="1" r="0.2" fill="none" stroke="#054A91" stroke-width="0.05"/></svg>',
+        'Namibia': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#009543"/><polygon points="0,0 3,0 0,2" fill="#0033A0"/><line x1="0" y1="2" x2="3" y2="0" stroke="#fff" stroke-width="0.62"/><line x1="0" y1="2" x2="3" y2="0" stroke="#D21034" stroke-width="0.4"/><circle cx="0.82" cy="0.6" r="0.17" fill="#FFCE00"/></svg>',
+        'Mexico': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="1" height="2" fill="#006847"/><rect x="1" width="1" height="2" fill="#F1F2F1"/><rect x="2" width="1" height="2" fill="#CE1126"/><circle cx="1.5" cy="1" r="0.22" fill="none" stroke="#8a5a2b" stroke-width="0.06"/></svg>'
       };
       function fmtCoord(lat, lon) {
         return Math.abs(lat).toFixed(2) + '°' + (lat >= 0 ? 'N' : 'S') + '   ' + Math.abs(lon).toFixed(2) + '°' + (lon >= 0 ? 'E' : 'W');
@@ -741,6 +817,17 @@
         pin.addEventListener('click', function () { openPanel(i, pin); });
         stage.appendChild(pin);
       });
+      // Keep the legend count in step with the data (region -> continent).
+      (function () {
+        var el = document.getElementById('mapCount');
+        if (!el) return;
+        var toCont = { 'Europe': 'Europe', 'Iberia': 'Europe', 'South America': 'South America',
+          'Anatolia': 'Asia', 'South Asia': 'Asia', 'Southern Africa': 'Africa', 'North America': 'North America' };
+        var conts = {};
+        ORIGINS.forEach(function (o) { conts[toCont[o.region] || o.region] = 1; });
+        var ns = ORIGINS.length, nc = Object.keys(conts).length;
+        el.textContent = ns + (ns === 1 ? ' source · ' : ' sources · ') + nc + (nc === 1 ? ' continent' : ' continents');
+      })();
       (function () {
         var pin = document.createElement('div');
         pin.className = 'pin origin';
@@ -800,7 +887,7 @@
             var label = g.prov || 'Provenance on request';
             var coord = (g.prov && PROVCOORD[g.prov]) ? '<span class="pb-coord">' + PROVCOORD[g.prov] + '</span>' : '';
             var rows = g.items.map(function (m) {
-              return '<div class="pb-row"><span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
+              return '<div class="pb-row" data-type="' + m.t + '"><span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
             }).join('');
             return '<div class="prov-block"><div class="pb-head"><span class="pb-name">' + label + '</span>' + coord + '</div>' + rows + '</div>';
           }).join('');
@@ -808,6 +895,7 @@
           el.className = 'country' + (i === 0 ? ' open' : '');
           el.innerHTML =
             '<button class="country-head" aria-expanded="' + (i === 0) + '">' +
+              '<span class="c-flag" aria-hidden="true">' + (FLAGS[o.c] || '') + '</span>' +
               '<span class="c-name">' + o.c + '</span>' +
               '<span class="c-region">' + o.region + '</span>' +
               '<span class="c-count">' + o.mats.length + (o.mats.length === 1 ? ' stone' : ' stones') + '</span>' +
