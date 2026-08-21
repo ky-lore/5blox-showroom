@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5blox Showroom — Kitchen Mood Boards</title>
+  <meta name="description" content="Eight kitchen styles to find your look — from dark and dramatic to modern oak. Then see them in person. By appointment, Los Angeles.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Light.ttf') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Suisse Intl'; src: url('assets/fonts/SuisseIntl-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+    :root {
+      --void: #0A0908; --coal: #121010; --raise: #191614; --bone: #E7E3DB; --ash: #928B82;
+      --faint: rgba(231,227,219,0.46); --line: rgba(231,227,219,0.14); --line-2: rgba(231,227,219,0.07);
+      --display: 'Suisse Intl','Inter',system-ui,sans-serif; --mono: 'Suisse Intl','Inter',system-ui,sans-serif; --sans: 'Suisse Intl','Inter',system-ui,sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--void); color: var(--bone); font-family: var(--sans); font-weight: 300; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    ::selection { background: var(--bone); color: var(--void); }
+    a { color: inherit; text-decoration: none; }
+    em { font-style: normal; color: var(--ash); }
+    .label { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0.28em; text-transform: uppercase; color: var(--faint); }
+    .rule { display: inline-block; width: 34px; height: 1px; background: var(--line); vertical-align: middle; margin-right: 14px; }
+
+    /* NAV */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(20px,4vw,56px); mix-blend-mode: difference; }
+    .nav-brand { font-family: var(--display); font-size: 21px; font-weight: 700; letter-spacing: -0.01em; color: #fff; }
+    .nav-brand span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.32em; vertical-align: super; margin-left: 8px; opacity: 0.7; font-weight: 400; }
+    .nav-links { display: flex; gap: clamp(20px,3vw,44px); align-items: center; }
+    .nav-links a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #fff; opacity: 0.82; transition: opacity 0.3s; }
+    .nav-links a:hover, .nav-links a.on { opacity: 1; }
+    .nav-appt { border: 1px solid rgba(255,255,255,0.45); padding: 8px 16px; }
+    @media (max-width: 820px) { .nav-links a:not(.nav-appt) { display: none; } }
+
+    /* HERO — full-bleed */
+    .mb-hero { position: relative; min-height: 92vh; display: flex; align-items: flex-end; padding: clamp(120px,20vh,220px) clamp(20px,5vw,80px) clamp(48px,8vh,90px); overflow: hidden; }
+    .mb-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .mb-hero::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(10,9,8,0.62) 0%, rgba(10,9,8,0.2) 40%, rgba(10,9,8,0.86) 100%); }
+    .mb-hero .inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; width: 100%; }
+    .mb-hero .label { margin-bottom: 24px; color: rgba(231,227,219,0.8); }
+    .mb-hero h1 { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(40px,7.4vw,110px); line-height: 0.94; }
+    .mb-hero p { max-width: 48ch; margin-top: 22px; color: var(--bone); font-size: clamp(14px,1.3vw,17px); }
+    .mb-hero .cta-row { margin-top: 34px; display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-solid { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 16px 28px; transition: gap 0.4s, background 0.3s; }
+    .btn-solid:hover { gap: 20px; background: #fff; }
+    .btn-line { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #fff; border: 1px solid rgba(255,255,255,0.5); padding: 16px 28px; transition: gap 0.4s, border-color 0.3s; }
+    .btn-line:hover { gap: 20px; border-color: #fff; }
+
+    /* INTRO */
+    .mb-intro { max-width: 900px; margin: 0 auto; text-align: center; padding: clamp(72px,12vh,150px) clamp(20px,5vw,80px) clamp(28px,5vh,56px); }
+    .mb-intro h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(26px,3.4vw,50px); letter-spacing: -0.01em; line-height: 1.02; }
+    .mb-intro p { margin-top: 20px; color: var(--ash); font-size: 15px; }
+
+    /* BOARD GRID */
+    .boards { max-width: 1400px; margin: 0 auto; padding: clamp(20px,4vh,50px) clamp(20px,5vw,80px) clamp(72px,12vh,150px); display: grid; grid-template-columns: 1fr; gap: clamp(40px,6vh,80px) 40px; }
+    @media (min-width: 760px) { .boards { grid-template-columns: repeat(2,1fr); } }
+    .board { display: flex; flex-direction: column; }
+    .board-desc { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); text-align: center; }
+    .board-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3vw,40px); letter-spacing: -0.01em; text-align: center; margin: 12px 0 22px; }
+    .board-media { position: relative; width: 100%; aspect-ratio: 3/2; overflow: hidden; background: var(--coal); cursor: pointer; border: none; padding: 0; display: block; }
+    .board-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.3s cubic-bezier(.2,.7,.2,1); }
+    .board-media:hover img { transform: scale(1.05); }
+    .board-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(10,9,8,0.5)); opacity: 0; transition: opacity 0.4s; }
+    .board-media:hover::after { opacity: 1; }
+    .board-count { position: absolute; left: 16px; bottom: 14px; z-index: 2; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; opacity: 0; transition: opacity 0.4s; }
+    .board-media:hover .board-count { opacity: 0.85; }
+    .board-line { color: var(--ash); font-size: 14px; text-align: center; margin: 22px auto 20px; max-width: 42ch; }
+    .board-cta { align-self: center; }
+    .see-style { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); border: 1px solid var(--line); padding: 14px 26px; background: none; cursor: pointer; transition: gap 0.4s, border-color 0.4s, background 0.3s; }
+    .see-style:hover { gap: 20px; border-color: var(--bone); }
+
+    /* FEATURED SLABS (supplementary — the homepage feature slabs) */
+    .slabs { border-top: 1px solid var(--line-2); padding: clamp(72px,12vh,150px) clamp(20px,5vw,80px); max-width: 1500px; margin: 0 auto; }
+    .slabs-head { text-align: center; max-width: 640px; margin: 0 auto clamp(40px,6vh,64px); }
+    .slabs-head .label { display: inline-flex; margin-bottom: 20px; }
+    .slabs-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(28px,3.8vw,56px); letter-spacing: -0.012em; line-height: 1.0; }
+    .slabs-head p { margin-top: 18px; color: var(--ash); font-size: 14px; }
+    .slab-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
+    @media (min-width: 720px) { .slab-grid { grid-template-columns: repeat(4,1fr); } }
+    .slab-cell { position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--coal); display: block; }
+    .slab-cell img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.3s cubic-bezier(.2,.7,.2,1); }
+    .slab-cell:hover img { transform: scale(1.05); }
+    .slab-cell::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, transparent 52%, rgba(10,9,8,0.8)); }
+    .slab-cell figcaption { position: absolute; left: 15px; right: 15px; bottom: 14px; z-index: 2; }
+    .slab-nm { display: block; font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(13px,1.2vw,18px); letter-spacing: -0.005em; color: #fff; line-height: 1.1; }
+    .slab-ty { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(231,227,219,0.66); margin-top: 5px; }
+    .slab-cta { display: flex; align-items: center; justify-content: center; text-align: center; border: 1px solid var(--line); background: var(--coal); transition: border-color 0.4s, background 0.3s; }
+    .slab-cta::after { display: none; }
+    .slab-cta span { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--bone); transition: gap 0.4s; }
+    .slab-cta:hover { border-color: var(--bone); background: var(--raise); }
+    .slab-cta:hover span { gap: 20px; }
+
+    /* CLOSING CTA */
+    .mb-cta { text-align: center; padding: clamp(90px,18vh,220px) clamp(20px,4vw,56px); border-top: 1px solid var(--line-2); }
+    .mb-cta .label { display: inline-flex; margin-bottom: 26px; }
+    .mb-cta h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(30px,4.4vw,64px); line-height: 1.08; letter-spacing: -0.015em; }
+    .mb-cta p { max-width: 44ch; margin: 22px auto 0; color: var(--ash); font-size: 14px; }
+    .mb-cta .btn-solid { margin-top: 38px; }
+
+    /* LIGHTBOX (reuses scrim/panel idea, but a centered gallery) */
+    .scrim { position: fixed; inset: 0; z-index: 110; background: rgba(6,5,4,0.82); opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
+    .scrim.open { opacity: 1; visibility: visible; }
+    .lb { position: fixed; inset: 0; z-index: 120; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s; }
+    .lb.open { opacity: 1; visibility: visible; }
+    .lb-bar { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: clamp(20px,3vh,32px) clamp(20px,5vw,64px) 14px; flex-wrap: wrap; }
+    .lb-title { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(22px,3vw,38px); letter-spacing: -0.01em; }
+    .lb-desc { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--faint); margin-top: 4px; }
+    .lb-close { background: none; border: none; color: var(--ash); font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; }
+    .lb-close:hover { color: var(--bone); }
+    .lb-scroll { flex: 1; overflow-y: auto; padding: 6px clamp(20px,5vw,64px) clamp(20px,4vh,40px); }
+    .lb-grid { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 1200px; margin: 0 auto; }
+    @media (min-width: 700px) { .lb-grid { grid-template-columns: repeat(2,1fr); } .lb-grid .lb-hero { grid-column: 1 / -1; } }
+    .lb-grid img { width: 100%; height: 100%; object-fit: cover; display: block; background: var(--coal); }
+    .lb-grid figure { position: relative; overflow: hidden; aspect-ratio: 3/2; }
+    .lb-grid .lb-hero { aspect-ratio: 16/8; }
+    .lb-foot { display: flex; align-items: center; justify-content: center; gap: 16px; padding: clamp(16px,3vh,28px) clamp(20px,5vw,64px) clamp(24px,4vh,40px); border-top: 1px solid var(--line-2); flex-wrap: wrap; }
+    .lb-foot p { color: var(--ash); font-size: 13px; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--line-2); padding: clamp(48px,8vh,90px) clamp(20px,4vw,56px) 40px; }
+    .foot-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+    @media (min-width: 760px) { .foot-grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+    .foot-brand { font-family: var(--display); font-size: 30px; font-weight: 700; }
+    .foot-brand span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em; vertical-align: super; opacity: 0.6; margin-left: 8px; font-weight: 400; }
+    .foot-blurb { margin-top: 16px; max-width: 34ch; color: var(--ash); font-size: 13px; }
+    .foot-col h4 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); margin-bottom: 16px; }
+    .foot-col a, .foot-col li { display: block; list-style: none; font-size: 13px; color: var(--ash); margin-bottom: 9px; transition: color 0.3s; }
+    .foot-col a:hover { color: var(--bone); }
+    .foot-legal { margin-top: clamp(48px,8vh,88px); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .foot-legal span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } html { scroll-behavior: auto; } }
+    body.lb-lock { overflow: hidden; }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-brand">5blox<span>SHOWROOM</span></a>
+    <div class="nav-links">
+      <a href="/stone">Stone</a>
+      <a href="/cabinetry">Cabinetry</a>
+      <a href="/tile">Tile</a>
+      <a href="/#sourcing">Sourcing</a>
+      <a href="/appointments" class="nav-appt">Appointments</a>
+    </div>
+  </nav>
+
+  <header class="mb-hero">
+    <img src="assets/img/kitchen/dark-dramatic-1.jpg" alt="A 5blox kitchen">
+    <div class="inner">
+      <div class="label"><span class="rule"></span>Kitchen mood boards</div>
+      <h1>Find your<br>kitchen style.</h1>
+      <p>Eight starting points — from dark and dramatic to modern oak. Find the one that feels like yours, then come see the real materials under the showroom's light.</p>
+      <div class="cta-row">
+        <a href="#boards" class="btn-solid">Explore the boards
+          <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+        </a>
+        <a href="/appointments" class="btn-line">Request a viewing</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="mb-intro" id="boards">
+    <h2 class="reveal">Eight kitchens, one of them <em>yours.</em></h2>
+    <p class="reveal">Tap a board to see the look up close. Every style is built from the stone, cabinetry and tile we keep in the showroom — so what you save is what you can stand in front of.</p>
+  </section>
+
+  <section class="boards" id="boardGrid"></section>
+
+  <!-- FEATURED SLABS — supplementary "proof of visibility" strip (the 7 homepage feature slabs) -->
+  <section class="slabs" id="slabs">
+    <div class="slabs-head reveal">
+      <span class="label"><span class="rule"></span>On the floor now</span>
+      <h2>Featured <em>slabs.</em></h2>
+      <p>A look at the stone in the showroom this season — each slab sourced, numbered and reserved. Seen best in person.</p>
+    </div>
+    <div class="slab-grid reveal">
+      <figure class="slab-cell"><img loading="lazy" src="assets/img/slab/ocean-green.jpg" alt="Ocean Green quartzite"><figcaption><span class="slab-nm">Ocean Green</span><span class="slab-ty">Quartzite · Brazil</span></figcaption></figure>
+      <figure class="slab-cell"><img loading="lazy" src="assets/img/slab/utopia.jpg" alt="Utopia quartzite"><figcaption><span class="slab-nm">Utopia</span><span class="slab-ty">Quartzite · Brazil</span></figcaption></figure>
+      <figure class="slab-cell"><img loading="lazy" src="assets/img/slab/avocatus-satin.jpg" alt="Avocatus Satin granite"><figcaption><span class="slab-nm">Avocatus Satin</span><span class="slab-ty">Granite · Brazil</span></figcaption></figure>
+      <figure class="slab-cell"><img loading="lazy" src="assets/img/slab/viridian.jpg" alt="Viridian granite"><figcaption><span class="slab-nm">Viridian</span><span class="slab-ty">Granite · Brazil</span></figcaption></figure>
+      <figure class="slab-cell"><img loading="lazy" src="assets/img/slab/cristallo-diamond-crystal.jpg" alt="Cristallo Diamond Crystal quartzite"><figcaption><span class="slab-nm">Cristallo Diamond Crystal</span><span class="slab-ty">Quartzite · Brazil</span></figcaption></figure>
+      <figure class="slab-cell"><img loading="lazy" src="assets/img/slab/stella-maestro.jpg" alt="Stella Maestro quartzite"><figcaption><span class="slab-nm">Stella Maestro</span><span class="slab-ty">Quartzite · Brazil</span></figcaption></figure>
+      <figure class="slab-cell"><img loading="lazy" src="assets/img/slab/vittara.jpg" alt="Vittara quartzite"><figcaption><span class="slab-nm">Vittara</span><span class="slab-ty">Quartzite · Brazil</span></figcaption></figure>
+      <a class="slab-cell slab-cta" href="/stone"><span>View all stone
+        <svg width="18" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg></span></a>
+    </div>
+  </section>
+
+  <section class="mb-cta">
+    <div class="label reveal">By invitation only</div>
+    <h2 class="reveal">See it in <em>person.</em></h2>
+    <p class="reveal">Found your style? Bring it in. We'll set aside the slabs, doors and tile worth seeing and walk the floor with you — by appointment.</p>
+    <div class="reveal"><a href="/appointments" class="btn-solid">Request a private viewing
+      <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+    </a></div>
+  </section>
+
+  <div class="scrim" id="scrim"></div>
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="lb-bar">
+      <div>
+        <div class="lb-title" id="lbTitle"></div>
+        <div class="lb-desc" id="lbDesc"></div>
+      </div>
+      <button class="lb-close" id="lbClose">Close ✕</button>
+    </div>
+    <div class="lb-scroll"><div class="lb-grid" id="lbGrid"></div></div>
+    <div class="lb-foot">
+      <p id="lbLine"></p>
+      <a href="/appointments" class="btn-solid">See this in person</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">5blox<span>SHOWROOM</span></div>
+        <p class="foot-blurb">Stone, cabinetry and tile for considered kitchens. Los Angeles. By appointment.</p>
+      </div>
+      <div class="foot-col"><h4>Showroom</h4><ul><li>Los Angeles, CA</li><li>By invitation only</li><li><a href="/appointments">Request an introduction</a></li></ul></div>
+      <div class="foot-col"><h4>Explore</h4><a href="/stone">Stone</a><a href="/cabinetry">Cabinetry</a><a href="/tile">Tile</a><a href="/#sourcing">Sourcing</a></div>
+    </div>
+    <div class="foot-legal"><span>© MMXXV 5blox</span><span>Opening Fall 2026</span></div>
+  </footer>
+
+  <script>
+    // ══ KITCHEN MOOD BOARDS — imagery curated from the 5blox showroom + interior
+    //    project archives (see scratchpad/funnel/boards.json). Swap for the client's
+    //    own kitchen mood-board photography when supplied. ══
+    var BOARDS = [
+      { slug:'dark-dramatic',   name:'Dark & Dramatic',  desc:'Moody · Veined · Bold',        line:"Near-black cabinetry, book-matched stone and brass — a kitchen that owns the room.",
+        imgs:['assets/img/kitchen/dark-dramatic-1.jpg','assets/img/kitchen/dark-dramatic-2.jpg','assets/img/kitchen/dark-dramatic-3.jpg','assets/img/kitchen/dark-dramatic-4.jpg','assets/img/kitchen/dark-dramatic-5.jpg'] },
+      { slug:'modern-oak',      name:'Modern Oak',       desc:'Warm · Clean · Calm',          line:"Light oak, slab fronts and quiet stone — modern warmth, none of the noise.",
+        imgs:['assets/img/kitchen/modern-oak-1.jpg','assets/img/kitchen/modern-oak-2.jpg','assets/img/kitchen/modern-oak-3.jpg','assets/img/kitchen/modern-oak-4.jpg','assets/img/kitchen/modern-oak-5.jpg'] },
+      { slug:'classic-refined', name:'Classic & Refined',desc:'Timeless · Shaker · Soft',      line:"Shaker doors, natural stone and considered detail — a kitchen that never dates.",
+        imgs:['assets/img/kitchen/classic-refined-1.jpg','assets/img/kitchen/classic-refined-2.jpg','assets/img/kitchen/classic-refined-3.jpg','assets/img/kitchen/classic-refined-4.jpg','assets/img/kitchen/classic-refined-5.jpg'] },
+      { slug:'exotic-stone',    name:'Exotic Stone',     desc:'Veined · Rare · Natural',      line:"Oak against a single statement slab — the vein is the whole design.",
+        imgs:['assets/img/kitchen/exotic-stone-1.jpg','assets/img/kitchen/exotic-stone-2.jpg','assets/img/kitchen/exotic-stone-3.jpg','assets/img/kitchen/exotic-stone-4.jpg'] },
+      { slug:'spanish-hacienda',name:'Spanish Hacienda', desc:'Patterned · Layered · Cozy',   line:"Deep cabinetry, hand-patterned tile and arched warmth — old-world, made now.",
+        imgs:['assets/img/kitchen/spanish-hacienda-1.jpg','assets/img/kitchen/spanish-hacienda-2.jpg','assets/img/kitchen/spanish-hacienda-3.jpg','assets/img/kitchen/spanish-hacienda-4.jpg'] },
+      { slug:'light-luxe',      name:'Light & Luxe',     desc:'Pale · Airy · Elegant',        line:"Pale oak, a sculpted island and soft brass — luxury that stays bright.",
+        imgs:['assets/img/kitchen/light-luxe-1.jpg','assets/img/kitchen/light-luxe-2.jpg','assets/img/kitchen/light-luxe-3.jpg'] },
+      { slug:'transitional',    name:'Transitional',     desc:'Balanced · Warm · Inviting',   line:"Oak with a crisp island and warm metal — the middle ground, done right.",
+        imgs:['assets/img/kitchen/transitional-1.jpg','assets/img/kitchen/transitional-2.jpg','assets/img/kitchen/transitional-3.jpg'] },
+      { slug:'the-details',     name:'In the Details',   desc:'Brass · Texture · Craft',      line:"Backsplash, hardware and edge — the small decisions that make a kitchen feel made.",
+        imgs:['assets/img/kitchen/the-details-1.jpg','assets/img/kitchen/the-details-2.jpg','assets/img/kitchen/the-details-3.jpg','assets/img/kitchen/the-details-4.jpg'] }
+    ];
+
+    // ── RENDER BOARD GRID ──
+    var grid = document.getElementById('boardGrid');
+    BOARDS.forEach(function (b, i) {
+      var el = document.createElement('div');
+      el.className = 'board reveal';
+      el.innerHTML =
+        '<div class="board-desc">' + b.desc + '</div>' +
+        '<div class="board-name">' + b.name + '</div>' +
+        '<button class="board-media" aria-label="See ' + b.name + '"><img loading="lazy" src="' + b.imgs[0] + '" alt="' + b.name + ' kitchen">' +
+          '<span class="board-count">' + b.imgs.length + ' images →</span></button>' +
+        '<p class="board-line">' + b.line + '</p>' +
+        '<div class="board-cta"><button class="see-style">See this style' +
+          ' <svg width="18" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg></button></div>';
+      el.querySelector('.board-media').addEventListener('click', function () { openLB(i); });
+      el.querySelector('.see-style').addEventListener('click', function () { openLB(i); });
+      grid.appendChild(el);
+    });
+
+    // ── LIGHTBOX ──
+    var lb = document.getElementById('lb'), scrim = document.getElementById('scrim');
+    function openLB(i) {
+      var b = BOARDS[i];
+      document.getElementById('lbTitle').textContent = b.name;
+      document.getElementById('lbDesc').textContent = b.desc;
+      document.getElementById('lbLine').textContent = b.line;
+      document.getElementById('lbGrid').innerHTML = b.imgs.map(function (src, n) {
+        return '<figure class="' + (n === 0 ? 'lb-hero' : '') + '"><img loading="lazy" src="' + src + '" alt="' + b.name + '"></figure>';
+      }).join('');
+      lb.classList.add('open'); scrim.classList.add('open'); lb.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('lb-lock');
+      document.querySelector('.lb-scroll').scrollTop = 0;
+    }
+    function closeLB() { lb.classList.remove('open'); scrim.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); document.body.classList.remove('lb-lock'); }
+    document.getElementById('lbClose').addEventListener('click', closeLB);
+    scrim.addEventListener('click', closeLB);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLB(); });
+
+    // Reveal
+    (function () {
+      var els = [].slice.call(document.querySelectorAll('.reveal'));
+      if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }); }, { threshold: 0.1 });
+      els.forEach(function (e) { io.observe(e); });
+    })();
+  </script>
+</body>
+
+</html>
