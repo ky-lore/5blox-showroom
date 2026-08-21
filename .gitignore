@@ -18,3 +18,8 @@ assets/img/**/originals/
 assets/img/showroom/
 # Raw 4K DJI clips (hundreds of MB) — keep locally, ship only the re-encoded web mp4s
 assets/video/web/DJI_*.MP4
+
+# scraped source images (optimized versions are committed)
+assets/img/slab/raw/
+assets/img/tile/raw/
+scratchpad/

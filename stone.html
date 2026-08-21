@@ -103,7 +103,7 @@
     .panel-count { color: var(--ash); font-size: 13px; margin-bottom: 28px; }
     .mat { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line-2); }
     .mat:last-of-type { border-bottom: 1px solid var(--line-2); }
-    .mat-swatch { width: 60px; height: 60px; object-fit: cover; flex-shrink: 0; background: var(--raise); }
+    .mat-swatch { width: 84px; height: 84px; object-fit: cover; flex-shrink: 0; background: var(--raise); }
     .mat-name { font-family: var(--display); font-size: 19px; font-weight: 500; }
     .mat-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
     .panel-cta { margin-top: auto; padding-top: 34px; }
@@ -199,27 +199,489 @@
     var SWATCH = 'assets/img/material/swatch/';
     var IMG = 'assets/img/material/';
     var CATEGORY = {
-      name: 'Stone', hero: IMG + 'marble.jpg',
-      title: 'By stone,<br>by <em>vein.</em>',
-      intro: "Marble, quartzite, travertine and onyx \u2014 chosen by colour and movement, not catalogue. Every slab is sourced, numbered, and reserved, and seen best under the showroom's light.",
-      styleLabel: 'By stone',
-      styles: [
-        { key: 'Marble', img: IMG + 'marble.jpg', items: [ { b: 'Calacatta', f: 'Italy \u00b7 Book-matched', s: 'marble' }, { b: 'Nero Marquina', f: 'Spain', s: 'marble' }, { b: 'Volakas', f: 'Greece', s: 'marble' } ] },
-        { key: 'Quartzite', img: IMG + 'onyx.jpg', items: [ { b: 'Taj Mahal', f: 'Brazil', s: 'onyx' }, { b: 'Patagonia', f: 'Brazil', s: 'onyx' } ] },
-        { key: 'Onyx', img: IMG + 'onyx.jpg', items: [ { b: 'Honey Onyx', f: 'Mexico \u00b7 Backlit', s: 'onyx' } ] },
-        { key: 'Travertine', img: IMG + 'tile.jpg', items: [ { b: 'Silver Travertine', f: 'Turkey', s: 'tile' }, { b: 'Navona', f: 'Italy', s: 'tile' } ] },
-        { key: 'Limestone', img: IMG + 'tile.jpg', items: [ { b: 'Azul Valverde', f: 'Portugal', s: 'tile' }, { b: 'Kota', f: 'India', s: 'tile' } ] },
-        { key: 'Granite', img: IMG + 'marble.jpg', items: [ { b: 'Absolute Black', f: 'India', s: 'marble' } ] }
-      ],
-      colourLabel: 'By colour',
-      colours: [
-        { name: 'White & Grey', s: 'marble', items: [ { b: 'Calacatta', f: 'Marble', s: 'marble' }, { b: 'Silver Travertine', f: 'Travertine', s: 'tile' } ] },
-        { name: 'Amber & Gold', s: 'onyx', items: [ { b: 'Honey Onyx', f: 'Onyx', s: 'onyx' }, { b: 'Taj Mahal', f: 'Quartzite', s: 'onyx' } ] },
-        { name: 'Black', s: 'marble', items: [ { b: 'Nero Marquina', f: 'Marble', s: 'marble' }, { b: 'Absolute Black', f: 'Granite', s: 'marble' } ] },
-        { name: 'Cream', s: 'tile', items: [ { b: 'Crema Marfil', f: 'Marble', s: 'tile' } ] },
-        { name: 'Green', s: 'onyx', items: [ { b: 'Patagonia', f: 'Quartzite', s: 'onyx' } ] }
+  "name": "Stone",
+  "hero": "assets/img/slab/aqua-venato.jpg",
+  "title": "By stone,<br>by <em>vein.</em>",
+  "intro": "Quartzite, granite, marble and limestone — chosen by colour and movement, not catalogue. Each slab is sourced, numbered and reserved, and seen best under the showroom’s light.",
+  "styleLabel": "By stone",
+  "styles": [
+    {
+      "key": "Quartzite",
+      "img": "assets/img/slab/aqua-venato.jpg",
+      "items": [
+        {
+          "b": "Aqua Venato",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/aqua-venato.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Arturo Crystal",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/arturo-crystal.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Blue Tahoe",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/blue-tahoe.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Calacatta Taupe",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/calacatta-taupe.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Mystic Jade",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/mystic-jade.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Fantasy Lux",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/fantasy-lux.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Artemis",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/artemis.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Gold Coast",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/gold-coast.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Nickel",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/nickel.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "New Louise Blue",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/new-louise-blue.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Ocean Green",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/ocean-green.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Taj Mahal",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/taj-mahal.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Utopia",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/utopia.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Ebon",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/ebon.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Riviera",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/riviera.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Sandalus",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/sandalus.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Nacarado",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/nacarado.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Leblon",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/leblon.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Cristallo Diamond Crystal",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/cristallo-diamond-crystal.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Cristallo Vitrium",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/cristallo-vitrium.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Acqua Bella",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/acqua-bella.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Stella Maestro",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/stella-maestro.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Jade Crystal",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/jade-crystal.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Acqua Mare",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/acqua-mare.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Vittara",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/vittara.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Tempest Blue",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/tempest-blue.jpg",
+          "s": "onyx"
+        }
       ]
-    };
+    },
+    {
+      "key": "Granite",
+      "img": "assets/img/slab/avocatus-satin.jpg",
+      "items": [
+        {
+          "b": "Avocatus Satin",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/avocatus-satin.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Belvedere Satin",
+          "f": "Granite · Namibia",
+          "img": "assets/img/slab/belvedere-satin.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Blizzard",
+          "f": "Granite · India",
+          "img": "assets/img/slab/blizzard.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Desert Canyon",
+          "f": "Granite · India",
+          "img": "assets/img/slab/desert-canyon.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Kalahari",
+          "f": "Granite · India",
+          "img": "assets/img/slab/kalahari.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Negresco Satin",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/negresco-satin.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Titanium",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/titanium.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Viridian",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/viridian.jpg",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "key": "Marble",
+      "img": "assets/img/slab/fantasy-black.jpg",
+      "items": [
+        {
+          "b": "Fantasy Black",
+          "f": "Marble · India",
+          "img": "assets/img/slab/fantasy-black.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Bianco Carrara",
+          "f": "Marble · Italy",
+          "img": "assets/img/slab/bianco-carrara-1.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Calacatta Viola",
+          "f": "Marble · Italy",
+          "s": "marble"
+        },
+        {
+          "b": "Arabescato",
+          "f": "Marble · Italy",
+          "img": "assets/img/slab/arabescato.jpg",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "key": "Limestone",
+      "img": "assets/img/slab/crema-vosscione.jpg",
+      "items": [
+        {
+          "b": "Crema Vosscione",
+          "f": "Limestone · Mexico",
+          "img": "assets/img/slab/crema-vosscione.jpg",
+          "s": "tile"
+        }
+      ]
+    }
+  ],
+  "colourLabel": "By colour",
+  "colours": [
+    {
+      "name": "Blue & Teal",
+      "s": "onyx",
+      "img": "assets/img/slab/aqua-venato.jpg",
+      "items": [
+        {
+          "b": "Aqua Venato",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/aqua-venato.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Blue Tahoe",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/blue-tahoe.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "New Louise Blue",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/new-louise-blue.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Riviera",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/riviera.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Acqua Bella",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/acqua-bella.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Acqua Mare",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/acqua-mare.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Tempest Blue",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/tempest-blue.jpg",
+          "s": "onyx"
+        }
+      ]
+    },
+    {
+      "name": "Green & Sage",
+      "s": "onyx",
+      "img": "assets/img/slab/mystic-jade.jpg",
+      "items": [
+        {
+          "b": "Mystic Jade",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/mystic-jade.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Ocean Green",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/ocean-green.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Avocatus Satin",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/avocatus-satin.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Viridian",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/viridian.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Jade Crystal",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/jade-crystal.jpg",
+          "s": "onyx"
+        }
+      ]
+    },
+    {
+      "name": "Gold & Brass",
+      "s": "onyx",
+      "img": "assets/img/slab/gold-coast.jpg",
+      "items": [
+        {
+          "b": "Gold Coast",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/gold-coast.jpg",
+          "s": "onyx"
+        }
+      ]
+    },
+    {
+      "name": "Black & Charcoal",
+      "s": "onyx",
+      "img": "assets/img/slab/nickel.jpg",
+      "items": [
+        {
+          "b": "Nickel",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/nickel.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Ebon",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/ebon.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Negresco Satin",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/negresco-satin.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Titanium",
+          "f": "Granite · Brazil",
+          "img": "assets/img/slab/titanium.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Fantasy Black",
+          "f": "Marble · India",
+          "img": "assets/img/slab/fantasy-black.jpg",
+          "s": "marble"
+        }
+      ]
+    },
+    {
+      "name": "White & Cream",
+      "s": "onyx",
+      "img": "assets/img/slab/arturo-crystal.jpg",
+      "items": [
+        {
+          "b": "Arturo Crystal",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/arturo-crystal.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Calacatta Taupe",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/calacatta-taupe.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Blizzard",
+          "f": "Granite · India",
+          "img": "assets/img/slab/blizzard.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Bianco Carrara",
+          "f": "Marble · Italy",
+          "img": "assets/img/slab/bianco-carrara-1.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Calacatta Viola",
+          "f": "Marble · Italy",
+          "s": "marble"
+        },
+        {
+          "b": "Crema Vosscione",
+          "f": "Limestone · Mexico",
+          "img": "assets/img/slab/crema-vosscione.jpg",
+          "s": "tile"
+        },
+        {
+          "b": "Cristallo Diamond Crystal",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/cristallo-diamond-crystal.jpg",
+          "s": "onyx"
+        },
+        {
+          "b": "Cristallo Vitrium",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/cristallo-vitrium.jpg",
+          "s": "onyx"
+        }
+      ]
+    },
+    {
+      "name": "Terracotta & Earth",
+      "s": "marble",
+      "img": "assets/img/slab/desert-canyon.jpg",
+      "items": [
+        {
+          "b": "Desert Canyon",
+          "f": "Granite · India",
+          "img": "assets/img/slab/desert-canyon.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Kalahari",
+          "f": "Granite · India",
+          "img": "assets/img/slab/kalahari.jpg",
+          "s": "marble"
+        },
+        {
+          "b": "Sandalus",
+          "f": "Quartzite · Brazil",
+          "img": "assets/img/slab/sandalus.jpg",
+          "s": "onyx"
+        }
+      ]
+    }
+  ]
+};
 
     // ── RENDER ──
     document.getElementById('heroImg').src = CATEGORY.hero;
@@ -235,8 +697,8 @@
     CATEGORY.styles.forEach(function (st, i) {
       var b = document.createElement('button');
       b.className = 'style-tile';
-      b.innerHTML = '<img src="' + st.img + '" alt="' + st.key + '"><div class="st-meta"><span class="st-name">' + st.key + '</span><span class="st-more">' + st.items.length + ' options →</span></div>';
-      b.addEventListener('click', function () { openDrill('Door style', st.key, st.items); });
+      b.innerHTML = '<img loading="lazy" src="' + st.img + '" alt="' + st.key + '"><div class="st-meta"><span class="st-name">' + st.key + '</span><span class="st-more">' + st.items.length + ' options →</span></div>';
+      b.addEventListener('click', function () { openDrill('Stone', st.key, st.items); });
       styleGrid.appendChild(b);
     });
 
@@ -244,7 +706,7 @@
     CATEGORY.colours.forEach(function (c) {
       var b = document.createElement('button');
       b.className = 'colour';
-      b.innerHTML = '<div class="colour-sw"><img src="' + SWATCH + c.s + '.jpg" alt="' + c.name + '"></div><span class="colour-name">' + c.name + '</span>';
+      b.innerHTML = '<div class="colour-sw"><img loading="lazy" src="' + (c.img || SWATCH + c.s + '.jpg') + '" alt="' + c.name + '"></div><span class="colour-name">' + c.name + '</span>';
       b.addEventListener('click', function () { openDrill('Colour', c.name, c.items); });
       colourGrid.appendChild(b);
     });
@@ -256,7 +718,7 @@
       document.getElementById('panelName').textContent = name;
       document.getElementById('panelCount').textContent = items.length + (items.length === 1 ? ' option' : ' options') + ' — shown in the showroom';
       document.getElementById('panelMats').innerHTML = items.map(function (m) {
-        return '<div class="mat"><img class="mat-swatch" src="' + SWATCH + m.s + '.jpg" alt="' + m.b + '"><div><div class="mat-name">' + m.b + '</div><div class="mat-type">' + m.f + '</div></div></div>';
+        return '<div class="mat"><img class="mat-swatch" loading="lazy" src="' + (m.img || SWATCH + m.s + '.jpg') + '" alt="' + m.b + '"><div><div class="mat-name">' + m.b + '</div><div class="mat-type">' + m.f + '</div></div></div>';
       }).join('');
       panel.classList.add('open'); scrim.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
     }
