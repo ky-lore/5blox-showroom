@@ -445,6 +445,79 @@
       .live::after, .pin.origin .pin-dot::before { animation: none; }
       html { scroll-behavior: auto; }
     }
+
+    /* ── REGION MODAL — near-fullpage bento (replaces the old right-drawer) ── */
+    .rmodal { position: fixed; inset: 0; z-index: 120; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease; }
+    .rmodal.open { opacity: 1; visibility: visible; }
+    .rmodal-scrim { position: absolute; inset: 0; background: rgba(6,5,4,0.72); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+    .rmodal-inner {
+      position: absolute; inset: clamp(0px, 2.2vw, 34px); background: var(--coal);
+      border: 1px solid var(--line); display: flex; flex-direction: column; overflow: hidden;
+      transform: translateY(18px) scale(0.985); opacity: 0; transition: transform 0.6s cubic-bezier(.2,.7,.2,1), opacity 0.5s ease;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+    }
+    .rmodal.open .rmodal-inner { transform: none; opacity: 1; }
+    .rmodal-inner::before { content: ""; position: absolute; inset: 0; background-image: var(--grain); background-size: 220px; opacity: 0.05; mix-blend-mode: screen; pointer-events: none; z-index: 5; }
+    .rmodal-close {
+      position: absolute; top: clamp(16px,2vw,26px); right: clamp(16px,2vw,26px); z-index: 8;
+      width: 42px; height: 42px; border: 1px solid var(--line-2); background: rgba(10,9,8,0.5); color: var(--bone);
+      font-family: var(--mono); font-size: 15px; cursor: pointer; -webkit-appearance: none; appearance: none;
+      display: grid; place-items: center; transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .rmodal-close:hover { background: var(--raise); border-color: var(--ash); transform: rotate(90deg); }
+    .rmodal-head {
+      flex: 0 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; flex-wrap: wrap;
+      padding: clamp(30px,4.4vw,66px) clamp(26px,4vw,64px) clamp(20px,2.4vw,34px); border-bottom: 1px solid var(--line-2);
+    }
+    .rmodal-titles { max-width: 760px; min-width: 0; }
+    .rm-region { margin-bottom: 16px; }
+    .rmodal-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(40px,7vw,104px); line-height: 0.92; letter-spacing: -0.01em; }
+    .rm-lead { color: var(--ash); font-size: clamp(13px,1.05vw,16px); line-height: 1.5; max-width: 52ch; margin-top: 16px; }
+    .rmodal-meta { display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); padding-bottom: 6px; }
+    .rm-flag { width: 30px; height: 20px; border-radius: 2px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line-2); flex: 0 0 auto; }
+    .rm-flag svg { display: block; width: 100%; height: 100%; }
+    .rm-coord { white-space: nowrap; }
+    .rm-count { color: var(--ash); white-space: nowrap; }
+    .rmodal-scroll { flex: 1 1 auto; overflow-y: auto; padding: clamp(18px,2.4vw,34px) clamp(26px,4vw,64px) clamp(30px,4vw,60px); }
+
+    .bento { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: clamp(116px, 15vw, 176px); grid-auto-flow: dense; gap: clamp(7px, 0.7vw, 12px); }
+    @media (min-width: 680px) { .bento { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .bento { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 1500px) { .bento { grid-template-columns: repeat(5, 1fr); } }
+    .b-tile { position: relative; overflow: hidden; border: 1px solid var(--line-2); background: var(--void); display: flex; align-items: flex-end; isolation: isolate; }
+    .b-tile.big { grid-column: span 2; grid-row: span 2; }
+    .b-tile.wide { grid-column: span 2; }
+    .b-tile.tall { grid-row: span 2; }
+    .b-tile.feature { grid-column: 1 / -1; grid-row: span 2; }
+    .b-img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8) contrast(1.02); transition: transform 1.1s cubic-bezier(.2,.7,.2,1), filter 0.6s ease; }
+    .b-tile:hover .b-img { transform: scale(1.06); filter: brightness(1) contrast(1.04); }
+    .b-tile::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(10,9,8,0) 34%, rgba(10,9,8,0.28) 62%, rgba(10,9,8,0.86) 100%); pointer-events: none; }
+    .b-topo { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; opacity: 0.5; }
+    .b-topo path { fill: none; stroke: var(--line-2); stroke-width: 0.6; }
+    .b-topo path.lead-ring { stroke: var(--ash); }
+    .b-tile.noimg { background: linear-gradient(160deg, var(--raise), var(--void)); }
+    .b-tile.noimg .b-req { position: absolute; top: 12px; left: 13px; z-index: 2; font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); }
+    .b-cap { position: relative; z-index: 3; padding: clamp(11px,1vw,17px) clamp(12px,1.1vw,18px); width: 100%; }
+    .b-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.005em; line-height: 0.98; color: var(--bone); font-size: clamp(13px, 1.15vw, 19px); }
+    .b-tile.big .b-name, .b-tile.feature .b-name { font-size: clamp(20px, 2vw, 34px); }
+    .b-meta { display: flex; align-items: center; gap: 9px; margin-top: 6px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+    .b-meta .dotsep { width: 3px; height: 3px; border-radius: 50%; background: var(--ash); flex: 0 0 auto; }
+    .rmodal-cta { margin-top: clamp(30px,4vw,52px); padding-top: clamp(24px,3vw,40px); border-top: 1px solid var(--line-2); display: flex; justify-content: center; }
+    .rmodal-cta a { display: inline-flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--bone); border: 1px solid var(--line-2); padding: 16px 30px; transition: border-color 0.35s, background 0.35s, gap 0.35s; }
+    .rmodal-cta a:hover { border-color: var(--ash); background: var(--raise); gap: 20px; }
+    body.modal-lock { overflow: hidden; }
+    @media (max-width: 560px) {
+      .rmodal-inner { inset: 0; }
+      .rmodal-head { display: block; padding-top: 58px; }
+      .rmodal-titles { max-width: 100%; }
+      .rm-lead { max-width: 100%; overflow-wrap: anywhere; }
+      .rmodal-meta { margin-top: 22px; }
+      .bento { grid-auto-rows: clamp(120px, 34vw, 168px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rmodal, .rmodal-inner, .b-img { transition: none; }
+      .b-tile:hover .b-img { transform: none; }
+    }
   </style>
 </head>
 
@@ -527,18 +600,33 @@
     <div id="countryList"></div>
   </section>
 
-  <div class="scrim" id="scrim"></div>
-  <aside class="panel" id="panel" aria-hidden="true">
-    <button class="panel-close" id="panelClose">Close ✕</button>
-    <div class="panel-region label" id="panelRegion"></div>
-    <h2 id="panelName"></h2>
-    <div class="origin-plate" id="originPlate"></div>
-    <div class="panel-lead" id="panelLead"></div>
-    <div id="panelMats"></div>
-    <div class="panel-cta"><a href="#invite">Reserve a viewing
-      <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
-    </a></div>
-  </aside>
+  <!-- REGION MODAL — near-fullpage bento of the region's stones (opens on map-pin click) -->
+  <div class="rmodal" id="regionModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Region collection">
+    <div class="rmodal-scrim" data-rclose></div>
+    <div class="rmodal-inner">
+      <button class="rmodal-close" id="rmClose" data-rclose aria-label="Close">✕</button>
+      <header class="rmodal-head">
+        <div class="rmodal-titles">
+          <div class="rm-region label"><span class="rule"></span><span id="rmRegion"></span></div>
+          <h2 id="rmName"></h2>
+          <p class="rm-lead" id="rmLead"></p>
+        </div>
+        <div class="rmodal-meta">
+          <span class="rm-flag" id="rmFlag" aria-hidden="true"></span>
+          <span class="rm-coord" id="rmCoord"></span>
+          <span class="rm-count" id="rmCount"></span>
+        </div>
+      </header>
+      <div class="rmodal-scroll">
+        <div class="bento" id="rmBento"></div>
+        <div class="rmodal-cta">
+          <a href="#invite" data-rclose>Reserve a viewing
+            <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- MOTION — showroom flythrough (real DJI footage) -->
   <section class="motion">
@@ -701,46 +789,46 @@
           { n: 'Calacatta Antico', t: 'Marble', prov: 'Carrara' },
           { n: 'Paonazzo Nero Extra', t: 'Marble', prov: 'Carrara' },
           { n: 'Calacatta Viola Antico', t: 'Marble', prov: 'Carrara' },
-          { n: 'Arabescato', t: 'Marble', prov: 'Carrara' },
+          { n: 'Arabescato', t: 'Marble', prov: 'Carrara', img: 'assets/img/slab/arabescato.jpg' },
           { n: 'Cristallo Juliet', t: 'Quartzite', prov: '' },
           { n: 'Cristallo Tiffany', t: 'Quartzite', prov: '' },
           { n: 'Luminescence', t: 'Quartzite', prov: '' },
-          { n: 'Bianco Carrara', t: 'Marble', prov: 'Carrara' },
+          { n: 'Bianco Carrara', t: 'Marble', prov: 'Carrara', img: 'assets/img/slab/bianco-carrara-1.jpg' },
           { n: 'Calacatta Viola', t: 'Marble', prov: 'Carrara' } ] },
         { c: 'Brazil', region: 'South America', lat: -10.0, lon: -52.0,
           lead: 'Cut from the quartzite and granite belts of Bahia and Espírito Santo.', mats: [
-          { n: 'Taj Mahal', t: 'Quartzite', prov: 'Bahia' },
-          { n: 'Ocean Green', t: 'Quartzite', prov: 'Bahia' },
-          { n: 'Acqua Mare', t: 'Quartzite', prov: 'Bahia' },
+          { n: 'Taj Mahal', t: 'Quartzite', prov: 'Bahia', img: 'assets/img/slab/taj-mahal.jpg' },
+          { n: 'Ocean Green', t: 'Quartzite', prov: 'Bahia', img: 'assets/img/slab/ocean-green.jpg' },
+          { n: 'Acqua Mare', t: 'Quartzite', prov: 'Bahia', img: 'assets/img/slab/acqua-mare.jpg' },
           { n: 'Patagonia Sky', t: 'Granite', prov: 'Espírito Santo' },
-          { n: 'Arturo Crystal', t: 'Quartzite', prov: 'Espírito Santo' },
+          { n: 'Arturo Crystal', t: 'Quartzite', prov: 'Espírito Santo', img: 'assets/img/slab/arturo-crystal.jpg' },
           { n: 'Volcano', t: 'Granite', prov: 'Espírito Santo' },
-          { n: 'Aqua Venato', t: 'Quartzite', prov: '' },
-          { n: 'Blue Tahoe', t: 'Quartzite', prov: '' },
-          { n: 'Calacatta Taupe', t: 'Quartzite', prov: '' },
-          { n: 'Mystic Jade', t: 'Quartzite', prov: '' },
-          { n: 'Fantasy Lux', t: 'Quartzite', prov: '' },
-          { n: 'Artemis', t: 'Quartzite', prov: '' },
-          { n: 'Gold Coast', t: 'Quartzite', prov: '' },
-          { n: 'Nickel', t: 'Quartzite', prov: '' },
-          { n: 'New Louise Blue', t: 'Quartzite', prov: '' },
-          { n: 'Utopia', t: 'Quartzite', prov: '' },
-          { n: 'Ebon', t: 'Quartzite', prov: '' },
-          { n: 'Avocatus Satin', t: 'Granite', prov: '' },
-          { n: 'Negresco Satin', t: 'Granite', prov: '' },
-          { n: 'Titanium', t: 'Granite', prov: '' },
-          { n: 'Viridian', t: 'Granite', prov: '' },
-          { n: 'Riviera', t: 'Quartzite', prov: '' },
-          { n: 'Sandalus', t: 'Quartzite', prov: '' },
-          { n: 'Nacarado', t: 'Quartzite', prov: '' },
-          { n: 'Leblon', t: 'Quartzite', prov: '' },
-          { n: 'Cristallo Diamond Crystal', t: 'Quartzite', prov: '' },
-          { n: 'Cristallo Vitrium', t: 'Quartzite', prov: '' },
-          { n: 'Acqua Bella', t: 'Quartzite', prov: '' },
-          { n: 'Stella Maestro', t: 'Quartzite', prov: '' },
-          { n: 'Jade Crystal', t: 'Quartzite', prov: '' },
-          { n: 'Vittara', t: 'Quartzite', prov: '' },
-          { n: 'Tempest Blue', t: 'Quartzite', prov: '' } ] },
+          { n: 'Aqua Venato', t: 'Quartzite', prov: '', img: 'assets/img/slab/aqua-venato.jpg' },
+          { n: 'Blue Tahoe', t: 'Quartzite', prov: '', img: 'assets/img/slab/blue-tahoe.jpg' },
+          { n: 'Calacatta Taupe', t: 'Quartzite', prov: '', img: 'assets/img/slab/calacatta-taupe.jpg' },
+          { n: 'Mystic Jade', t: 'Quartzite', prov: '', img: 'assets/img/slab/mystic-jade.jpg' },
+          { n: 'Fantasy Lux', t: 'Quartzite', prov: '', img: 'assets/img/slab/fantasy-lux.jpg' },
+          { n: 'Artemis', t: 'Quartzite', prov: '', img: 'assets/img/slab/artemis.jpg' },
+          { n: 'Gold Coast', t: 'Quartzite', prov: '', img: 'assets/img/slab/gold-coast.jpg' },
+          { n: 'Nickel', t: 'Quartzite', prov: '', img: 'assets/img/slab/nickel.jpg' },
+          { n: 'New Louise Blue', t: 'Quartzite', prov: '', img: 'assets/img/slab/new-louise-blue.jpg' },
+          { n: 'Utopia', t: 'Quartzite', prov: '', img: 'assets/img/slab/utopia.jpg' },
+          { n: 'Ebon', t: 'Quartzite', prov: '', img: 'assets/img/slab/ebon.jpg' },
+          { n: 'Avocatus Satin', t: 'Granite', prov: '', img: 'assets/img/slab/avocatus-satin.jpg' },
+          { n: 'Negresco Satin', t: 'Granite', prov: '', img: 'assets/img/slab/negresco-satin.jpg' },
+          { n: 'Titanium', t: 'Granite', prov: '', img: 'assets/img/slab/titanium.jpg' },
+          { n: 'Viridian', t: 'Granite', prov: '', img: 'assets/img/slab/viridian.jpg' },
+          { n: 'Riviera', t: 'Quartzite', prov: '', img: 'assets/img/slab/riviera.jpg' },
+          { n: 'Sandalus', t: 'Quartzite', prov: '', img: 'assets/img/slab/sandalus.jpg' },
+          { n: 'Nacarado', t: 'Quartzite', prov: '', img: 'assets/img/slab/nacarado.jpg' },
+          { n: 'Leblon', t: 'Quartzite', prov: '', img: 'assets/img/slab/leblon.jpg' },
+          { n: 'Cristallo Diamond Crystal', t: 'Quartzite', prov: '', img: 'assets/img/slab/cristallo-diamond-crystal.jpg' },
+          { n: 'Cristallo Vitrium', t: 'Quartzite', prov: '', img: 'assets/img/slab/cristallo-vitrium.jpg' },
+          { n: 'Acqua Bella', t: 'Quartzite', prov: '', img: 'assets/img/slab/acqua-bella.jpg' },
+          { n: 'Stella Maestro', t: 'Quartzite', prov: '', img: 'assets/img/slab/stella-maestro.jpg' },
+          { n: 'Jade Crystal', t: 'Quartzite', prov: '', img: 'assets/img/slab/jade-crystal.jpg' },
+          { n: 'Vittara', t: 'Quartzite', prov: '', img: 'assets/img/slab/vittara.jpg' },
+          { n: 'Tempest Blue', t: 'Quartzite', prov: '', img: 'assets/img/slab/tempest-blue.jpg' } ] },
         { c: 'Turkey', region: 'Anatolia', lat: 39.0, lon: 35.0,
           lead: 'Banded onyx from the Anatolian highlands.', mats: [
           { n: 'Onyx Ivory', t: 'Onyx', prov: 'Afyon' } ] },
@@ -750,16 +838,16 @@
           { n: 'Bergen', t: 'Porcelain', prov: 'Castellón' } ] },
         { c: 'India', region: 'South Asia', lat: 22.0, lon: 79.0,
           lead: 'Granite and marble from the Deccan plateau and the quarry belts of Rajasthan.', mats: [
-          { n: 'Blizzard', t: 'Granite', prov: '' },
-          { n: 'Desert Canyon', t: 'Granite', prov: '' },
-          { n: 'Kalahari', t: 'Granite', prov: '' },
-          { n: 'Fantasy Black', t: 'Marble', prov: '' } ] },
+          { n: 'Blizzard', t: 'Granite', prov: '', img: 'assets/img/slab/blizzard.jpg' },
+          { n: 'Desert Canyon', t: 'Granite', prov: '', img: 'assets/img/slab/desert-canyon.jpg' },
+          { n: 'Kalahari', t: 'Granite', prov: '', img: 'assets/img/slab/kalahari.jpg' },
+          { n: 'Fantasy Black', t: 'Marble', prov: '', img: 'assets/img/slab/fantasy-black.jpg' } ] },
         { c: 'Namibia', region: 'Southern Africa', lat: -22.0, lon: 17.0,
           lead: 'Deep granite drawn from the Erongo highlands of the Namib interior.', mats: [
-          { n: 'Belvedere Satin', t: 'Granite', prov: '' } ] },
+          { n: 'Belvedere Satin', t: 'Granite', prov: '', img: 'assets/img/slab/belvedere-satin.jpg' } ] },
         { c: 'Mexico', region: 'North America', lat: 20.5, lon: -99.0,
           lead: 'Soft highland limestone, quarried and honed in central Mexico.', mats: [
-          { n: 'Crema Vosscione', t: 'Limestone', prov: '' } ] }
+          { n: 'Crema Vosscione', t: 'Limestone', prov: '', img: 'assets/img/slab/crema-vosscione.jpg' } ] }
       ];
       var PROVCOORD = {
         'Carrara': '44.08°N 10.10°E',
@@ -799,6 +887,13 @@
         return '<svg class="origin-topo" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + out + '</svg>';
       }
       var TOPO_SVG = makeTopo();
+      // Type → generic swatch fallback (for stones we don't yet have a photo of).
+      var TYPE_SWATCH = { 'Onyx': 'onyx', 'Marble': 'marble', 'Quartzite': 'marble',
+        'Granite': 'marble', 'Limestone': 'marble', 'Sintered Stone': 'tile', 'Porcelain': 'tile' };
+      // The image behind a stone: its real slab photo if we have one, else a type swatch.
+      function stoneSlab(m) {
+        return m.img || ('assets/img/material/swatch/' + (TYPE_SWATCH[m.t] || 'marble') + '.jpg');
+      }
       function projX(lon) { return (lon + 180) / 360; }
       function projY(lat) { return (LAT_TOP - lat) / (LAT_TOP - LAT_BOT); }
       var arcs = document.getElementById('arcs'), VB_W = 1000, VB_H = 361;
@@ -816,7 +911,7 @@
         pin.style.left = (px * 100) + '%'; pin.style.top = (py * 100) + '%';
         pin.setAttribute('aria-label', o.c);
         pin.innerHTML = '<span class="pin-label">' + o.c + '</span><span class="pin-dot"></span>';
-        pin.addEventListener('click', function () { openPanel(i, pin); });
+        pin.addEventListener('click', function () { openRegion(i, pin); });
         stage.appendChild(pin);
       });
       // Keep the legend count in step with the data (region -> continent).
@@ -837,42 +932,60 @@
         pin.innerHTML = '<span class="pin-label">Los Angeles</span><span class="pin-dot"></span>';
         stage.appendChild(pin);
       })();
-      var panel = document.getElementById('panel'), scrim = document.getElementById('scrim');
-      var pName = document.getElementById('panelName'), pRegion = document.getElementById('panelRegion'),
-        pPlate = document.getElementById('originPlate'), pLead = document.getElementById('panelLead'),
-        pMats = document.getElementById('panelMats');
+      // ── REGION MODAL — near-fullpage bento of a region's stones ──
+      var modal = document.getElementById('regionModal');
+      var rmRegion = document.getElementById('rmRegion'), rmName = document.getElementById('rmName'),
+        rmLead = document.getElementById('rmLead'), rmFlag = document.getElementById('rmFlag'),
+        rmCoord = document.getElementById('rmCoord'), rmCount = document.getElementById('rmCount'),
+        rmBento = document.getElementById('rmBento');
       var activePin = null;
-      function openPanel(i, pin) {
-        var o = ORIGINS[i];
-        pRegion.textContent = o.region; pName.textContent = o.c;
-        pPlate.innerHTML = TOPO_SVG + '<span class="origin-mark">Origin</span><div class="origin-coord">' + fmtCoord(o.lat, o.lon) + '</div>';
-        pLead.textContent = o.lead || '';
-        // Group stones by province (insertion order); blank province => "Provenance on request".
-        var groups = [], idx = {};
-        o.mats.forEach(function (m) {
-          var key = m.prov || '__req';
-          if (!(key in idx)) { idx[key] = groups.length; groups.push({ prov: m.prov, items: [] }); }
-          groups[idx[key]].items.push(m);
-        });
-        pMats.innerHTML = groups.map(function (g) {
-          var label = g.prov || 'Provenance on request';
-          var coord = (g.prov && PROVCOORD[g.prov]) ? '<span class="prov-coord">' + PROVCOORD[g.prov] + '</span>' : '';
-          var rows = g.items.map(function (m) {
-            return '<div class="mat"><div class="mat-name">' + m.n + '</div><div class="mat-type">' + m.t + '</div></div>';
-          }).join('');
-          return '<div class="prov-group"><div class="prov-head"><span class="prov-name">' + label + '</span>' + coord + '</div>' + rows + '</div>';
-        }).join('');
-        panel.classList.add('open'); scrim.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
+      // Deterministic bento sizing — feels art-directed but auto-fills any stone count.
+      function bentoClass(i, n) {
+        if (n === 1) return 'feature';
+        if (n === 2) return 'wide';
+        if (n <= 4) return i === 0 ? 'big' : '';
+        if (i % 7 === 0) return 'big';        // periodic hero tile
+        if (i % 7 === 3) return 'wide';       // periodic wide accent
+        if (i % 11 === 6) return 'tall';
+        return '';
+      }
+      function bentoTile(m, i, n) {
+        var size = bentoClass(i, n);
+        var prov = m.prov ? m.prov : 'Provenance on request';
+        var meta = m.t + ' <span class="dotsep"></span> ' + prov;
+        var media, cls = 'b-tile' + (size ? ' ' + size : '');
+        if (m.img) {
+          media = '<img class="b-img" src="' + m.img + '" alt="' + m.n + ' slab" loading="lazy">';
+        } else {
+          cls += ' noimg';
+          media = '<span class="b-req">On request</span>' + TOPO_SVG.replace('origin-topo', 'origin-topo b-topo');
+        }
+        return '<figure class="' + cls + '">' + media +
+          '<figcaption class="b-cap"><div class="b-name">' + m.n + '</div>' +
+          '<div class="b-meta">' + meta + '</div></figcaption></figure>';
+      }
+      function openRegion(i, pin) {
+        var o = ORIGINS[i], n = o.mats.length;
+        rmRegion.textContent = o.region;
+        rmName.textContent = o.c;
+        rmLead.textContent = o.lead || '';
+        rmFlag.innerHTML = FLAGS[o.c] || '';
+        rmCoord.textContent = fmtCoord(o.lat, o.lon);
+        rmCount.textContent = n + (n === 1 ? ' stone' : ' stones');
+        rmBento.innerHTML = o.mats.map(function (m, k) { return bentoTile(m, k, n); }).join('');
+        modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-lock');
+        var sc = modal.querySelector('.rmodal-scroll'); if (sc) sc.scrollTop = 0;
         if (activePin) activePin.classList.remove('active');
         if (pin) { pin.classList.add('active'); activePin = pin; }
       }
-      function closePanel() {
-        panel.classList.remove('open'); scrim.classList.remove('open'); panel.setAttribute('aria-hidden', 'true');
+      function closeRegion() {
+        modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-lock');
         if (activePin) { activePin.classList.remove('active'); activePin = null; }
       }
-      document.getElementById('panelClose').addEventListener('click', closePanel);
-      scrim.addEventListener('click', closePanel);
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePanel(); });
+      modal.querySelectorAll('[data-rclose]').forEach(function (el) { el.addEventListener('click', closeRegion); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeRegion(); });
 
       // ── FULL LIST: expandable country panels below the map (same ORIGINS data) ──
       (function () {
@@ -889,7 +1002,7 @@
             var label = g.prov || 'Provenance on request';
             var coord = (g.prov && PROVCOORD[g.prov]) ? '<span class="pb-coord">' + PROVCOORD[g.prov] + '</span>' : '';
             var rows = g.items.map(function (m) {
-              return '<div class="pb-row" data-type="' + m.t + '"><span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
+              return '<div class="pb-row" data-type="' + m.t + '" style="--slab:url(\'' + stoneSlab(m) + '\')"><span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
             }).join('');
             return '<div class="prov-block"><div class="pb-head"><span class="pb-name">' + label + '</span>' + coord + '</div>' + rows + '</div>';
           }).join('');
