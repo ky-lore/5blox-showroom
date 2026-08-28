@@ -38,9 +38,9 @@
     @media (max-width: 820px) { .nav-links a:not(.nav-appt) { display: none; } }
 
     /* HERO — full-bleed */
-    .mb-hero { position: relative; min-height: 92vh; display: flex; align-items: flex-end; padding: clamp(120px,20vh,220px) clamp(20px,5vw,80px) clamp(48px,8vh,90px); overflow: hidden; }
+    .mb-hero { position: relative; min-height: 78vh; display: flex; align-items: flex-end; padding: clamp(120px,20vh,220px) clamp(20px,5vw,80px) clamp(48px,8vh,90px); overflow: hidden; }
     .mb-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-    .mb-hero::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(10,9,8,0.62) 0%, rgba(10,9,8,0.2) 40%, rgba(10,9,8,0.86) 100%); }
+    .mb-hero::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(10,9,8,0.68) 0%, rgba(10,9,8,0.16) 34%, rgba(10,9,8,0.72) 78%, var(--void) 100%); }
     .mb-hero .inner { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; width: 100%; }
     .mb-hero .label { margin-bottom: 24px; color: rgba(231,227,219,0.8); }
     .mb-hero h1 { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(40px,7.4vw,110px); line-height: 0.94; }
@@ -134,22 +134,20 @@
   </nav>
 
   <header class="mb-hero">
-    <img src="assets/img/kitchen/banner.jpg" alt="A 5blox kitchen">
+    <img src="assets/img/media/hero-mood.jpg" alt="A wall of 5blox kitchen mood board imagery">
     <div class="inner">
-      <div class="label"><span class="rule"></span>Kitchen mood boards</div>
-      <h1>Find your<br>kitchen style.</h1>
-      <p>Eight starting points — from Japandi calm to Modern Organic warmth. Find the one that feels like yours, then come see the real materials under the showroom's light.</p>
+      <div class="label"><span class="rule"></span>5blox mood boards</div>
+      <h1>Find your<br>style.</h1>
       <div class="cta-row">
         <a href="#boards" class="btn-solid">Explore the boards
           <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
         </a>
-        <a href="/appointments" class="btn-line">Request a viewing</a>
       </div>
     </div>
   </header>
 
   <section class="mb-intro" id="boards">
-    <h2 class="reveal">Eight kitchens, one of them <em>yours.</em></h2>
+    <h2 class="reveal">Eight styles, one of them <em>yours.</em></h2>
     <p class="reveal">Open a board to see the full collection on Pinterest. Every style is built from the stone, cabinetry and tile we keep in the showroom — so what you save is what you can stand in front of.</p>
   </section>
 
@@ -204,22 +202,22 @@
     //    Pin counts as of the last sync — refresh if the boards grow. ══
     var PIN = 'https://www.pinterest.com/5blox/';
     var BOARDS = [
+      { slug:'contemporary',       name:'Contemporary',      pins:29, desc:'Sleek · Handleless · Sculptural',
+        line:"Handleless slab fronts and one statement stone — the island as sculpture." },
       { slug:'modern-organic',     name:'Modern Organic',    pins:55, desc:'Warm · Textural · Natural',
         line:"Plaster, pale oak and stone with real movement — modern lines softened by natural material." },
       { slug:'traditional',        name:'Traditional',       pins:60, desc:'Timeless · Detailed · Classic',
         line:"Inset doors, honed marble and considered millwork — a kitchen that never dates." },
       { slug:'mid-century-modern', name:'Mid Century Modern',pins:53, desc:'Walnut · Graphic · Clean',
         line:"Walnut grain, flat fronts and a low horizon — restraint with a sense of ease." },
-      { slug:'transitional',       name:'Transitional',      pins:54, desc:'Balanced · Warm · Inviting',
-        line:"Shaker simplicity against a modern island — the middle ground, done right." },
       { slug:'japandi',            name:'Japandi',           pins:29, desc:'Quiet · Spare · Precise',
         line:"Light timber, hidden hardware and an empty counter — everything here earns its place." },
-      { slug:'contemporary',       name:'Contemporary',      pins:29, desc:'Sleek · Handleless · Sculptural',
-        line:"Handleless slab fronts and one statement stone — the island as sculpture." },
-      { slug:'california-coastal', name:'California Coastal',pins:39, desc:'Pale · Airy · Relaxed',
-        line:"White oak, soft whites and light off the water — luxury that stays bright." },
+      { slug:'transitional',       name:'Transitional',      pins:54, desc:'Balanced · Warm · Inviting',
+        line:"Shaker simplicity against a modern island — the middle ground, done right." },
       { slug:'farmhouse',          name:'Farmhouse',         pins:33, desc:'Honest · Textured · Warm',
-        line:"Painted cabinetry, a deep apron sink and real wood — comfortable, and built to work." }
+        line:"Painted cabinetry, a deep apron sink and real wood — comfortable, and built to work." },
+      { slug:'california-coastal', name:'California Coastal',pins:39, desc:'Pale · Airy · Relaxed',
+        line:"White oak, soft whites and light off the water — luxury that stays bright." }
     ];
 
     // ── RENDER BOARD GRID ──

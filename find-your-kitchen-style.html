@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5blox Showroom — Find Your Kitchen Style</title>
-  <meta name="description" content="Get the 5blox kitchen mood boards — eight styles to find your look, from dark and dramatic to modern oak. Enter your details to explore, then see the materials in person.">
+  <meta name="description" content="Get the 5blox kitchen mood boards — eight styles to find your look, from Japandi restraint to Modern Organic warmth. Enter your details to explore, then see the materials in person.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -28,8 +28,9 @@
     .rule { display: inline-block; width: 34px; height: 1px; background: var(--line); vertical-align: middle; margin-right: 14px; }
     .btn-solid { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--void); background: var(--bone); padding: 16px 28px; border: none; cursor: pointer; transition: gap 0.4s, background 0.3s; }
     .btn-solid:hover { gap: 20px; background: #fff; }
-    .btn-line { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); border: 1px solid var(--line); padding: 16px 28px; transition: gap 0.4s, border-color 0.3s; }
+    .btn-line { display: inline-flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); background: none; border: 1px solid var(--line); padding: 16px 28px; cursor: pointer; transition: gap 0.4s, border-color 0.3s; }
     .btn-line:hover { gap: 20px; border-color: var(--bone); }
+    .btn-lg { padding: clamp(18px,2.4vh,24px) clamp(28px,3.4vw,44px); font-size: clamp(11px,1vw,13px); letter-spacing: 0.26em; }
 
     /* NAV */
     .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(20px,4vw,56px); mix-blend-mode: difference; }
@@ -43,20 +44,20 @@
 
     /* HERO — split */
     .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr; align-items: center; gap: clamp(40px,6vw,80px); padding: clamp(130px,18vh,200px) clamp(20px,5vw,80px) clamp(60px,10vh,110px); max-width: 1500px; margin: 0 auto; }
-    @media (min-width: 940px) { .hero { grid-template-columns: 1.05fr 1fr; } }
+    @media (min-width: 940px) { .hero { grid-template-columns: 1.02fr 1fr; } }
     .hero-type .label { margin-bottom: 26px; }
     .hero-type h1 { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.012em; font-size: clamp(44px,6.6vw,104px); line-height: 0.92; }
     .hero-type p { max-width: 44ch; margin-top: 26px; color: var(--ash); font-size: clamp(14px,1.3vw,17px); }
     .hero-type .cta-row { margin-top: 36px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-    .hero-note { margin-top: 22px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
-    /* image cluster */
-    .hero-cluster { position: relative; aspect-ratio: 4/5; max-height: 78vh; }
-    .hero-cluster figure { position: absolute; overflow: hidden; background: var(--coal); box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
-    .hero-cluster img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .hc-1 { inset: 0 22% 26% 0; z-index: 1; }
-    .hc-2 { width: 46%; aspect-ratio: 3/4; right: 0; bottom: 0; z-index: 2; border: 1px solid rgba(231,227,219,0.12); }
-    .hc-tag { position: absolute; left: 0; bottom: 6%; z-index: 3; background: var(--bone); color: var(--void); font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 9px 14px; }
-    @media (max-width: 939px) { .hero-cluster { aspect-ratio: 16/11; max-height: none; } }
+    /* tablet render — the mood boards page on a device, bleeding past the right edge */
+    .hero-device { position: relative; }
+    .hero-device::before { content: ""; position: absolute; left: 10%; top: 8%; width: 84%; height: 82%; z-index: 0;
+      background: radial-gradient(closest-side, rgba(231,227,219,0.11), rgba(231,227,219,0) 70%); }
+    .hero-device img { position: relative; z-index: 1; display: block; width: 112%; max-width: none; height: auto; margin-left: -6%; }
+    /* the supplied render sits at a steeper tilt than the flat mockup — a small
+       counter-rotation brings it back toward upright, then it bleeds off the right
+       edge and is cropped by the section below, as in MOCKUP.jpg */
+    @media (min-width: 940px) { .hero-device img { width: 152%; margin-left: -10%; transform: rotate(13deg) translateY(-8%); } }
 
     /* WHAT'S INSIDE */
     .inside { background: var(--coal); border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: clamp(72px,12vh,140px) clamp(20px,5vw,80px); }
@@ -128,6 +129,40 @@
     .foot-legal { margin-top: clamp(48px,8vh,88px); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .foot-legal span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
 
+    /* ── LEAD MODAL — the light form panel over the darkened page ── */
+    :root { --pop: #F5F6F8; --pop-ink: #14171C; --pop-dim: #9C9CA0; --pop-field: #EFEFEF; --pop-btn: #181C24; }
+    .pop-scrim { position: fixed; inset: 0; z-index: 100; background: rgba(8,7,6,0.93); opacity: 0; visibility: hidden; transition: opacity 0.45s, visibility 0.45s; }
+    .pop-scrim.on { opacity: 1; visibility: visible; }
+    .pop-wrap { position: fixed; inset: 0; z-index: 101; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: clamp(16px,4vh,56px) clamp(16px,4vw,40px); opacity: 0; visibility: hidden; transition: opacity 0.45s, visibility 0.45s; }
+    .pop-wrap.on { opacity: 1; visibility: visible; }
+    .pop { position: relative; width: 100%; max-width: 900px; margin: auto; background: var(--pop); color: var(--pop-ink); padding: clamp(34px,5vw,72px) clamp(24px,5vw,80px) clamp(30px,4vw,56px); transform: translateY(18px) scale(0.99); transition: transform 0.5s cubic-bezier(.2,.7,.2,1); }
+    .pop-wrap.on .pop { transform: none; }
+    .pop-close { position: absolute; top: 18px; right: 20px; background: none; border: none; cursor: pointer; font-family: var(--mono); font-size: 16px; line-height: 1; color: var(--pop-dim); padding: 8px; transition: color 0.3s; }
+    .pop-close:hover { color: var(--pop-ink); }
+    .pop-mark { font-family: var(--display); font-weight: 700; font-size: clamp(24px,2.6vw,34px); letter-spacing: -0.01em; text-align: center; color: var(--pop-ink); }
+    .pop h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(30px,4.4vw,58px); line-height: 1.02; letter-spacing: -0.015em; text-align: center; margin-top: 14px; }
+    .pop h2 em { font-style: normal; color: var(--pop-dim); }
+    .pop > p { max-width: 44ch; margin: 18px auto 0; text-align: center; color: #5C5F66; font-size: clamp(14px,1.3vw,16px); }
+    .pop form { margin-top: clamp(28px,4vh,44px); }
+    .pop .field label, .pop .consult > label { color: #8A8D94; }
+    .pop .field input { background: var(--pop-field); border: 1px solid transparent; color: var(--pop-ink); }
+    .pop .field input:focus { border-color: var(--pop-btn); }
+    .pop .field input::placeholder { color: #A9ACB2; }
+    .pop .consult > label { display: block; font-family: var(--sans); font-size: 15px; letter-spacing: 0; text-transform: none; color: #5C5F66; margin-bottom: 10px; }
+    .pop .consult .opt span { border-color: #D6D8DC; color: #5C5F66; }
+    .pop .consult .opt span:hover { border-color: var(--pop-btn); color: var(--pop-ink); }
+    .pop .consult .opt input:checked + span { background: var(--pop-btn); border-color: var(--pop-btn); color: var(--pop); }
+    .pop .btn-solid { width: 100%; justify-content: center; background: var(--pop-btn); color: var(--pop); padding: clamp(17px,2.2vh,21px) 28px; }
+    .pop .btn-solid:hover { background: #0D1016; }
+    .pop .form-fine { color: #9C9FA6; }
+    .pop-success { display: none; text-align: center; }
+    .pop-success.on { display: block; }
+    .pop-success h3 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3.2vw,40px); letter-spacing: -0.01em; margin-top: 18px; }
+    .pop-success p { color: #5C5F66; font-size: 15px; margin: 16px auto 0; max-width: 42ch; }
+    .pop-success .btn-solid { margin-top: 30px; }
+    .pop form.hide { display: none; }
+    body.pop-lock { overflow: hidden; }
+
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
     .reveal.in { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } html { scroll-behavior: auto; } }
@@ -149,19 +184,19 @@
   <header class="hero">
     <div class="hero-type">
       <div class="label"><span class="rule"></span>Kitchen mood boards · Free</div>
-      <h1>Find your<br>kitchen <em>style.</em></h1>
-      <p>Eight kitchen styles, built from real stone, cabinetry and tile — a short, honest way to name the look you're after before you ever step into the showroom.</p>
+      <h1>Find your<br>style.</h1>
+      <p>Eight styles, built from real stone, cabinetry and tile — a short, honest way to name the look you're after before you ever step into the showroom.</p>
       <div class="cta-row">
-        <a href="#capture" class="btn-solid">Get the mood boards
+        <button type="button" class="btn-solid btn-lg js-open">Get the mood boards
           <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
-        </a>
-        <span class="hero-note">Free · 8 styles · No obligation</span>
+        </button>
       </div>
     </div>
-    <div class="hero-cluster reveal">
-      <figure class="hc-1"><img src="assets/img/kitchen/dark-dramatic-2.jpg" alt="A dark, dramatic 5blox kitchen"></figure>
-      <figure class="hc-2"><img src="assets/img/kitchen/modern-oak-1.jpg" alt="A modern oak 5blox kitchen"></figure>
-      <span class="hc-tag">Eight styles inside</span>
+    <div class="hero-device reveal">
+      <picture>
+        <source srcset="assets/img/media/ipad.webp" type="image/webp">
+        <img src="assets/img/media/ipad.png" alt="The 5blox kitchen mood boards open on a tablet" fetchpriority="high">
+      </picture>
     </div>
   </header>
 
@@ -170,17 +205,17 @@
       <h2 class="reveal">What's inside?</h2>
       <div class="inside-grid">
         <div class="inside-col reveal">
-          <div class="inside-media"><img src="assets/img/kitchen/dark-dramatic-1.jpg" alt="A range of kitchen styles" loading="lazy"><span class="bn">01</span></div>
-          <h3>Eight kitchen styles</h3>
-          <p>From dark and dramatic to modern oak — see the full range and find the one that feels like yours.</p>
+          <div class="inside-media"><img src="assets/img/media/template-based-design.jpg" alt="The eight 5blox kitchen mood boards" loading="lazy"><span class="bn">01</span></div>
+          <h3>Eight design styles</h3>
+          <p>From Japandi restraint to Modern Organic warmth — see the full range and find the one that feels like yours.</p>
         </div>
         <div class="inside-col reveal">
-          <div class="inside-media"><img src="assets/img/kitchen/the-details-1.jpg" alt="Material detail — brass and stone" loading="lazy"><span class="bn">02</span></div>
-          <h3>The material behind the look</h3>
+          <div class="inside-media"><img src="assets/img/showroom/DSC04284.jpg" alt="Stone, oak cabinetry and tile together" loading="lazy"><span class="bn">02</span></div>
+          <h3>Material behind the look</h3>
           <p>Every board names the stone, cabinetry and tile that make it — so you learn to describe what you love.</p>
         </div>
         <div class="inside-col reveal">
-          <div class="inside-media"><img src="assets/img/kitchen/light-luxe-1.jpg" alt="Inside the showroom" loading="lazy"><span class="bn">03</span></div>
+          <div class="inside-media"><img src="assets/img/media/dsc05891-1-1.jpg" alt="The 5blox team in the showroom" loading="lazy"><span class="bn">03</span></div>
           <h3>A place to start</h3>
           <p>Bring your board to the showroom and we'll set the real slabs, doors and tile in front of you.</p>
         </div>
@@ -194,9 +229,9 @@
       <h2>The materials, <em>first.</em></h2>
       <p>5blox is a Los Angeles showroom for the things a kitchen is actually made of — quarried stone, cabinetry from the makers that matter, and tile you won't find in a big box. We're appointment-only by design: fewer people, more attention, and the space to decide slowly.</p>
       <p>Start with the mood boards. When one feels right, come see it under our light.</p>
-      <a href="#capture" class="btn-line">Get the mood boards</a>
+      <button type="button" class="btn-line js-open">Get the mood boards</button>
     </div>
-    <div class="about-media reveal"><img src="assets/img/kitchen/light-luxe-1.jpg" alt="Inside the 5blox showroom" loading="lazy"></div>
+    <div class="about-media reveal"><img src="assets/img/media/slabroom-sm.jpg" alt="Backlit stone slabs in the 5blox showroom" loading="lazy"></div>
   </section>
 
   <section class="trust">
@@ -249,6 +284,52 @@
     </div>
   </section>
 
+  <!-- ══ LEAD MODAL — same capture as the #capture section, surfaced from the CTAs ══ -->
+  <div class="pop-scrim" id="popScrim"></div>
+  <div class="pop-wrap" id="popWrap" role="dialog" aria-modal="true" aria-labelledby="popTitle" aria-hidden="true">
+    <div class="pop">
+      <button class="pop-close" id="popClose" aria-label="Close">&#10005;</button>
+      <div class="pop-mark">5blox</div>
+      <h2 id="popTitle">Get the <em>boards.</em></h2>
+      <p>Enter your details below to open the collection. If you'd like, we'll also reach out to set up a private viewing.</p>
+
+      <form class="lead" id="popForm" novalidate>
+        <div class="field">
+          <label for="p-name">Name</label>
+          <input type="text" id="p-name" name="name" placeholder="Your name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="p-email">Email</label>
+          <input type="email" id="p-email" name="email" placeholder="you@email.com" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="p-tel">Telephone</label>
+          <input type="tel" id="p-tel" name="telephone" placeholder="(000) 000-0000" required autocomplete="tel">
+        </div>
+        <div class="consult">
+          <label>Are you interested in a free consultation?</label>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="consultation" value="Yes" required><span>Yes</span></label>
+            <label class="opt"><input type="radio" name="consultation" value="No"><span>No</span></label>
+            <label class="opt"><input type="radio" name="consultation" value="Maybe"><span>Maybe</span></label>
+          </div>
+        </div>
+        <button type="submit" class="btn-solid">Send me the mood boards
+          <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+        </button>
+        <div class="form-fine">We'll never share your details · Unsubscribe anytime</div>
+      </form>
+
+      <div class="pop-success" id="popSuccess">
+        <h3>Your mood boards<br>are ready.</h3>
+        <p id="popSuccessMsg"></p>
+        <a href="/kitchen-mood-boards" class="btn-solid">View the mood boards
+          <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="foot-grid">
       <div>
@@ -265,38 +346,82 @@
     // ══ LEAD CAPTURE — client-side for now. TODO(backend): POST to the studio inbox
     //    / CRM. The showroom has no SMTP/backend scaffolded yet (see appointments.html,
     //    same status). Set LEAD_ENDPOINT to a real handler and it will POST there;
-    //    until then the form still succeeds client-side and unlocks the mood boards. ══
+    //    until then the form still succeeds client-side and unlocks the mood boards.
+    //    Two entry points share this logic: the #capture section and the CTA modal. ══
     var LEAD_ENDPOINT = ''; // e.g. '/api/lead' or a HubSpot/Zapier webhook URL
+    var AUTO_OPEN_MS = 0;   // set e.g. 12000 to surface the modal on a timer instead
 
+    function confirmCopy(consult) {
+      if (consult === 'Yes')   return "Explore the eight kitchen styles below. Our team will reach out within 24–48 business hours to set up your private viewing.";
+      if (consult === 'Maybe') return "Explore the eight kitchen styles below. When you're ready to see them in person, we're here — no rush.";
+      return "Explore the eight kitchen styles below. When one feels right, you can request a private viewing anytime.";
+    }
+
+    function wireLead(form, source, onDone) {
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = form.name.value.trim(), email = form.email.value.trim(), tel = form.telephone.value.trim();
+        var consult = (form.querySelector('input[name="consultation"]:checked') || {}).value;
+        if (!name || !email || !/.+@.+\..+/.test(email) || !tel || !consult) {
+          form.reportValidity && form.reportValidity();
+          return;
+        }
+        var payload = { name: name, email: email, telephone: tel, consultation: consult, source: source };
+        if (LEAD_ENDPOINT) {
+          try {
+            fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          } catch (err) { /* non-blocking */ }
+        }
+        onDone(consult);
+      });
+    }
+
+    // ── inline section ──
     var form = document.getElementById('leadForm');
     var success = document.getElementById('leadSuccess');
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      // basic validation
-      var name = form.name.value.trim(), email = form.email.value.trim(), tel = form.telephone.value.trim();
-      var consult = (form.querySelector('input[name="consultation"]:checked') || {}).value;
-      if (!name || !email || !/.+@.+\..+/.test(email) || !tel || !consult) {
-        form.reportValidity && form.reportValidity();
-        return;
-      }
-      var payload = { name: name, email: email, telephone: tel, consultation: consult, source: 'find-your-kitchen-style' };
-      if (LEAD_ENDPOINT) {
-        try {
-          fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        } catch (err) { /* non-blocking */ }
-      }
-      // tailor the confirmation to the consultation answer
-      var msg = document.getElementById('successMsg');
-      if (consult === 'Yes') {
-        msg.textContent = "Explore the eight kitchen styles below. Our team will reach out within 24–48 business hours to set up your private viewing.";
-      } else if (consult === 'Maybe') {
-        msg.textContent = "Explore the eight kitchen styles below. When you're ready to see them in person, we're here — no rush.";
-      } else {
-        msg.textContent = "Explore the eight kitchen styles below. When one feels right, you can request a private viewing anytime.";
-      }
+    wireLead(form, 'find-your-kitchen-style', function (consult) {
+      document.getElementById('successMsg').textContent = confirmCopy(consult);
       form.classList.add('hide');
       success.classList.add('on');
       success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // ── modal ──
+    var popWrap = document.getElementById('popWrap'), popScrim = document.getElementById('popScrim');
+    var popForm = document.getElementById('popForm'), popSuccess = document.getElementById('popSuccess');
+    var lastFocus = null;
+    function openPop() {
+      lastFocus = document.activeElement;
+      popWrap.classList.add('on'); popScrim.classList.add('on');
+      popWrap.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('pop-lock');
+      var first = popForm.classList.contains('hide') ? null : document.getElementById('p-name');
+      if (first) setTimeout(function () { first.focus(); }, 420);
+    }
+    function closePop() {
+      popWrap.classList.remove('on'); popScrim.classList.remove('on');
+      popWrap.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('pop-lock');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    [].slice.call(document.querySelectorAll('.js-open')).forEach(function (b) {
+      b.addEventListener('click', openPop);
+    });
+    document.getElementById('popClose').addEventListener('click', closePop);
+    popScrim.addEventListener('click', closePop);
+    popWrap.addEventListener('click', function (e) { if (e.target === popWrap) closePop(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && popWrap.classList.contains('on')) closePop(); });
+    if (AUTO_OPEN_MS) setTimeout(openPop, AUTO_OPEN_MS);
+
+    wireLead(popForm, 'find-your-kitchen-style-modal', function (consult) {
+      document.getElementById('popSuccessMsg').textContent = confirmCopy(consult);
+      popForm.classList.add('hide');
+      popSuccess.classList.add('on');
+      // keep the inline section in step, so a scroll back down isn't a second ask
+      document.getElementById('successMsg').textContent = confirmCopy(consult);
+      form.classList.add('hide');
+      success.classList.add('on');
     });
 
     // Reveal
