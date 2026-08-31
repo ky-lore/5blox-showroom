@@ -96,10 +96,10 @@
     .capture > p { max-width: 46ch; margin: 20px auto 0; color: var(--ash); font-size: 15px; }
     form.lead { margin-top: clamp(38px,6vh,56px); text-align: left; }
     .field { margin-bottom: 20px; }
-    .field label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); margin-bottom: 9px; }
+    .field label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ash); margin-bottom: 9px; }
     .field input { width: 100%; background: var(--coal); border: 1px solid var(--line); color: var(--bone); font-family: var(--sans); font-size: 15px; font-weight: 300; padding: 14px 16px; transition: border-color 0.3s; }
     .field input:focus { outline: none; border-color: var(--ash); }
-    .field input::placeholder { color: rgba(231,227,219,0.3); }
+    .field input::placeholder { color: rgba(231,227,219,0.5); }
     .consult { margin-bottom: 26px; }
     .consult .opts { display: flex; gap: 10px; flex-wrap: wrap; }
     .consult .opt { flex: 1; min-width: 90px; }
@@ -108,7 +108,7 @@
     .consult .opt input:checked + span { background: var(--bone); color: var(--void); border-color: var(--bone); }
     .consult .opt span:hover { border-color: var(--ash); color: var(--bone); }
     form.lead .btn-solid { width: 100%; justify-content: center; margin-top: 6px; }
-    .form-fine { margin-top: 16px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); text-align: center; }
+    .form-fine { margin-top: 16px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ash); text-align: center; }
     .form-success { display: none; text-align: center; }
     .form-success.on { display: block; }
     .form-success h3 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(26px,3.4vw,44px); letter-spacing: -0.01em; }
@@ -142,23 +142,23 @@
     .pop-mark { font-family: var(--display); font-weight: 700; font-size: clamp(24px,2.6vw,34px); letter-spacing: -0.01em; text-align: center; color: var(--pop-ink); }
     .pop h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(30px,4.4vw,58px); line-height: 1.02; letter-spacing: -0.015em; text-align: center; margin-top: 14px; }
     .pop h2 em { font-style: normal; color: var(--pop-dim); }
-    .pop > p { max-width: 44ch; margin: 18px auto 0; text-align: center; color: #5C5F66; font-size: clamp(14px,1.3vw,16px); }
+    .pop > p { max-width: 44ch; margin: 18px auto 0; text-align: center; color: #4A4D54; font-size: clamp(14px,1.3vw,16px); }
     .pop form { margin-top: clamp(28px,4vh,44px); }
-    .pop .field label, .pop .consult > label { color: #8A8D94; }
+    .pop .field label, .pop .consult > label { color: #6C7078; }
     .pop .field input { background: var(--pop-field); border: 1px solid transparent; color: var(--pop-ink); }
     .pop .field input:focus { border-color: var(--pop-btn); }
-    .pop .field input::placeholder { color: #A9ACB2; }
-    .pop .consult > label { display: block; font-family: var(--sans); font-size: 15px; letter-spacing: 0; text-transform: none; color: #5C5F66; margin-bottom: 10px; }
-    .pop .consult .opt span { border-color: #D6D8DC; color: #5C5F66; }
+    .pop .field input::placeholder { color: #8B8F97; }
+    .pop .consult > label { display: block; font-family: var(--sans); font-size: 15px; letter-spacing: 0; text-transform: none; color: #4A4D54; margin-bottom: 10px; }
+    .pop .consult .opt span { border-color: #CDD0D5; color: #4A4D54; }
     .pop .consult .opt span:hover { border-color: var(--pop-btn); color: var(--pop-ink); }
     .pop .consult .opt input:checked + span { background: var(--pop-btn); border-color: var(--pop-btn); color: var(--pop); }
     .pop .btn-solid { width: 100%; justify-content: center; background: var(--pop-btn); color: var(--pop); padding: clamp(17px,2.2vh,21px) 28px; }
     .pop .btn-solid:hover { background: #0D1016; }
-    .pop .form-fine { color: #9C9FA6; }
+    .pop .form-fine { color: #7C8088; }
     .pop-success { display: none; text-align: center; }
     .pop-success.on { display: block; }
     .pop-success h3 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3.2vw,40px); letter-spacing: -0.01em; margin-top: 18px; }
-    .pop-success p { color: #5C5F66; font-size: 15px; margin: 16px auto 0; max-width: 42ch; }
+    .pop-success p { color: #4A4D54; font-size: 15px; margin: 16px auto 0; max-width: 42ch; }
     .pop-success .btn-solid { margin-top: 30px; }
     .pop form.hide { display: none; }
     body.pop-lock { overflow: hidden; }
@@ -210,12 +210,12 @@
           <p>From Japandi restraint to Modern Organic warmth — see the full range and find the one that feels like yours.</p>
         </div>
         <div class="inside-col reveal">
-          <div class="inside-media"><img src="assets/img/media/consult1.jpg" alt="Stone, oak cabinetry and tile together" loading="lazy"><span class="bn">02</span></div>
+          <div class="inside-media"><img src="assets/img/media/showroom.jpg" alt="The sample library in the 5blox showroom" loading="lazy"><span class="bn">02</span></div>
           <h3>Material behind the look</h3>
           <p>Every board names the stone, cabinetry and tile that make it — so you learn to describe what you love.</p>
         </div>
         <div class="inside-col reveal">
-          <div class="inside-media"><img src="assets/img/media/showroom.jpg" alt="The 5blox team in the showroom" loading="lazy"><span class="bn">03</span></div>
+          <div class="inside-media"><img src="assets/img/media/consult1.jpg" alt="A 5blox designer walking clients through samples and plans" loading="lazy"><span class="bn">03</span></div>
           <h3>A place to start</h3>
           <p>Bring your board to the showroom and we'll set the real slabs, doors and tile in front of you.</p>
         </div>
