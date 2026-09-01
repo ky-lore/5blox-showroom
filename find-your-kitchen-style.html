@@ -2,6 +2,24 @@
 <html lang="en">
 
 <head>
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1615762873558754');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1615762873558754&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5blox Showroom — Find Your Kitchen Style</title>
@@ -337,7 +355,7 @@
         <p class="foot-blurb">Stone, cabinetry and tile for considered kitchens. Los Angeles. By appointment.</p>
       </div>
       <div class="foot-col"><h4>Showroom</h4><ul><li>Los Angeles, CA</li><li>By invitation only</li><li><a href="/appointments">Request an introduction</a></li></ul></div>
-      <div class="foot-col"><h4>Explore</h4><a href="/stone">Stone</a><a href="/cabinetry">Cabinetry</a><a href="/tile">Tile</a><a href="/kitchen-mood-boards">Kitchen mood boards</a></div>
+      <div class="foot-col"><h4>Explore</h4><a href="/stone">Stone</a><a href="/cabinetry">Cabinetry</a><a href="/tile">Tile</a></div>
     </div>
     <div class="foot-legal"><span>© MMXXV 5blox</span><span>Opening Fall 2026</span></div>
   </footer>
@@ -368,6 +386,12 @@
           return;
         }
         var payload = { name: name, email: email, telephone: tel, consultation: consult, source: source };
+        // Unlock the gated boards page. The Meta Pixel Lead fires over there, on the
+        // first post-form pageview — not here. We only record that the form was cleared.
+        try {
+          sessionStorage.setItem('5blox_boards_unlocked', '1');
+          sessionStorage.setItem('5blox_lead_source', source);
+        } catch (err) { /* private browsing — the CTA link still works */ }
         if (LEAD_ENDPOINT) {
           try {
             fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });

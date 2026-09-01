@@ -2,6 +2,55 @@
 <html lang="en">
 
 <head>
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1615762873558754');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1615762873558754&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- ══ GATE — the boards are the reward for the form, not a public page. ══
+       Runs before any content paints: no unlock flag in this session means the
+       visitor never cleared the form, so bounce them to it. Client-side only —
+       this shapes the funnel, it is not access control (see README note). ── -->
+  <script>
+    (function () {
+      // Fail OPEN when storage itself is unavailable (private browsing, blocked
+      // cookies): we genuinely cannot tell whether they filled the form, and
+      // bouncing them would trap a real lead in a redirect loop with the form.
+      var unlocked = true, fired = false;
+      try {
+        unlocked = sessionStorage.getItem('5blox_boards_unlocked') === '1';
+        fired    = sessionStorage.getItem('5blox_lead_fired') === '1';
+      } catch (err) { unlocked = true; }
+
+      if (!unlocked) {
+        location.replace('/find-your-kitchen-style');
+        return;
+      }
+
+      // First arrival after the form — this pageview is the Lead. Guarded so a
+      // reload or a back-forward into the boards does not count a second time.
+      if (!fired) {
+        try { sessionStorage.setItem('5blox_lead_fired', '1'); } catch (err) {}
+        var src = '';
+        try { src = sessionStorage.getItem('5blox_lead_source') || ''; } catch (err) {}
+        if (window.fbq) fbq('track', 'Lead', { content_name: 'Kitchen Mood Boards', content_category: src });
+      }
+    })();
+  </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5blox Showroom — Kitchen Mood Boards</title>
