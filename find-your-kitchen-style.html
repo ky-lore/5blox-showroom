@@ -366,7 +366,7 @@
     //    same status). Set LEAD_ENDPOINT to a real handler and it will POST there;
     //    until then the form still succeeds client-side and unlocks the mood boards.
     //    Two entry points share this logic: the #capture section and the CTA modal. ══
-    var LEAD_ENDPOINT = ''; // e.g. '/api/lead' or a HubSpot/Zapier webhook URL
+    var LEAD_ENDPOINT = 'https://services.leadconnectorhq.com/hooks/SarDAA7vlHLBZ9mMIl2Y/webhook-trigger/88ffab8f-d1a6-4980-88af-9cb28676ed6d'; // GHL inbound webhook
     var AUTO_OPEN_MS = 0;   // set e.g. 12000 to surface the modal on a timer instead
 
     function confirmCopy(consult) {
@@ -392,12 +392,24 @@
           sessionStorage.setItem('5blox_boards_unlocked', '1');
           sessionStorage.setItem('5blox_lead_source', source);
         } catch (err) { /* private browsing — the CTA link still works */ }
-        if (LEAD_ENDPOINT) {
-          try {
-            fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-          } catch (err) { /* non-blocking */ }
-        }
-        onDone(consult);
+        // Fire the GHL webhook and make sure it fully lands before we reveal the
+        // success CTA (which links through to the gated boards). `keepalive` lets
+        // the request complete even if the page navigates; a `text/plain` body
+        // dodges the CORS preflight so the hook always receives the JSON; and a
+        // short timeout means a slow/blocked webhook never traps the visitor.
+        if (!LEAD_ENDPOINT) { onDone(consult); return; }
+        var settled = false;
+        var proceed = function () { if (settled) return; settled = true; onDone(consult); };
+        var timer = setTimeout(proceed, 2500);
+        try {
+          fetch(LEAD_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+            body: JSON.stringify(payload),
+            keepalive: true
+          }).catch(function () { /* fire-and-forget: never block the funnel */ })
+            .then(function () { clearTimeout(timer); proceed(); });
+        } catch (err) { clearTimeout(timer); proceed(); }
       });
     }
 
