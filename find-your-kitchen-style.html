@@ -361,10 +361,10 @@
   </footer>
 
   <script>
-    // ══ LEAD CAPTURE — client-side for now. TODO(backend): POST to the studio inbox
-    //    / CRM. The showroom has no SMTP/backend scaffolded yet (see appointments.html,
-    //    same status). Set LEAD_ENDPOINT to a real handler and it will POST there;
-    //    until then the form still succeeds client-side and unlocks the mood boards.
+    // ══ LEAD CAPTURE — submissions POST to the GHL inbound webhook below, which is
+    //    the system of record for mood-board leads. There is still no SMTP/backend on
+    //    the showroom itself (see appointments.html, which remains client-side only).
+    //    Clear LEAD_ENDPOINT to fall back to succeeding client-side without posting.
     //    Two entry points share this logic: the #capture section and the CTA modal. ══
     var LEAD_ENDPOINT = 'https://services.leadconnectorhq.com/hooks/SarDAA7vlHLBZ9mMIl2Y/webhook-trigger/88ffab8f-d1a6-4980-88af-9cb28676ed6d'; // GHL inbound webhook
     var AUTO_OPEN_MS = 0;   // set e.g. 12000 to surface the modal on a timer instead
