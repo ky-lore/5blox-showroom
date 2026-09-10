@@ -394,9 +394,15 @@
         } catch (err) { /* private browsing — the CTA link still works */ }
         // Fire the GHL webhook and make sure it fully lands before we reveal the
         // success CTA (which links through to the gated boards). `keepalive` lets
-        // the request complete even if the page navigates; a `text/plain` body
-        // dodges the CORS preflight so the hook always receives the JSON; and a
-        // short timeout means a slow/blocked webhook never traps the visitor.
+        // the request complete even if the page navigates, and a short timeout means
+        // a slow/blocked webhook never traps the visitor.
+        //
+        // Content-Type MUST be application/json. A text/plain body (the usual trick
+        // for dodging the CORS preflight) is rejected by LeadConnector with
+        // {"status":"Error: Request has invalid data: Body payload"} — and it still
+        // answers HTTP 200, so fetch resolves and the silent drop is invisible from
+        // the client. No preflight concern here: the hook returns
+        // Access-Control-Allow-Origin/Headers: * with a one-year max-age.
         if (!LEAD_ENDPOINT) { onDone(consult); return; }
         var settled = false;
         var proceed = function () { if (settled) return; settled = true; onDone(consult); };
@@ -404,7 +410,7 @@
         try {
           fetch(LEAD_ENDPOINT, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
             keepalive: true
           }).catch(function () { /* fire-and-forget: never block the funnel */ })
