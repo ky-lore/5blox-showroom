@@ -127,6 +127,48 @@
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
     .reveal.in { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } html { scroll-behavior: auto; } }
+  
+    /* ═══════════ PRODUCT LIGHTBOX ═══════════
+       The drilldown swatches are only 84px, which is not enough to judge a slab or a
+       tile. Clicking one opens that product's existing image at whatever size the
+       viewport allows. Deliberately not a gallery — no next/prev, no thumbnails:
+       the point is to inspect the ONE piece you clicked, then get back. Sits above
+       the drilldown panel (z-index 80) so the panel stays open underneath. */
+    .lbox { position: fixed; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center;
+            padding: clamp(20px,5vh,64px) clamp(16px,4vw,64px); opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease; }
+    .lbox.open { opacity: 1; visibility: visible; }
+    .lbox-scrim { position: absolute; inset: 0; background: rgba(6,5,4,0.92); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .lbox-fig { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center;
+                gap: 18px; max-width: 100%; max-height: 100%; transform: scale(0.98); transition: transform 0.35s cubic-bezier(.2,.7,.2,1); }
+    .lbox.open .lbox-fig { transform: none; }
+    .lbox-fig img { display: block; max-width: min(1100px, 100%); max-height: calc(100vh - clamp(150px,22vh,240px));
+                    width: auto; height: auto; object-fit: contain; background: var(--raise);
+                    border: 1px solid var(--line); box-shadow: 0 40px 90px rgba(0,0,0,0.6); }
+    .lbox-cap { text-align: center; }
+    .lbox-name { font-family: var(--display); font-weight: 300; text-transform: uppercase;
+                 font-size: clamp(20px,3vw,34px); line-height: 1; letter-spacing: 0; color: var(--bone); }
+    .lbox-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+                 color: var(--faint); margin-top: 10px; }
+    .lbox-close { position: absolute; top: clamp(14px,2.5vh,26px); right: clamp(14px,3vw,30px); z-index: 2;
+                  background: none; border: 1px solid var(--line); color: var(--ash); width: 42px; height: 42px;
+                  font-size: 15px; line-height: 1; cursor: pointer; transition: color 0.25s, border-color 0.25s; }
+    .lbox-close:hover { color: var(--bone); border-color: var(--bone); }
+    .lbox-hint { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.3); }
+    /* the swatch is the affordance — make it read as clickable */
+    .mat { cursor: pointer; transition: background 0.25s; }
+    .mat:hover { background: rgba(231,227,219,0.035); }
+    .mat:hover .mat-swatch { outline: 1px solid var(--line-2); outline-offset: 2px; }
+    .mat:focus-visible { outline: 1px solid var(--bone); outline-offset: -1px; }
+    @media (prefers-reduced-motion: reduce) {
+      .lbox, .lbox-fig { transition: none; }
+    }
+      /* no photography yet — flat, not clickable, and says so */
+    .mat-nophoto { cursor: default; }
+    .mat-nophoto:hover { background: none; }
+    .mat-nophoto:hover .mat-swatch { outline: none; }
+    .mat-nophoto .mat-swatch { opacity: 0.5; filter: saturate(0.4); }
+    .mat-nophoto .mat-name { color: var(--ash); }
   </style>
 </head>
 
@@ -193,6 +235,21 @@
     </div>
     <div class="foot-legal"><span>© MMXXV 5blox</span><span>Opening Fall 2026</span></div>
   </footer>
+
+  
+  <!-- PRODUCT LIGHTBOX — single-image inspector for the clicked slab/tile -->
+  <div class="lbox" id="lbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Product image">
+    <div class="lbox-scrim" data-lbclose></div>
+    <button class="lbox-close" id="lboxClose" data-lbclose aria-label="Close image">&#10005;</button>
+    <figure class="lbox-fig">
+      <img id="lboxImg" src="" alt="">
+      <figcaption class="lbox-cap">
+        <div class="lbox-name" id="lboxName"></div>
+        <div class="lbox-type" id="lboxType"></div>
+        <div class="lbox-hint">Esc or click anywhere to close</div>
+      </figcaption>
+    </figure>
+  </div>
 
   <script>
     // ══ CATEGORY DATA (placeholder — swap for real style/colour photography + the client's brand list) ══
@@ -718,14 +775,76 @@
       document.getElementById('panelName').textContent = name;
       document.getElementById('panelCount').textContent = items.length + (items.length === 1 ? ' option' : ' options') + ' — shown in the showroom';
       document.getElementById('panelMats').innerHTML = items.map(function (m) {
-        return '<div class="mat"><img class="mat-swatch" loading="lazy" src="' + (m.img || SWATCH + m.s + '.jpg') + '" alt="' + m.b + '"><div><div class="mat-name">' + m.b + '</div><div class="mat-type">' + m.f + '</div></div></div>';
+        // A handful of products have no photography yet and fall back to a generic
+        // material swatch. Those must NOT be zoomable — blowing up a stand-in
+        // swatch and labelling it with a real product name misrepresents the stock.
+        var shot = !!m.img;
+        var full = m.img || SWATCH + m.s + '.jpg';
+        var attrs = shot
+          ? ' tabindex="0" role="button" aria-label="View ' + m.b + ' larger"' +
+            ' data-full="' + full + '" data-name="' + m.b + '" data-type="' + m.f + '"'
+          : '';
+        return '<div class="mat' + (shot ? '' : ' mat-nophoto') + '"' + attrs + '>' +
+               '<img class="mat-swatch" loading="lazy" src="' + full + '" alt="' + m.b + '">' +
+               '<div><div class="mat-name">' + m.b + '</div><div class="mat-type">' + m.f +
+               (shot ? '' : ' · photo pending') + '</div></div></div>';
       }).join('');
       panel.classList.add('open'); scrim.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
     }
     function closeDrill() { panel.classList.remove('open'); scrim.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); }
     document.getElementById('panelClose').addEventListener('click', closeDrill);
     scrim.addEventListener('click', closeDrill);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrill(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      // lightbox is on top: Esc dismisses it and leaves the drilldown where it was
+      if (typeof lboxIsOpen === 'function' && lboxIsOpen()) { lboxClose(); return; }
+      closeDrill();
+    });
+
+
+    // ── PRODUCT LIGHTBOX ──
+    // Opens the clicked material's own image, larger. Not a gallery by design.
+    var lbox = document.getElementById('lbox');
+    var lboxImg = document.getElementById('lboxImg');
+    var lbLastFocus = null;
+
+    function lboxOpen(src, name, type) {
+      lbLastFocus = document.activeElement;
+      lboxImg.src = src;
+      lboxImg.alt = name + (type ? ' — ' + type : '');
+      document.getElementById('lboxName').textContent = name;
+      document.getElementById('lboxType').textContent = type || '';
+      lbox.classList.add('open');
+      lbox.setAttribute('aria-hidden', 'false');
+      document.getElementById('lboxClose').focus();
+    }
+    function lboxClose() {
+      if (!lbox.classList.contains('open')) return;
+      lbox.classList.remove('open');
+      lbox.setAttribute('aria-hidden', 'true');
+      // drop the src so a big slab image isn't held in memory behind the panel
+      setTimeout(function () { if (!lbox.classList.contains('open')) lboxImg.src = ''; }, 350);
+      if (lbLastFocus && lbLastFocus.focus) lbLastFocus.focus();
+    }
+    function lboxIsOpen() { return lbox.classList.contains('open'); }
+
+    [].slice.call(document.querySelectorAll('[data-lbclose]')).forEach(function (el) {
+      el.addEventListener('click', lboxClose);
+    });
+
+    // Delegated: the .mat rows are rebuilt on every drilldown, so bind to the container.
+    document.getElementById('panelMats').addEventListener('click', function (e) {
+      var row = e.target.closest ? e.target.closest('.mat[data-full]') : null;
+      if (!row) return;   // .mat-nophoto rows carry no data-full and stay inert
+      lboxOpen(row.getAttribute('data-full'), row.getAttribute('data-name'), row.getAttribute('data-type'));
+    });
+    document.getElementById('panelMats').addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var row = e.target.closest ? e.target.closest('.mat[data-full]') : null;
+      if (!row) return;
+      e.preventDefault();
+      lboxOpen(row.getAttribute('data-full'), row.getAttribute('data-name'), row.getAttribute('data-type'));
+    });
 
     // Reveal
     (function () {
