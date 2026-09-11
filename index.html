@@ -273,11 +273,19 @@
     }
 
     /* ── MOTION (split flythrough video + copy) ── */
-    .motion { display: grid; grid-template-columns: 1fr; min-height: 100vh; border-top: 1px solid var(--line-2); }
+    .motion { display: grid; grid-template-columns: 1fr; min-height: auto; border-top: 1px solid var(--line-2); }
     @media (min-width: 900px) { .motion { grid-template-columns: 1.05fr 1fr; } }
-    .motion-video { position: relative; overflow: hidden; background: var(--coal); min-height: 58vh; }
-    @media (min-width: 900px) { .motion-video { min-height: auto; } }
-    .motion-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .motion-video { position: relative; overflow: hidden; background: var(--coal); aspect-ratio: 4 / 3; height: auto; max-height: 46vh; }
+    @media (min-width: 900px) { .motion-video { aspect-ratio: 16 / 9; max-height: 56vh; align-self: center; } }
+    .motion-video video { width: 100%; height: 100%; object-fit: cover; object-position: center 48%; display: block; }
+    /* The clip is 608x1080 portrait: exposed joists/ducts fill the top ~25% and the
+       bottom ~40% is bare floor, so only the middle band is worth showing. How much
+       of the frame is visible depends only on the BOX aspect, so the box is
+       aspect-locked (4/3 mobile, 16/9 desktop) rather than sized in raw vh. That
+       makes the visible band a fixed ~28%-60% of the frame at every viewport size
+       — below the ceiling, above the empty floor — instead of drifting with
+       viewport height. max-height still caps it in vh. */
+    @media (min-width: 900px) { .motion-video video { object-position: center 41%; } }
     .motion-video::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: var(--grain); background-size: 220px; opacity: 0.1; mix-blend-mode: overlay; }
     .motion-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(60px,12vh,140px) clamp(24px,5vw,90px); }
     .motion-copy .label { margin-bottom: 22px; }
