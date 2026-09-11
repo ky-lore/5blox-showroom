@@ -72,10 +72,13 @@
     .hero-device::before { content: ""; position: absolute; left: 10%; top: 8%; width: 84%; height: 82%; z-index: 0;
       background: radial-gradient(closest-side, rgba(231,227,219,0.11), rgba(231,227,219,0) 70%); }
     .hero-device img { position: relative; z-index: 1; display: block; width: 112%; max-width: none; height: auto; margin-left: -6%; }
-    /* the supplied render sits at a steeper tilt than the flat mockup — a small
-       counter-rotation brings it back toward upright, then it bleeds off the right
-       edge and is cropped by the section below, as in MOCKUP.jpg */
-    @media (min-width: 940px) { .hero-device img { width: 152%; margin-left: -10%; transform: rotate(13deg) translateY(-8%); } }
+    /* The supplied render sits at a steeper tilt than the flat mockup, so a small
+       counter-rotation brings it back toward upright and it bleeds off the right
+       edge, as in MOCKUP.jpg. The bleed was 247px past the viewport at 1440, which
+       sliced off the right half of the boards on screen — the whole point of the
+       shot. Pulled back to ~33px: still reads as a bleed, but the styles are
+       legible. Measured at 1440/1200/1920, not eyeballed. */
+    @media (min-width: 940px) { .hero-device img { width: 112%; margin-left: 2%; transform: rotate(8deg) translateY(-3%); } }
 
     /* WHAT'S INSIDE */
     .inside { background: var(--coal); border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: clamp(72px,12vh,140px) clamp(20px,5vw,80px); }
@@ -132,6 +135,10 @@
     .form-success h3 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(26px,3.4vw,44px); letter-spacing: -0.01em; }
     .form-success p { color: var(--ash); font-size: 15px; margin: 18px auto 0; max-width: 44ch; }
     .form-success .btn-solid { margin-top: 34px; }
+    /* Tom asked for a spam/reply call-out on the page: a first send from a cold
+       domain can land in junk, and a reply is what fixes deliverability. */
+    .deliver-note { margin: 22px auto 0; max-width: 46ch; font-size: 12.5px; line-height: 1.7; color: var(--faint); }
+    .pop .deliver-note { color: #7C8088; }
     form.lead.hide { display: none; }
 
     /* FOOTER */
@@ -295,10 +302,13 @@
 
     <div class="form-success" id="leadSuccess">
       <h3>Your mood boards<br>are ready.</h3>
-      <p id="successMsg">Explore the eight kitchen styles below. If you asked about a consultation, our team will reach out within 24–48 business hours to set up your private viewing.</p>
+      <p id="successMsg">Open the eight kitchen styles below. If you asked about a consultation, our team will reach out within 24–48 business hours to set up your private viewing.</p>
       <a href="/kitchen-mood-boards" class="btn-solid">View the mood boards
         <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
       </a>
+      <p class="deliver-note">We're also sending the link by email and text so you can come back to it.
+        If it isn't in your inbox in a few minutes, check spam — and replying to it
+        keeps us out of there next time.</p>
     </div>
   </section>
 
@@ -344,6 +354,9 @@
         <a href="/kitchen-mood-boards" class="btn-solid">View the mood boards
           <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
         </a>
+        <p class="deliver-note">We're also sending the link by email and text so you can come back to it.
+          If it isn't in your inbox in a few minutes, check spam — and replying to it
+          keeps us out of there next time.</p>
       </div>
     </div>
   </div>
@@ -369,10 +382,12 @@
     var LEAD_ENDPOINT = 'https://services.leadconnectorhq.com/hooks/SarDAA7vlHLBZ9mMIl2Y/webhook-trigger/88ffab8f-d1a6-4980-88af-9cb28676ed6d'; // GHL inbound webhook
     var AUTO_OPEN_MS = 0;   // set e.g. 12000 to surface the modal on a timer instead
 
+    // NB "below" was wrong — the boards are a separate page behind the CTA, not
+    // further down this one.
     function confirmCopy(consult) {
-      if (consult === 'Yes')   return "Explore the eight kitchen styles below. Our team will reach out within 24–48 business hours to set up your private viewing.";
-      if (consult === 'Maybe') return "Explore the eight kitchen styles below. When you're ready to see them in person, we're here — no rush.";
-      return "Explore the eight kitchen styles below. When one feels right, you can request a private viewing anytime.";
+      if (consult === 'Yes')   return "Open the eight kitchen styles below. Our team will reach out within 24–48 business hours to set up your private viewing.";
+      if (consult === 'Maybe') return "Open the eight kitchen styles below. When you're ready to see them in person, we're here — no rush.";
+      return "Open the eight kitchen styles below. When one feels right, you can request a private viewing anytime.";
     }
 
     function wireLead(form, source, onDone) {

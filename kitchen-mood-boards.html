@@ -20,33 +20,70 @@
   /></noscript>
   <!-- End Meta Pixel Code -->
 
-  <!-- ══ GATE — the boards are the reward for the form, not a public page. ══
-       Runs before any content paints: no unlock flag in this session means the
-       visitor never cleared the form, so bounce them to it. Client-side only —
-       this shapes the funnel, it is not access control (see README note). ── -->
+  <!-- ══ GATE — the boards are the reward for a form, not a public page. ══
+       Runs before any content paints. Three ways in, because there is more than
+       one form pointing here:
+
+         1. our own squeeze page (find-your-kitchen-style) sets a session flag
+         2. an explicit source param — Tom's GoHighLevel landing page redirects
+            straight here, so its form should point at
+              /kitchen-mood-boards?src=ghl-lp
+            which both admits the visitor and tags the Lead with that source, so
+            the A/B between the two landing pages is attributable on one pixel
+         3. any off-site referrer, as a backstop: if someone arrives from a GHL
+            page, an ad or an email without a param, they still converted
+            somewhere, and bouncing a real lead is worse than letting one
+            curious visitor through
+
+       Client-side only — this shapes the funnel, it is not access control. ── -->
   <script>
     (function () {
-      // Fail OPEN when storage itself is unavailable (private browsing, blocked
-      // cookies): we genuinely cannot tell whether they filled the form, and
-      // bouncing them would trap a real lead in a redirect loop with the form.
-      var unlocked = true, fired = false;
-      try {
-        unlocked = sessionStorage.getItem('5blox_boards_unlocked') === '1';
-        fired    = sessionStorage.getItem('5blox_lead_fired') === '1';
-      } catch (err) { unlocked = true; }
+      var SRC_KEYS = ['src', 'utm_source', 'utm_campaign', 'utm_medium', 'ref'];
+      var store = null;
+      try { store = window.sessionStorage; store.getItem('probe'); } catch (err) { store = null; }
+      var get = function (k) { try { return store && store.getItem(k); } catch (err) { return null; } };
+      var set = function (k, v) { try { if (store) store.setItem(k, v); } catch (err) {} };
 
+      // 1. cleared our own form earlier this session
+      var unlocked = get('5blox_boards_unlocked') === '1';
+      var source   = get('5blox_lead_source') || '';
+
+      // 2. arrived with a source param (another form's redirect)
       if (!unlocked) {
-        location.replace('/find-your-kitchen-style');
-        return;
+        try {
+          var q = new URLSearchParams(location.search);
+          for (var i = 0; i < SRC_KEYS.length; i++) {
+            var v = q.get(SRC_KEYS[i]);
+            if (v) { unlocked = true; source = v; break; }
+          }
+        } catch (err) {}
       }
 
-      // First arrival after the form — this pageview is the Lead. Guarded so a
+      // 3. arrived from off-site
+      if (!unlocked) {
+        try {
+          if (document.referrer && new URL(document.referrer).host !== location.host) {
+            unlocked = true;
+            source = 'referrer:' + new URL(document.referrer).host;
+          }
+        } catch (err) {}
+      }
+
+      // Storage unavailable (private browsing) means we cannot read the flag at
+      // all, so fail open rather than trap someone who did fill the form.
+      if (!unlocked && store === null) unlocked = true;
+
+      if (!unlocked) { location.replace('/find-your-kitchen-style'); return; }
+
+      // hold the unlock so a reload or in-page navigation does not bounce
+      set('5blox_boards_unlocked', '1');
+      if (source) set('5blox_lead_source', source);
+
+      // First arrival after a form — this pageview is the Lead. Guarded so a
       // reload or a back-forward into the boards does not count a second time.
-      if (!fired) {
-        try { sessionStorage.setItem('5blox_lead_fired', '1'); } catch (err) {}
-        var src = '';
-        try { src = sessionStorage.getItem('5blox_lead_source') || ''; } catch (err) {}
-        if (window.fbq) fbq('track', 'Lead', { content_name: 'Kitchen Mood Boards', content_category: src });
+      if (get('5blox_lead_fired') !== '1') {
+        set('5blox_lead_fired', '1');
+        if (window.fbq) fbq('track', 'Lead', { content_name: 'Kitchen Mood Boards', content_category: source });
       }
     })();
   </script>
