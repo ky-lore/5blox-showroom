@@ -425,8 +425,38 @@
     .map-legend span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
 
     /* ── ORIGINS: expandable country panels (the full collection, below the map) ── */
-    .origins { max-width: 1500px; margin: 0 auto; padding: clamp(20px,3vh,40px) clamp(20px,4vw,56px) clamp(70px,11vh,130px); }
-    .origins-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(28px,4vh,48px); }
+    /* One viewport, three columns: Italy / Brazil / everywhere else. The
+       accordion stacked seven panels and ran well past a screen; Brazil alone
+       is 32 stones. Each column scrolls inside itself, so the section is
+       exactly 100vh no matter how the counts move. */
+    .origins { max-width: 1500px; margin: 0 auto; height: 100vh; min-height: 560px;
+               display: flex; flex-direction: column;
+               padding: clamp(20px,3vh,40px) clamp(20px,4vw,56px) clamp(24px,4vh,54px); }
+    .origins-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(18px,2.6vh,30px); flex: 0 0 auto; }
+    .origin-cols { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px,2.6vw,44px); }
+    .ocol { display: flex; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
+    .ocol-head { display: flex; align-items: center; gap: 12px; padding: 14px 0 12px; flex: 0 0 auto; }
+    .ocol-head .c-flag { flex: 0 0 auto; width: 24px; height: 16px; border-radius: 2px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line-2); opacity: 0.9; }
+    .ocol-head .c-flag svg { display: block; width: 100%; height: 100%; }
+    .ocol-head .o-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(18px,2vw,30px); line-height: 1; letter-spacing: -0.01em; flex: 1; }
+    .ocol-head .o-count { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--ash); white-space: nowrap; }
+    /* the list, not the page, takes the overflow */
+    .ocol-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+                 scrollbar-width: thin; scrollbar-color: rgba(231,227,219,0.22) transparent;
+                 -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%);
+                 mask-image: linear-gradient(180deg, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%); }
+    .ocol-list::-webkit-scrollbar { width: 3px; }
+    .ocol-list::-webkit-scrollbar-thumb { background: rgba(231,227,219,0.22); }
+    .ocol-sub { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--faint);
+                padding: 14px 0 5px; border-bottom: 1px solid var(--line-2); }
+    .ocol-sub:first-child { padding-top: 2px; }
+    @media (max-width: 900px) {
+      /* stacked, but still one viewport — the three lists share the height and
+         each keeps its own scroll rather than the section growing to 2400px */
+      .origin-cols { grid-template-columns: 1fr; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: clamp(10px,1.6vh,18px); }
+      .ocol-head { padding: 10px 0 8px; }
+      .ocol-head .o-name { font-size: clamp(16px,4.4vw,22px); }
+    }
     .origins-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(24px,3.4vw,48px); letter-spacing: -0.01em; line-height: 1; }
     .origins-head .oh-note { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
     .country { border-top: 1px solid var(--line-2); }
@@ -450,8 +480,8 @@
     .prov-block .pb-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line-2); margin-bottom: 4px; }
     .prov-block .pb-name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); }
     .prov-block .pb-coord { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--faint); white-space: nowrap; }
-    .prov-block .pb-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line-2); }
-    .prov-block .pb-mat { font-family: var(--display); font-size: 17px; font-weight: 400; color: var(--bone); }
+    .prov-block .pb-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 7px 0; border-bottom: 1px solid var(--line-2); }
+    .prov-block .pb-mat { font-family: var(--display); font-size: 15px; font-weight: 400; color: var(--bone); }
     .prov-block .pb-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
     /* On hover, a whisper of the slab itself rises behind the row — the one place
        in the list where material colour is allowed to surface. Kept low with a
@@ -670,9 +700,9 @@
   <section class="origins">
     <div class="origins-head reveal">
       <h2>The collection</h2>
-      <span class="oh-note">Select an origin</span>
+      <span class="oh-note" id="ohNote"></span>
     </div>
-    <div id="countryList"></div>
+    <div class="origin-cols" id="countryList"></div>
   </section>
 
   <!-- REGION MODAL — near-fullpage bento of the region's stones (opens on map-pin click) -->
@@ -1162,42 +1192,51 @@
       modal.querySelectorAll('[data-rclose]').forEach(function (el) { el.addEventListener('click', closeRegion); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeRegion(); });
 
-      // ── FULL LIST: expandable country panels below the map (same ORIGINS data) ──
+      // ── FULL LIST: three columns — Italy, Brazil, everywhere else ──
+      //    Was a seven-panel accordion that ran well past a screen. Same ORIGINS
+      //    data, but grouped so the whole section holds one viewport; each column
+      //    scrolls internally rather than growing the page.
       (function () {
         var clist = document.getElementById('countryList');
         if (!clist) return;
-        ORIGINS.forEach(function (o, i) {
-          var groups = [], idx = {};
-          o.mats.forEach(function (m) {
-            var key = m.prov || '__req';
-            if (!(key in idx)) { idx[key] = groups.length; groups.push({ prov: m.prov, items: [] }); }
-            groups[idx[key]].items.push(m);
-          });
-          var blocks = groups.map(function (g) {
-            var label = g.prov || 'Provenance on request';
-            var coord = (g.prov && PROVCOORD[g.prov]) ? '<span class="pb-coord">' + PROVCOORD[g.prov] + '</span>' : '';
-            var rows = g.items.map(function (m) {
-              return '<div class="pb-row" data-type="' + m.t + '" style="--slab:url(\'' + stoneSlab(m) + '\')"><span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
-            }).join('');
-            return '<div class="prov-block"><div class="pb-head"><span class="pb-name">' + label + '</span>' + coord + '</div>' + rows + '</div>';
+
+        var by = {};
+        ORIGINS.forEach(function (o) { by[o.c] = o; });
+        var rest = ORIGINS.filter(function (o) { return o.c !== 'Italy' && o.c !== 'Brazil'; });
+
+        function rowsFor(mats) {
+          return mats.map(function (m) {
+            return '<div class="pb-row" data-type="' + m.t + '" style="--slab:url(\'' + stoneSlab(m) + '\')">' +
+                   '<span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
           }).join('');
+        }
+        function column(name, flagKey, count, inner) {
           var el = document.createElement('div');
-          el.className = 'country' + (i === 0 ? ' open' : '');
+          el.className = 'ocol';
           el.innerHTML =
-            '<button class="country-head" aria-expanded="' + (i === 0) + '">' +
-              '<span class="c-flag" aria-hidden="true">' + (FLAGS[o.c] || '') + '</span>' +
-              '<span class="c-name">' + o.c + '</span>' +
-              '<span class="c-region">' + o.region + '</span>' +
-              '<span class="c-count">' + o.mats.length + (o.mats.length === 1 ? ' stone' : ' stones') + '</span>' +
-              '<span class="c-toggle">+</span>' +
-            '</button>' +
-            '<div class="country-body"><div class="country-inner">' + blocks + '</div></div>';
-          el.querySelector('.country-head').addEventListener('click', function () {
-            var open = el.classList.toggle('open');
-            this.setAttribute('aria-expanded', open);
-          });
+            '<div class="ocol-head">' +
+              (flagKey && FLAGS[flagKey] ? '<span class="c-flag" aria-hidden="true">' + FLAGS[flagKey] + '</span>' : '') +
+              '<span class="o-name">' + name + '</span>' +
+              '<span class="o-count">' + count + (count === 1 ? ' stone' : ' stones') + '</span>' +
+            '</div>' +
+            '<div class="ocol-list"><div class="prov-block">' + inner + '</div></div>';
           clist.appendChild(el);
+        }
+
+        ['Italy', 'Brazil'].forEach(function (c) {
+          var o = by[c];
+          if (o) column(o.c, o.c, o.mats.length, rowsFor(o.mats));
         });
+
+        var otherCount = rest.reduce(function (n, o) { return n + o.mats.length; }, 0);
+        var otherInner = rest.map(function (o) {
+          return '<div class="ocol-sub">' + o.c + ' · ' + o.region + '</div>' + rowsFor(o.mats);
+        }).join('');
+        column('Other origins', null, otherCount, otherInner);
+
+        var note = document.getElementById('ohNote');
+        if (note) note.textContent = ORIGINS.reduce(function (n, o) { return n + o.mats.length; }, 0) +
+                                     ' stones · ' + ORIGINS.length + ' origins';
       })();
     })();
 
