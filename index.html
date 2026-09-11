@@ -338,7 +338,6 @@
     /* ── MOOD BOARD — its own full-viewport moment (fades in/out on scroll).
        Material palettes only, NOT showroom pieces; placeholder for the client's mood-board shots. ── */
     .moodband { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: clamp(30px,5vh,64px); overflow: hidden; border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: clamp(80px,13vh,150px) 0; }
-    .mood-fade { opacity: var(--mf, 1); will-change: opacity; }
     .mood-head { padding: 0 clamp(20px,4vw,56px) clamp(28px,5vh,52px); }
     .mood-head .label { display: block; margin-bottom: 16px; }
     .mood-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(32px,5.4vw,80px); line-height: 0.94; letter-spacing: -0.018em; }
@@ -377,7 +376,7 @@
     .mood-cap { position: absolute; left: 14px; bottom: 12px; z-index: 3; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.92); }
     @keyframes moodLeft  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
     @keyframes moodRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-    @media (prefers-reduced-motion: reduce) { .mood-row { animation: none; } .mood-fade { opacity: 1 !important; } }
+    @media (prefers-reduced-motion: reduce) { .mood-row { animation: none; } }
 
     /* ═══════════ FOOTER ═══════════ */
     footer { border-top: 1px solid var(--line-2); padding: clamp(48px, 8vh, 90px) clamp(20px, 4vw, 56px) 40px; }
@@ -433,27 +432,32 @@
                display: flex; flex-direction: column;
                padding: clamp(20px,3vh,40px) clamp(20px,4vw,56px) clamp(24px,4vh,54px); }
     .origins-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: clamp(18px,2.6vh,30px); flex: 0 0 auto; }
-    .origin-cols { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px,2.6vw,44px); }
+    .origin-cols { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 1fr 1.85fr 1fr; gap: clamp(20px,2.6vw,44px); }
     .ocol { display: flex; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
     .ocol-head { display: flex; align-items: center; gap: 12px; padding: 14px 0 12px; flex: 0 0 auto; }
     .ocol-head .c-flag { flex: 0 0 auto; width: 24px; height: 16px; border-radius: 2px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line-2); opacity: 0.9; }
     .ocol-head .c-flag svg { display: block; width: 100%; height: 100%; }
     .ocol-head .o-name { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(18px,2vw,30px); line-height: 1; letter-spacing: -0.01em; flex: 1; }
     .ocol-head .o-count { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--ash); white-space: nowrap; }
-    /* the list, not the page, takes the overflow */
-    .ocol-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
-                 scrollbar-width: thin; scrollbar-color: rgba(231,227,219,0.22) transparent;
-                 -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%);
-                 mask-image: linear-gradient(180deg, transparent 0, #000 10px, #000 calc(100% - 14px), transparent 100%); }
-    .ocol-list::-webkit-scrollbar { width: 3px; }
-    .ocol-list::-webkit-scrollbar-thumb { background: rgba(231,227,219,0.22); }
-    .ocol-sub { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--faint);
-                padding: 14px 0 5px; border-bottom: 1px solid var(--line-2); }
-    .ocol-sub:first-child { padding-top: 2px; }
+    /* No internal scrolling — a scroll region inside a full-height section
+       swallows the wheel and the page stops moving. Brazil is 32 of the 50
+       stones, so instead of scrolling it, its column runs two sub-columns and
+       everything fits. */
+    .ocol-list { flex: 1 1 auto; min-height: 0; }
+    .ocol.wide .ocol-list { column-count: 2; column-gap: clamp(18px,2vw,36px); }
+    .ocol.wide .pb-row { break-inside: avoid; }
+
+    /* country dividers inside the combined column: rule above, brighter label,
+       real air before each — they were reading as part of the row beneath */
+    .ocol-sub { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.26em; text-transform: uppercase;
+                color: rgba(231,227,219,0.78); padding: 20px 0 9px; margin-top: 8px;
+                border-top: 1px solid var(--line); }
+    .ocol-sub:first-child { padding-top: 0; margin-top: 0; border-top: 0; }
     @media (max-width: 900px) {
-      /* stacked, but still one viewport — the three lists share the height and
-         each keeps its own scroll rather than the section growing to 2400px */
-      .origin-cols { grid-template-columns: 1fr; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: clamp(10px,1.6vh,18px); }
+      /* stacked and full-length on a phone; nothing traps the wheel */
+      .origins { height: auto; }
+      .origin-cols { grid-template-columns: 1fr; grid-template-rows: none; gap: clamp(6px,1.2vh,14px); }
+      .ocol.wide .ocol-list { column-count: 1; }
       .ocol-head { padding: 10px 0 8px; }
       .ocol-head .o-name { font-size: clamp(16px,4.4vw,22px); }
     }
@@ -750,7 +754,6 @@
        stone product photography + tile product photography + cabinetry cut from the
        high-res showroom set. Captions name what is actually pictured. -->
   <section class="moodband" id="moodband" aria-label="Material moods">
-    <div class="mood-fade" id="moodFade">
     <div class="mood-head reveal">
       <span class="label">Moods</span>
       <h2>In the <em>palette.</em></h2>
@@ -853,7 +856,6 @@
         <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
         <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>      </div>
       </div>
-    </div>
     </div>
   </section>
 
@@ -1210,9 +1212,9 @@
                    '<span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
           }).join('');
         }
-        function column(name, flagKey, count, inner) {
+        function column(name, flagKey, count, inner, wide) {
           var el = document.createElement('div');
-          el.className = 'ocol';
+          el.className = 'ocol' + (wide ? ' wide' : '');
           el.innerHTML =
             '<div class="ocol-head">' +
               (flagKey && FLAGS[flagKey] ? '<span class="c-flag" aria-hidden="true">' + FLAGS[flagKey] + '</span>' : '') +
@@ -1225,7 +1227,7 @@
 
         ['Italy', 'Brazil'].forEach(function (c) {
           var o = by[c];
-          if (o) column(o.c, o.c, o.mats.length, rowsFor(o.mats));
+          if (o) column(o.c, o.c, o.mats.length, rowsFor(o.mats), c === 'Brazil');
         });
 
         var otherCount = rest.reduce(function (n, o) { return n + o.mats.length; }, 0);
@@ -1298,26 +1300,6 @@
           el.style.transform = 'translateY(' + (d * -amt).toFixed(1) + 'px)';
         });
         ticking = false;
-      }
-      function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
-      update();
-    })();
-
-    // Mood board — fade the whole section in as it centers, out as it leaves.
-    (function () {
-      var band = document.getElementById('moodband'), fade = document.getElementById('moodFade');
-      if (!band || !fade) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { fade.style.setProperty('--mf', '1'); return; }
-      var ticking = false;
-      function update() {
-        ticking = false;
-        var r = band.getBoundingClientRect(), vh = window.innerHeight;
-        var dist = Math.abs((r.top + r.height / 2) - vh / 2);   // 0 = perfectly centred
-        var start = vh * 0.22, end = vh * 0.9;                    // full opacity in the middle, fade near edges
-        var op = dist <= start ? 1 : dist >= end ? 0.04 : 1 - ((dist - start) / (end - start)) * 0.96;
-        fade.style.setProperty('--mf', op.toFixed(3));
       }
       function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
       window.addEventListener('scroll', onScroll, { passive: true });
