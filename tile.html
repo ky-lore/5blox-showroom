@@ -169,6 +169,18 @@
     .mat-nophoto:hover .mat-swatch { outline: none; }
     .mat-nophoto .mat-swatch { opacity: 0.5; filter: saturate(0.4); }
     .mat-nophoto .mat-name { color: var(--ash); }
+  
+    /* Hero is a slow cross-fade through the collection rather than one static
+       plate — there are 61 slabs and 178 tiles now, so a single image undersells
+       the range. Same opacity/gradient treatment as before; only the source
+       rotates. First frame is eager so there is never an empty hero. */
+    .cat-hero .slides { position: absolute; inset: 0; z-index: 0; }
+    .cat-hero .slides img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+                            opacity: 0; transition: opacity 1.8s ease; }
+    .cat-hero .slides img.on { opacity: 0.5; }
+    @media (prefers-reduced-motion: reduce) {
+      .cat-hero .slides img { transition: none; }
+    }
   </style>
 </head>
 
@@ -185,7 +197,7 @@
   </nav>
 
   <header class="cat-hero">
-    <img id="heroImg" src="" alt="">
+    <div class="slides" id="heroSlides"></div>
     <div class="inner">
       <div class="label reveal"><span class="rule"></span><span id="catName"></span></div>
       <h1 class="reveal" id="catTitle"></h1>
@@ -260,6 +272,15 @@
     var CATEGORY = {
       "name": "Tile",
       "hero": "assets/img/tile/rose-brass-mosiac-tile.jpg",
+      "heroSet": [
+        "assets/img/tile/scalloped-field-tile.jpg",
+        "assets/img/tile/zagora.jpg",
+        "assets/img/tile/thalia-3d-carved-rosette.jpg",
+        "assets/img/tile/calacatta-monet-petite-lantern-mosaic.jpg",
+        "assets/img/tile/monet-mosaic.jpg",
+        "assets/img/tile/santorini-petals.jpg",
+        "assets/img/tile/rose-brass-mosiac-tile.jpg"
+      ],
       "title": "By surface,<br>by <em>hand.</em>",
       "intro": "Marble mosaic, hand-glazed ceramic, large-format porcelain, zellige and natural stone — the detail that decides a room. Every piece shown in person under the showroom’s light.",
       "styleLabel": "By material",
@@ -2375,7 +2396,27 @@
     };
 
     // ── RENDER ──
-    document.getElementById('heroImg').src = CATEGORY.hero;
+
+    // ── HERO SLIDESHOW ──
+    (function () {
+      var set = CATEGORY.heroSet && CATEGORY.heroSet.length ? CATEGORY.heroSet : [CATEGORY.hero];
+      var box = document.getElementById('heroSlides');
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var nodes = set.map(function (src, i) {
+        var im = document.createElement('img');
+        im.src = src; im.alt = ''; im.setAttribute('aria-hidden', 'true');
+        if (i === 0) { im.className = 'on'; im.loading = 'eager'; } else { im.loading = 'lazy'; }
+        box.appendChild(im);
+        return im;
+      });
+      if (reduce || nodes.length < 2) return;
+      var i = 0;
+      setInterval(function () {
+        nodes[i].classList.remove('on');
+        i = (i + 1) % nodes.length;
+        nodes[i].classList.add('on');
+      }, 5200);
+    })();
     document.getElementById('catName').textContent = CATEGORY.name;
     document.getElementById('catTitle').innerHTML = CATEGORY.title;
     document.getElementById('catIntro').textContent = CATEGORY.intro;

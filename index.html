@@ -182,28 +182,52 @@
     .manifesto .line { font-family: var(--display); font-weight: 300; font-size: clamp(23px, 3.2vw, 44px); line-height: 1.32; letter-spacing: -0.01em; color: var(--bone); }
     .manifesto .l2 { color: var(--ash); }
 
-    /* ── SCENES — one material image floating in black, a small caption ── */
-    .scene { min-height: 100vh; display: grid; align-content: center; border-top: 1px solid var(--line-2); padding: clamp(96px, 16vh, 200px) clamp(20px, 5vw, 80px); }
-    .scene-media { position: relative; overflow: hidden; background: var(--coal); }
-    .scene-media img { position: absolute; left: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; display: block; will-change: transform; }
+    /* ── SCENES — a cluster of real stock per material, not one floating plate.
+       Was: a single image in ~5 of 12 columns inside a 100vh section, which left
+       most of three viewport-heights empty. Now each material shows a lead frame
+       plus four more from the same category, tight 2px gutters, and the section
+       is content-height instead of 100vh. Copy swaps sides scene to scene. ── */
+    .scene { display: grid; gap: clamp(26px,4vw,54px); border-top: 1px solid var(--line-2);
+             padding: clamp(52px,8vh,104px) clamp(20px,4vw,56px); }
     .scene-cap .label { display: block; margin-bottom: 20px; }
     .scene-title { font-family: var(--display); font-weight: 300; font-size: clamp(26px, 3.1vw, 44px); line-height: 1.12; letter-spacing: -0.01em; color: var(--bone); }
     .scene-title em { color: var(--ash); }
-    .scene-cap p { color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.85; max-width: 30ch; margin: 22px 0 0; }
+    .scene-cap p { color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.85; max-width: 32ch; margin: 22px 0 0; }
     .scene-cap .more { margin-top: 28px; }
 
+    .scene-cluster { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr);
+                     gap: 2px; height: clamp(340px, 56vh, 600px); }
+    .scene-cluster figure { position: relative; overflow: hidden; background: var(--coal); margin: 0; }
+    .scene-cluster figure.lead { grid-column: 1 / 3; grid-row: 1 / 3; }
+    .scene-cluster img { width: 100%; height: 100%; object-fit: cover; display: block;
+                         transition: transform 1.3s cubic-bezier(.2,.7,.2,1); }
+    /* the lead frame keeps the parallax, so it is overscaled to hide the travel */
+    .scene-cluster figure.lead img { position: absolute; left: 0; top: -6%; height: 112%; will-change: transform; }
+    .scene-cluster figure:hover img { transform: scale(1.05); }
+    .scene-cluster figure.lead:hover img { transform: scale(1.05) translateY(var(--par, 0px)); }
+    .scene-cluster figcaption { position: absolute; left: 10px; bottom: 8px; z-index: 3;
+                                font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em;
+                                text-transform: uppercase; color: rgba(231,227,219,0.92);
+                                opacity: 0; transition: opacity 0.35s; }
+    .scene-cluster figure:hover figcaption { opacity: 1; }
+    .scene-cluster figure::before { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+                                    background: linear-gradient(180deg, transparent 55%, rgba(10,9,8,0.7));
+                                    opacity: 0; transition: opacity 0.35s; }
+    .scene-cluster figure:hover::before { opacity: 1; }
+
     @media (min-width: 900px) {
-      .scene { grid-template-columns: repeat(12, 1fr); align-items: center; column-gap: clamp(24px, 5vw, 72px); }
-      .scene-1 .scene-media { grid-column: 7 / 12; height: 58vh; }
-      .scene-1 .scene-cap   { grid-column: 2 / 5; }
-      .scene-2 .scene-media { grid-column: 3 / 6; height: 76vh; }
-      .scene-2 .scene-cap   { grid-column: 8 / 11; }
-      .scene-3 .scene-media { grid-column: 7 / 12; height: 56vh; }
-      .scene-3 .scene-cap   { grid-column: 2 / 5; }
+      /* cluster is first in the DOM, so order is set explicitly rather than
+         relying on source order — otherwise it lands in the narrow column */
+      .scene { grid-template-columns: minmax(240px, 3fr) 9fr; align-items: center; }
+      .scene .scene-cap     { order: 1; }
+      .scene .scene-cluster { order: 2; }
+      .scene-2 { grid-template-columns: 9fr minmax(240px, 3fr); }
+      .scene-2 .scene-cluster { order: 1; }
+      .scene-2 .scene-cap     { order: 2; }
     }
     @media (max-width: 899px) {
-      .scene { min-height: auto; }
-      .scene-media { aspect-ratio: 4 / 5; margin-bottom: 30px; }
+      .scene-cluster { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); height: clamp(380px, 62vh, 560px); }
+      .scene-cluster figure.lead { grid-column: 1 / 3; grid-row: 1 / 2; }
     }
 
     /* ── SOURCING — minimal ── */
@@ -267,7 +291,7 @@
     @media (max-width: 720px) { .detail-band { grid-auto-flow: row; grid-template-columns: 1fr 1fr; } }
 
     /* Grit grain over the material photos so the texture reads on the imagery too. */
-    .scene-media::after, .detail-band figure::after {
+    .scene-cluster figure::after, .detail-band figure::after {
       content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
       background-image: var(--grain); background-size: 220px; opacity: 0.11; mix-blend-mode: overlay;
     }
@@ -302,15 +326,23 @@
     .mood-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(32px,5.4vw,80px); line-height: 0.94; letter-spacing: -0.018em; }
     .mood-head h2 em { color: var(--ash); }
     .mood-head p { color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.7; max-width: 42ch; margin-top: 18px; }
-    .mood-track { display: flex; gap: 2px; width: max-content; animation: mood 140s linear infinite; }
-    .moodband:hover .mood-track { animation-play-state: paused; }
-    .mood-item { position: relative; flex: none; height: clamp(320px, 52vh, 580px); aspect-ratio: 3 / 4; overflow: hidden; background: var(--coal); }
+    /* Three rows instead of one belt, each drifting against the one above it.
+       Opposing directions read as a moving palette rather than a single conveyor,
+       and three shallower rows show ~3x the material in the same vertical space. */
+    .mood-rows { display: flex; flex-direction: column; gap: 2px; }
+    .mood-row { display: flex; gap: 2px; width: max-content; will-change: transform; }
+    .mood-row.r1 { animation: moodRight 150s linear infinite; }
+    .mood-row.r2 { animation: moodLeft  128s linear infinite; }
+    .mood-row.r3 { animation: moodRight 168s linear infinite; }
+    .moodband:hover .mood-row { animation-play-state: paused; }
+    .mood-item { position: relative; flex: none; height: clamp(150px, 21vh, 250px); aspect-ratio: 3 / 4; overflow: hidden; background: var(--coal); }
     .mood-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.5s cubic-bezier(.2,.7,.2,1); }
     .mood-item:hover img { transform: scale(1.05); }
     .mood-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, transparent 50%, rgba(10,9,8,0.74)); }
-    .mood-cap { position: absolute; left: 18px; bottom: 16px; z-index: 3; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.92); }
-    @keyframes mood { to { transform: translateX(-50%); } }
-    @media (prefers-reduced-motion: reduce) { .mood-track { animation: none; } .mood-fade { opacity: 1 !important; } }
+    .mood-cap { position: absolute; left: 12px; bottom: 10px; z-index: 3; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(231,227,219,0.92); }
+    @keyframes moodLeft  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+    @keyframes moodRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    @media (prefers-reduced-motion: reduce) { .mood-row { animation: none; } .mood-fade { opacity: 1 !important; } }
 
     /* ═══════════ FOOTER ═══════════ */
     footer { border-top: 1px solid var(--line-2); padding: clamp(48px, 8vh, 90px) clamp(20px, 4vw, 56px) 40px; }
@@ -657,35 +689,102 @@
     <div class="mood-head reveal">
       <span class="label">Moods</span>
       <h2>In the <em>palette.</em></h2>
-      <p>Stone, tile and cabinetry — chosen for character. A rotating look at what's on the floor.</p>
+      <p>Stone, tile and cabinetry — chosen for character. Three rows of what's on the floor, drifting past each other.</p>
     </div>
-    <div class="mood-track">
-      <!-- set A — stone, tile and cabinetry actually on the floor -->
-      <div class="mood-item"><img src="assets/img/material/mood/st-stella-maestro.jpg" alt="Stella Maestro quartzite" loading="lazy"><span class="mood-cap">Stella Maestro</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted shaker cabinetry" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/ti-zagora.jpg" alt="Zagora hand-glazed zellige tile" loading="lazy"><span class="mood-cap">Zagora Zellige</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-vittara.jpg" alt="Vittara quartzite" loading="lazy"><span class="mood-cap">Vittara</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White oak cabinetry under a veined slab" loading="lazy"><span class="mood-cap">White Oak</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia 3D carved rosette tile" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-acqua-bella.jpg" alt="Acqua Bella quartzite" loading="lazy"><span class="mood-cap">Acqua Bella</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy cabinetry with an apron sink" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals mosaic tile" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-tempest-blue.jpg" alt="Tempest Blue quartzite" loading="lazy"><span class="mood-cap">Tempest Blue</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-cristallo-diamond-crystal.jpg" alt="Cristallo Diamond Crystal quartzite" loading="lazy"><span class="mood-cap">Cristallo Diamond</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-sandalus.jpg" alt="Sandalus quartzite" loading="lazy"><span class="mood-cap">Sandalus</span></div>
-      <!-- set B (duplicate for a seamless loop) -->
-      <div class="mood-item"><img src="assets/img/material/mood/st-stella-maestro.jpg" alt="Stella Maestro quartzite" loading="lazy"><span class="mood-cap">Stella Maestro</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted shaker cabinetry" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/ti-zagora.jpg" alt="Zagora hand-glazed zellige tile" loading="lazy"><span class="mood-cap">Zagora Zellige</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-vittara.jpg" alt="Vittara quartzite" loading="lazy"><span class="mood-cap">Vittara</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White oak cabinetry under a veined slab" loading="lazy"><span class="mood-cap">White Oak</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia 3D carved rosette tile" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-acqua-bella.jpg" alt="Acqua Bella quartzite" loading="lazy"><span class="mood-cap">Acqua Bella</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy cabinetry with an apron sink" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals mosaic tile" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-tempest-blue.jpg" alt="Tempest Blue quartzite" loading="lazy"><span class="mood-cap">Tempest Blue</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-cristallo-diamond-crystal.jpg" alt="Cristallo Diamond Crystal quartzite" loading="lazy"><span class="mood-cap">Cristallo Diamond</span></div>
-      <div class="mood-item"><img src="assets/img/material/mood/st-sandalus.jpg" alt="Sandalus quartzite" loading="lazy"><span class="mood-cap">Sandalus</span></div>
+    <div class="mood-rows">
+      <!-- Stone — drifts right · set of 12, duplicated for the seamless wrap -->
+      <div class="mood-row r1">
+        <div class="mood-item"><img src="assets/img/material/mood/st-stella-maestro.jpg" alt="Stella Maestro" loading="lazy"><span class="mood-cap">Stella Maestro</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-titanium.jpg" alt="Titanium" loading="lazy"><span class="mood-cap">Titanium</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-acqua-bella.jpg" alt="Acqua Bella" loading="lazy"><span class="mood-cap">Acqua Bella</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-vittara.jpg" alt="Vittara" loading="lazy"><span class="mood-cap">Vittara</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-fantasy-lux.jpg" alt="Fantasy Lux" loading="lazy"><span class="mood-cap">Fantasy Lux</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-sandalus.jpg" alt="Sandalus" loading="lazy"><span class="mood-cap">Sandalus</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-cristallo-diamond-crystal.jpg" alt="Cristallo Diamond" loading="lazy"><span class="mood-cap">Cristallo Diamond</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-belvedere-satin.jpg" alt="Belvedere Satin" loading="lazy"><span class="mood-cap">Belvedere Satin</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-blue-tahoe.jpg" alt="Blue Tahoe" loading="lazy"><span class="mood-cap">Blue Tahoe</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-tempest-blue.jpg" alt="Tempest Blue" loading="lazy"><span class="mood-cap">Tempest Blue</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-calacatta-taupe.jpg" alt="Calacatta Taupe" loading="lazy"><span class="mood-cap">Calacatta Taupe</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-ebon.jpg" alt="Ebon" loading="lazy"><span class="mood-cap">Ebon</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-stella-maestro.jpg" alt="Stella Maestro" loading="lazy"><span class="mood-cap">Stella Maestro</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-titanium.jpg" alt="Titanium" loading="lazy"><span class="mood-cap">Titanium</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-acqua-bella.jpg" alt="Acqua Bella" loading="lazy"><span class="mood-cap">Acqua Bella</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-vittara.jpg" alt="Vittara" loading="lazy"><span class="mood-cap">Vittara</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-fantasy-lux.jpg" alt="Fantasy Lux" loading="lazy"><span class="mood-cap">Fantasy Lux</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-sandalus.jpg" alt="Sandalus" loading="lazy"><span class="mood-cap">Sandalus</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-cristallo-diamond-crystal.jpg" alt="Cristallo Diamond" loading="lazy"><span class="mood-cap">Cristallo Diamond</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-belvedere-satin.jpg" alt="Belvedere Satin" loading="lazy"><span class="mood-cap">Belvedere Satin</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-blue-tahoe.jpg" alt="Blue Tahoe" loading="lazy"><span class="mood-cap">Blue Tahoe</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-tempest-blue.jpg" alt="Tempest Blue" loading="lazy"><span class="mood-cap">Tempest Blue</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-calacatta-taupe.jpg" alt="Calacatta Taupe" loading="lazy"><span class="mood-cap">Calacatta Taupe</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/st-ebon.jpg" alt="Ebon" loading="lazy"><span class="mood-cap">Ebon</span></div>
+      </div>
+      <!-- Tile — drifts left · set of 16, duplicated for the seamless wrap -->
+      <div class="mood-row r2">
+        <div class="mood-item"><img src="assets/img/material/mood/ti-zagora.jpg" alt="Zagora Zellige" loading="lazy"><span class="mood-cap">Zagora Zellige</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-zagora.jpg" alt="Zagora Zellige" loading="lazy"><span class="mood-cap">Zagora Zellige</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-zagora.jpg" alt="Zagora Zellige" loading="lazy"><span class="mood-cap">Zagora Zellige</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-zagora.jpg" alt="Zagora Zellige" loading="lazy"><span class="mood-cap">Zagora Zellige</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>
+      </div>
+      <!-- Cabinetry — drifts right · set of 14, duplicated for the seamless wrap -->
+      <div class="mood-row r3">
+        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
+        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>
+      </div>
     </div>
     </div>
   </section>
@@ -694,7 +793,13 @@
   <div class="scenes">
 
     <section class="scene scene-1" id="stone">
-      <div class="scene-media reveal"><img data-par="34" src="assets/img/material/scene-stone.jpg" alt="Calacatta Taupe — full slab, vein bands up close"></div>
+      <div class="scene-cluster reveal">
+        <figure class="lead"><img data-par="26" src="assets/img/material/scene-stone.jpg" alt="Calacatta Taupe — full slab, vein bands up close"><figcaption>Calacatta Taupe</figcaption></figure>
+        <figure><img src="assets/img/material/mood/st-titanium.jpg" alt="Titanium granite" loading="lazy"><figcaption>Titanium</figcaption></figure>
+        <figure><img src="assets/img/material/mood/st-stella-maestro.jpg" alt="Stella Maestro quartzite" loading="lazy"><figcaption>Stella Maestro</figcaption></figure>
+        <figure><img src="assets/img/material/mood/st-cristallo-diamond-crystal.jpg" alt="Cristallo Diamond Crystal quartzite" loading="lazy"><figcaption>Cristallo Diamond</figcaption></figure>
+        <figure><img src="assets/img/material/mood/st-vittara.jpg" alt="Vittara quartzite" loading="lazy"><figcaption>Vittara</figcaption></figure>
+      </div>
       <div class="scene-cap reveal">
         <span class="label">01 — Stone</span>
         <h2 class="scene-title">Slabs, by the <em>vein.</em></h2>
@@ -706,7 +811,13 @@
     </section>
 
     <section class="scene scene-2" id="cabinetry">
-      <div class="scene-media reveal"><img data-par="40" src="assets/img/material/scene-cabinetry.jpg" alt="Shaker cabinet doors and drawers with brass pulls"></div>
+      <div class="scene-cluster reveal">
+        <figure class="lead"><img data-par="30" src="assets/img/material/scene-cabinetry.jpg" alt="Shaker cabinet doors and drawers with brass pulls"><figcaption>Painted Shaker</figcaption></figure>
+        <figure><img src="assets/img/material/mood/cb-oak-run.jpg" alt="White oak cabinetry under a veined slab" loading="lazy"><figcaption>Oak & Quartzite</figcaption></figure>
+        <figure><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy cabinetry with an apron sink" loading="lazy"><figcaption>Navy Cabinetry</figcaption></figure>
+        <figure><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light painted shaker cabinetry" loading="lazy"><figcaption>Light Shaker</figcaption></figure>
+        <figure><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="White oak tall cabinetry run" loading="lazy"><figcaption>Oak Tall Run</figcaption></figure>
+      </div>
       <div class="scene-cap reveal">
         <span class="label">02 — Cabinetry</span>
         <h2 class="scene-title">By style &amp; <em>colour.</em></h2>
@@ -718,7 +829,13 @@
     </section>
 
     <section class="scene scene-3" id="tile">
-      <div class="scene-media reveal"><img data-par="30" src="assets/img/material/scene-tile.jpg" alt="Hand-glazed zellige field tile"></div>
+      <div class="scene-cluster reveal">
+        <figure class="lead"><img data-par="22" src="assets/img/material/scene-tile.jpg" alt="Hand-glazed zellige field tile"><figcaption>Zagora Zellige</figcaption></figure>
+        <figure><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia 3D carved rosette tile" loading="lazy"><figcaption>Thalia Carved</figcaption></figure>
+        <figure><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta lantern mosaic" loading="lazy"><figcaption>Calacatta Lantern</figcaption></figure>
+        <figure><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals mosaic tile" loading="lazy"><figcaption>Santorini Petals</figcaption></figure>
+        <figure><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet mosaic tile" loading="lazy"><figcaption>Monet Mosaic</figcaption></figure>
+      </div>
       <div class="scene-cap reveal">
         <span class="label">03 — Tile</span>
         <h2 class="scene-title">Surface, up <em>close.</em></h2>
@@ -733,11 +850,11 @@
 
   <!-- DETAIL BAND -->
   <div class="detail-band">
-    <figure><img src="assets/img/material/det-01.jpg" alt="Stella Maestro quartzite" loading="lazy"><figcaption>Stella Maestro</figcaption></figure>
-    <figure><img src="assets/img/material/det-02.jpg" alt="Titanium quartzite" loading="lazy"><figcaption>Titanium</figcaption></figure>
-    <figure><img src="assets/img/material/det-03.jpg" alt="Painted shaker door with brass pull" loading="lazy"><figcaption>Painted Shaker</figcaption></figure>
-    <figure><img src="assets/img/material/det-04.jpg" alt="Calacatta lantern mosaic" loading="lazy"><figcaption>Calacatta Lantern</figcaption></figure>
-    <figure><img src="assets/img/material/det-05.jpg" alt="Jade Crystal quartzite" loading="lazy"><figcaption>Jade Crystal</figcaption></figure>
+    <figure><img src="assets/img/material/mood/st-jade-crystal.jpg" alt="Jade Crystal quartzite" loading="lazy"><figcaption>Jade Crystal</figcaption></figure>
+    <figure><img src="assets/img/material/mood/st-belvedere-satin.jpg" alt="Belvedere Satin granite" loading="lazy"><figcaption>Belvedere Satin</figcaption></figure>
+    <figure><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White oak cabinetry" loading="lazy"><figcaption>White Oak</figcaption></figure>
+    <figure><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped terracotta field tile" loading="lazy"><figcaption>Scalloped Field</figcaption></figure>
+    <figure><img src="assets/img/material/mood/st-acqua-bella.jpg" alt="Acqua Bella quartzite" loading="lazy"><figcaption>Acqua Bella</figcaption></figure>
   </div>
 
   <!-- FULL-BLEED STATEMENT (light) -->
