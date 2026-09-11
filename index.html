@@ -272,34 +272,41 @@
 
     /* ── FULL-BLEED IMAGE STATEMENTS (Chrome-Hearts-style grainy image sections) ── */
     .statement { position: relative; height: 100vh; min-height: 520px; overflow: hidden; border-top: 1px solid var(--line-2); }
-    /* Three panels sliced on a forward diagonal, void showing through the gaps
-       as hairlines. Boundaries at 1/3 and 2/3, each shifted +5% at the top and
-       -5% at the bottom, with a 0.35% gap either side of the cut. */
+    /* Three panels sliced on a forward diagonal, void showing through the gaps as
+       hairlines. Each panel is boxed to just its own band rather than the full
+       width — at inset:0 all three images painted at container width and the
+       browser upscaled them ~1.3x, which is what made them look soft. Boxed, the
+       same files are downscaled into place. clip-path is local to each box. */
     .st-cut { position: absolute; inset: 0; z-index: 0; }
-    .st-cut .cut { position: absolute; inset: 0; margin: 0; overflow: hidden; }
+    .st-cut .cut { position: absolute; top: 0; bottom: 0; margin: 0; overflow: hidden; }
     .st-cut .cut img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    /* the middle panel is narrow, and a centre crop of a tall door lands on blank
-       face — bias down so the knobs and pull are in frame and it reads as cabinetry */
     .st-cut .c2 img { object-position: center 82%; }
-    .st-cut .c1 { clip-path: polygon(0 0, 37.98% 0, 27.98% 100%, 0 100%); }
-    .st-cut .c2 { clip-path: polygon(38.68% 0, 71.32% 0, 61.32% 100%, 28.68% 100%); }
-    .st-cut .c3 { clip-path: polygon(72.02% 0, 100% 0, 100% 100%, 62.02% 100%); }
+
+    .st-cut .c1 { left: 0;   width: 38.4%; clip-path: polygon(0 0, 99.6% 0, 73.6% 100%, 0 100%); }
+    .st-cut .c2 { left: 28%; width: 44%;   clip-path: polygon(23.6% 0, 99.1% 0, 76.4% 100%, 0.9% 100%); }
+    .st-cut .c3 { left: 61%; width: 39%;   clip-path: polygon(27.5% 0, 100% 0, 100% 100%, 1.9% 100%); }
+
     @media (max-width: 620px) {
       /* a 5% slant on a narrow screen reads as a mistake rather than a cut */
-      .st-cut .c1 { clip-path: polygon(0 0, 35.6% 0, 31.1% 100%, 0 100%); }
-      .st-cut .c2 { clip-path: polygon(36.3% 0, 68.9% 0, 64.4% 100%, 31.8% 100%); }
-      .st-cut .c3 { clip-path: polygon(69.6% 0, 100% 0, 100% 100%, 65.1% 100%); }
+      .st-cut .c1 { left: 0;     width: 36.1%; clip-path: polygon(0 0, 99.4% 0, 86.9% 100%, 0 100%); }
+      .st-cut .c2 { left: 31%;   width: 38.5%; clip-path: polygon(13.0% 0, 99.3% 0, 87.6% 100%, 1.3% 100%); }
+      .st-cut .c3 { left: 64.5%; width: 35.5%; clip-path: polygon(13.7% 0, 100% 0, 100% 100%, 1.0% 100%); }
     }
     /* Heavy grit grain over the image — overlay works on light OR dark frames. */
     .statement::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background-image: var(--grain); background-size: 220px; opacity: 0.12; mix-blend-mode: overlay; }
     .statement::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background: linear-gradient(180deg, rgba(10,9,8,0.36) 0%, transparent 24%, transparent 58%, rgba(10,9,8,0.8) 100%); }
-    .st-cap { position: absolute; left: clamp(20px, 4vw, 56px); bottom: clamp(26px, 5vh, 54px); z-index: 2; }
-    .st-cap .label { color: rgba(231,227,219,0.72); }
-    .st-title { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.005em; font-size: clamp(22px, 2.8vw, 40px); line-height: 1.06; color: #fff; margin-top: 13px; }
+      background:
+        radial-gradient(52% 40% at 50% 50%, rgba(10,9,8,0.62), rgba(10,9,8,0.18) 62%, transparent 82%),
+        linear-gradient(180deg, rgba(10,9,8,0.36) 0%, transparent 24%, transparent 58%, rgba(10,9,8,0.7) 100%); }
+    /* centred rather than bottom-left: the three cuts read as a triptych, so the
+       line belongs on the axis they meet around */
+    .st-cap { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
+              align-items: center; justify-content: center; text-align: center;
+              padding: 0 clamp(20px,5vw,60px); pointer-events: none; }
+    .st-cap .label { color: rgba(255,255,255,0.8); text-shadow: 0 1px 18px rgba(10,9,8,0.6); }
+    .st-title { font-family: var(--display); font-weight: 300; text-transform: uppercase; letter-spacing: -0.005em; font-size: clamp(30px, 4.6vw, 68px); line-height: 1.04; color: #fff; margin-top: 16px; text-shadow: 0 2px 30px rgba(10,9,8,0.55); }
 
-    /* ── DETAIL BAND (tight row of material stills) ── */
 
     /* Grit grain over the material photos so the texture reads on the imagery too. */
     .scene-cluster figure::after, .statement .cut::after {
