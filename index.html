@@ -484,7 +484,7 @@
     .prov-block .pb-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line-2); margin-bottom: 4px; }
     .prov-block .pb-name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone); }
     .prov-block .pb-coord { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--faint); white-space: nowrap; }
-    .prov-block .pb-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 7px 0; border-bottom: 1px solid var(--line-2); }
+    .prov-block .pb-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 7px 0; min-height: 34px; border-bottom: 1px solid var(--line-2); }
     .prov-block .pb-mat { font-family: var(--display); font-size: 15px; font-weight: 400; color: var(--bone); }
     .prov-block .pb-type { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
     /* On hover, a whisper of the slab itself rises behind the row — the one place
@@ -647,7 +647,7 @@
   <!-- HERO -->
   <header class="hero">
     <div class="hero-bg" id="heroBg">
-      <video muted loop playsinline preload="auto" poster="assets/video/poster/hero.jpg" data-autoplay data-src="assets/video/web/hero-montage.mp4"></video>
+      <video muted loop playsinline preload="none" poster="assets/video/poster/hero.jpg" data-autoplay data-src="assets/video/web/hero-montage.mp4" data-src-mobile="assets/video/web/hero-montage-mobile.mp4"></video>
     </div>
     <div class="hero-type">
       <div class="hero-eyebrow label"><span class="rule"></span>5blox Showroom · Los Angeles</div>
@@ -873,7 +873,7 @@
       <div class="scene-cap reveal">
         <span class="label">01 — Stone</span>
         <h2 class="scene-title">Slabs, by the <em>vein.</em></h2>
-        <p>Marble, quartzite, and travertine — chosen by colour and movement, not catalogue.</p>
+        <p>Marble, quartzite, and travertine — chosen by color and movement, not catalogue.</p>
         <a href="#" class="more">View the stone
           <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
         </a>
@@ -890,7 +890,7 @@
       </div>
       <div class="scene-cap reveal">
         <span class="label">02 — Cabinetry</span>
-        <h2 class="scene-title">By style &amp; <em>colour.</em></h2>
+        <h2 class="scene-title">By style &amp; <em>color.</em></h2>
         <p>Door profiles and finishes first — the brand follows. Oak, lacquer, and stained walnut.</p>
         <a href="#" class="more">View cabinetry
           <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
@@ -1261,10 +1261,14 @@
         vids.forEach(function (v) { var w = v.closest('.hero-bg'); if (w) w.classList.add('playing'); });
         return;
       }
+      var narrow = window.matchMedia('(max-width: 700px)').matches;
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           var v = e.target;
-          if (e.isIntersecting) { if (v.dataset.src && !v.src) { v.src = v.dataset.src; v.load(); } var p = v.play(); if (p) p.catch(function () { }); }
+          if (e.isIntersecting) {
+            if (!v.src) { var src = (narrow && v.dataset.srcMobile) ? v.dataset.srcMobile : v.dataset.src; if (src) { v.src = src; v.load(); } }
+            var p = v.play(); if (p) p.catch(function () { });
+          }
           else { v.pause(); }
         });
       }, { threshold: 0.25 });
