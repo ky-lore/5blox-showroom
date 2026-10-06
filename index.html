@@ -272,26 +272,7 @@
 
     /* ── FULL-BLEED IMAGE STATEMENTS (Chrome-Hearts-style grainy image sections) ── */
     .statement { position: relative; height: 100vh; min-height: 520px; overflow: hidden; border-top: 1px solid var(--line-2); }
-    /* Three panels sliced on a forward diagonal, void showing through the gaps as
-       hairlines. Each panel is boxed to just its own band rather than the full
-       width — at inset:0 all three images painted at container width and the
-       browser upscaled them ~1.3x, which is what made them look soft. Boxed, the
-       same files are downscaled into place. clip-path is local to each box. */
-    .st-cut { position: absolute; inset: 0; z-index: 0; }
-    .st-cut .cut { position: absolute; top: 0; bottom: 0; margin: 0; overflow: hidden; }
-    .st-cut .cut img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .st-cut .c2 img { object-position: center 82%; }
-
-    .st-cut .c1 { left: 0;   width: 38.4%; clip-path: polygon(0 0, 99.6% 0, 73.6% 100%, 0 100%); }
-    .st-cut .c2 { left: 28%; width: 44%;   clip-path: polygon(23.6% 0, 99.1% 0, 76.4% 100%, 0.9% 100%); }
-    .st-cut .c3 { left: 61%; width: 39%;   clip-path: polygon(27.5% 0, 100% 0, 100% 100%, 1.9% 100%); }
-
-    @media (max-width: 620px) {
-      /* a 5% slant on a narrow screen reads as a mistake rather than a cut */
-      .st-cut .c1 { left: 0;     width: 36.1%; clip-path: polygon(0 0, 99.4% 0, 86.9% 100%, 0 100%); }
-      .st-cut .c2 { left: 31%;   width: 38.5%; clip-path: polygon(13.0% 0, 99.3% 0, 87.6% 100%, 1.3% 100%); }
-      .st-cut .c3 { left: 64.5%; width: 35.5%; clip-path: polygon(13.7% 0, 100% 0, 100% 100%, 1.0% 100%); }
-    }
+    .st-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 38%; z-index: 0; display: block; }
     /* Heavy grit grain over the image — overlay works on light OR dark frames. */
     .statement::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background-image: var(--grain); background-size: 220px; opacity: 0.12; mix-blend-mode: overlay; }
@@ -309,7 +290,7 @@
 
 
     /* Grit grain over the material photos so the texture reads on the imagery too. */
-    .scene-cluster figure::after, .statement .cut::after {
+    .scene-cluster figure::after {
       content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
       background-image: var(--grain); background-size: 220px; opacity: 0.11; mix-blend-mode: overlay;
     }
@@ -336,45 +317,23 @@
     .motion-copy p { max-width: 34ch; margin-top: 22px; color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.85; }
 
     /* ── MOOD BOARD — its own full-viewport moment (fades in/out on scroll).
-       Material palettes only, NOT showroom pieces; placeholder for the client's mood-board shots. ── */
+       Real installed kitchens (ours + the interior-design studio's), not material
+       swatches — a swatch doesn't mean anything to someone who isn't in the trade;
+       a finished room does. ── */
     .moodband { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: clamp(30px,5vh,64px); overflow: hidden; border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); padding: clamp(80px,13vh,150px) 0; }
     .mood-head { padding: 0 clamp(20px,4vw,56px) clamp(28px,5vh,52px); }
     .mood-head .label { display: block; margin-bottom: 16px; }
     .mood-head h2 { font-family: var(--display); font-weight: 300; text-transform: uppercase; font-size: clamp(32px,5.4vw,80px); line-height: 0.94; letter-spacing: -0.018em; }
     .mood-head h2 em { color: var(--ash); }
     .mood-head p { color: var(--ash); font-size: 14px; font-weight: 300; line-height: 1.7; max-width: 42ch; margin-top: 18px; }
-    /* Three rows instead of one belt, each drifting against the one above it.
-       Opposing directions read as a moving palette rather than a single conveyor,
-       and three shallower rows show ~3x the material in the same vertical space. */
-    .mood-rows { display: flex; flex-direction: column; gap: clamp(16px, 2.4vh, 30px); }
-    /* Each material gets its own band with a standing label, so stone / tile /
-       cabinetry read as three distinct rows rather than one continuous belt.
-       Rows are tall — short rows meant a lot of small frames on screen at once,
-       which was just horizontal noise. */
+    .mood-rows { display: flex; flex-direction: column; }
     .mood-line { position: relative; overflow: hidden; }
-    .mood-line-label { position: absolute; left: 0; top: 0; bottom: 0; z-index: 3; display: flex; align-items: center;
-                       padding: 0 clamp(26px,3.4vw,52px) 0 clamp(20px,4vw,56px); pointer-events: none;
-                       background: linear-gradient(90deg, var(--void) 52%, rgba(10,9,8,0.82) 78%, rgba(10,9,8,0)); }
-    .mood-line-label span { font-family: var(--mono); font-size: clamp(10px,0.86vw,12px); letter-spacing: 0.3em;
-                            text-transform: uppercase; color: var(--bone); white-space: nowrap; }
-    .mood-line-label i { display: block; width: 26px; height: 1px; background: var(--line2, rgba(231,227,219,0.3)); margin-right: 14px; }
-    @media (max-width: 620px) {
-      /* the label plate was covering a third of a phone screen */
-      .mood-line-label { padding: 0 clamp(14px,3vw,20px) 0 clamp(14px,3vw,20px);
-                         background: linear-gradient(90deg, var(--void) 40%, rgba(10,9,8,0)); }
-      .mood-line-label i { width: 14px; margin-right: 9px; }
-      .mood-line-label span { font-size: 9px; letter-spacing: 0.22em; }
-    }
-    .mood-row { display: flex; gap: 2px; width: max-content; will-change: transform; }
-    .mood-row.r1 { animation: moodRight 150s linear infinite; }
-    .mood-row.r2 { animation: moodLeft  128s linear infinite; }
-    .mood-row.r3 { animation: moodRight 168s linear infinite; }
-    .mood-item { position: relative; flex: none; height: clamp(250px, 40vh, 440px); aspect-ratio: 3 / 4; overflow: hidden; background: var(--coal); }
+    .mood-row { display: flex; gap: 2px; width: max-content; will-change: transform; animation: moodRight 170s linear infinite; }
+    .mood-item { position: relative; flex: none; height: clamp(280px, 48vh, 520px); aspect-ratio: 4 / 3; overflow: hidden; background: var(--coal); }
     .mood-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.5s cubic-bezier(.2,.7,.2,1); }
     .mood-item:hover img { transform: scale(1.05); }
-    .mood-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, transparent 50%, rgba(10,9,8,0.74)); }
-    .mood-cap { position: absolute; left: 14px; bottom: 12px; z-index: 3; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.92); }
-    @keyframes moodLeft  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+    .mood-item::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, transparent 55%, rgba(10,9,8,0.78)); }
+    .mood-cap { position: absolute; left: 16px; bottom: 14px; z-index: 3; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(231,227,219,0.92); }
     @keyframes moodRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
     @media (prefers-reduced-motion: reduce) { .mood-row { animation: none; } }
 
@@ -589,6 +548,13 @@
     .rm-count { color: var(--ash); white-space: nowrap; }
     .rmodal-scroll { flex: 1 1 auto; overflow-y: auto; padding: clamp(18px,2.4vw,34px) clamp(26px,4vw,64px) clamp(30px,4vw,60px); }
 
+    /* ── COLLECTION — a real photo grid, not a text list. Replaces the old
+       interactive map + country-name list: it told people what we carry
+       but never showed them, which was the whole point of a showroom. ── */
+    .collection { max-width: 1560px; margin: 0 auto; padding: clamp(80px, 14vh, 170px) clamp(20px, 5vw, 80px) clamp(80px, 12vh, 150px); border-top: 1px solid var(--line-2); }
+    .collection .origins-head { margin-bottom: clamp(26px,3.6vh,40px); }
+    .collection .origins-head p { color: var(--ash); font-size: 14px; max-width: 54ch; margin-top: 10px; }
+    .collection-cta { margin-top: clamp(30px,4vw,52px); padding-top: clamp(24px,3vw,40px); border-top: 1px solid var(--line-2); display: flex; flex-wrap: wrap; gap: clamp(20px,3vw,40px); justify-content: center; }
     .bento { display: grid; grid-template-columns: repeat(2, 1fr); grid-auto-rows: clamp(116px, 15vw, 176px); grid-auto-flow: dense; gap: clamp(7px, 0.7vw, 12px); }
     @media (min-width: 680px) { .bento { grid-template-columns: repeat(3, 1fr); } }
     @media (min-width: 1024px) { .bento { grid-template-columns: repeat(4, 1fr); } }
@@ -639,7 +605,7 @@
       <a href="/stone">Stone</a>
       <a href="/cabinetry">Cabinetry</a>
       <a href="/tile">Tile</a>
-      <a href="#sourcing">Sourcing</a>
+      <a href="#collection">Collection</a>
       <a href="/appointments" class="nav-appt">Appointments</a>
     </div>
   </nav>
@@ -682,60 +648,44 @@
     <div class="line l2 reveal">The rest, in person.</div>
   </section>
 
-  <!-- INLINE SOURCING MAP -->
-  <section class="maparea" id="sourcing">
-    <div class="map-inner">
-      <div class="map-head reveal">
-        <div class="label"><span class="rule"></span>Sourcing</div>
-        <div class="map-lead">Drawn from quarries &amp; makers across five continents. Select a point to see what we carry.</div>
-      </div>
-      <div class="mapstage reveal" id="mapstage">
-        <svg class="arc-layer" id="arcs" viewBox="0 0 1000 361" preserveAspectRatio="none" aria-hidden="true"></svg>
-      </div>
-      <div class="map-legend reveal">
-        <span>● Origin — Los Angeles</span>
-        <span id="mapCount">7 sources · 5 continents</span>
-        <span>Current collection · subject to availability</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- FULL LIST: expandable country panels (the whole collection at a glance) -->
-  <section class="origins">
+  <!-- THE COLLECTION — real photo grid (stone, tile, cabinetry) -->
+  <section class="collection" id="collection">
     <div class="origins-head reveal">
       <h2>The collection</h2>
-      <span class="oh-note" id="ohNote"></span>
+      <p>A working sample of what's on the floor — stone, tile and cabinetry, shown as it actually looks. The full range is in the showroom, by appointment.</p>
     </div>
-    <div class="origin-cols" id="countryList"></div>
+    <div class="bento reveal">
+        <a class="b-tile feature" href="/tile"><img class="b-img" src="assets/img/tile/santorini-petals.jpg" alt="Santorini Petals — Tile" loading="lazy"><div class="b-cap"><div class="b-name">Santorini Petals</div><div class="b-meta">Tile</div></div></a>
+        <a class="b-tile big" href="/cabinetry"><img class="b-img" src="assets/img/cabinetry/cab-02.jpg" alt="White Oak — Cabinetry" loading="lazy"><div class="b-cap"><div class="b-name">White Oak</div><div class="b-meta">Cabinetry</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/ocean-green.jpg" alt="Ocean Green — Quartzite" loading="lazy"><div class="b-cap"><div class="b-name">Ocean Green</div><div class="b-meta">Quartzite</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/utopia.jpg" alt="Utopia — Quartzite" loading="lazy"><div class="b-cap"><div class="b-name">Utopia</div><div class="b-meta">Quartzite</div></div></a>
+        <a class="b-tile wide" href="/cabinetry"><img class="b-img" src="assets/img/cabinetry/cab-01.jpg" alt="Painted Shaker — Cabinetry" loading="lazy"><div class="b-cap"><div class="b-name">Painted Shaker</div><div class="b-meta">Cabinetry</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/avocatus-satin.jpg" alt="Avocatus Satin — Granite" loading="lazy"><div class="b-cap"><div class="b-name">Avocatus Satin</div><div class="b-meta">Granite</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/viridian.jpg" alt="Viridian — Granite" loading="lazy"><div class="b-cap"><div class="b-name">Viridian</div><div class="b-meta">Granite</div></div></a>
+        <a class="b-tile" href="/tile"><img class="b-img" src="assets/img/tile/almaza.jpg" alt="Almaza — Tile" loading="lazy"><div class="b-cap"><div class="b-name">Almaza</div><div class="b-meta">Tile</div></div></a>
+        <a class="b-tile big" href="/stone"><img class="b-img" src="assets/img/slab/cristallo-diamond-crystal.jpg" alt="Cristallo Diamond — Quartzite" loading="lazy"><div class="b-cap"><div class="b-name">Cristallo Diamond</div><div class="b-meta">Quartzite</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/stella-maestro.jpg" alt="Stella Maestro — Quartzite" loading="lazy"><div class="b-cap"><div class="b-name">Stella Maestro</div><div class="b-meta">Quartzite</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/vittara.jpg" alt="Vittara — Quartzite" loading="lazy"><div class="b-cap"><div class="b-name">Vittara</div><div class="b-meta">Quartzite</div></div></a>
+        <a class="b-tile" href="/cabinetry"><img class="b-img" src="assets/img/cabinetry/cab-04.jpg" alt="Navy Cabinetry — Cabinetry" loading="lazy"><div class="b-cap"><div class="b-name">Navy Cabinetry</div><div class="b-meta">Cabinetry</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/taj-mahal.jpg" alt="Taj Mahal — Quartzite" loading="lazy"><div class="b-cap"><div class="b-name">Taj Mahal</div><div class="b-meta">Quartzite</div></div></a>
+        <a class="b-tile wide" href="/tile"><img class="b-img" src="assets/img/tile/emporio-jade-crystal-look.jpg" alt="Emporio Jade — Tile" loading="lazy"><div class="b-cap"><div class="b-name">Emporio Jade</div><div class="b-meta">Tile</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/titanium.jpg" alt="Titanium — Granite" loading="lazy"><div class="b-cap"><div class="b-name">Titanium</div><div class="b-meta">Granite</div></div></a>
+        <a class="b-tile" href="/stone"><img class="b-img" src="assets/img/slab/fantasy-black.jpg" alt="Fantasy Black — Marble" loading="lazy"><div class="b-cap"><div class="b-name">Fantasy Black</div><div class="b-meta">Marble</div></div></a>
+        <a class="b-tile" href="/cabinetry"><img class="b-img" src="assets/img/cabinetry/cab-05.jpg" alt="Oak Island — Cabinetry" loading="lazy"><div class="b-cap"><div class="b-name">Oak Island</div><div class="b-meta">Cabinetry</div></div></a>
+        <a class="b-tile" href="/tile"><img class="b-img" src="assets/img/tile/masari.jpg" alt="Masari — Tile" loading="lazy"><div class="b-cap"><div class="b-name">Masari</div><div class="b-meta">Tile</div></div></a>
+    </div>
+    <div class="collection-cta reveal">
+      <a href="/stone" class="more">View all stone
+        <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+      </a>
+      <a href="/cabinetry" class="more">View cabinetry
+        <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+      </a>
+      <a href="/tile" class="more">View tile
+        <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
+      </a>
+    </div>
   </section>
-
-  <!-- REGION MODAL — near-fullpage bento of the region's stones (opens on map-pin click) -->
-  <div class="rmodal" id="regionModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Region collection">
-    <div class="rmodal-scrim" data-rclose></div>
-    <div class="rmodal-inner">
-      <button class="rmodal-close" id="rmClose" data-rclose aria-label="Close">✕</button>
-      <header class="rmodal-head">
-        <div class="rmodal-titles">
-          <div class="rm-region label"><span class="rule"></span><span id="rmRegion"></span></div>
-          <h2 id="rmName"></h2>
-          <p class="rm-lead" id="rmLead"></p>
-        </div>
-        <div class="rmodal-meta">
-          <span class="rm-flag" id="rmFlag" aria-hidden="true"></span>
-          <span class="rm-coord" id="rmCoord"></span>
-          <span class="rm-count" id="rmCount"></span>
-        </div>
-      </header>
-      <div class="rmodal-scroll">
-        <div class="bento" id="rmBento"></div>
-        <div class="rmodal-cta">
-          <a href="#invite" data-rclose>Reserve a viewing
-            <svg width="20" height="8" viewBox="0 0 20 8" fill="none"><path d="M0 4h18M15 1l3 3-3 3" stroke="currentColor" stroke-width="1"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- MOTION — showroom flythrough (real DJI footage) -->
   <section class="motion">
@@ -753,108 +703,39 @@
   <!-- MOOD BOARD — full-viewport moment, fades in/out on scroll. Real showroom stock:
        stone product photography + tile product photography + cabinetry cut from the
        high-res showroom set. Captions name what is actually pictured. -->
-  <section class="moodband" id="moodband" aria-label="Material moods">
+  <section class="moodband" id="moodband" aria-label="Kitchens on the floor">
     <div class="mood-head reveal">
       <span class="label">Moods</span>
-      <h2>In the <em>palette.</em></h2>
-      <p>Stone, tile and cabinetry — chosen for character. Three rows of what's on the floor, drifting past each other.</p>
+      <h2>Seen <em>installed.</em></h2>
+      <p>Stone, tile and cabinetry from the showroom and our interior-design studio — finished kitchens, not swatches.</p>
     </div>
     <div class="mood-rows">
-      <!-- Stone — drifts right · set of 12, duplicated for the seamless wrap -->
+      <!-- set of 12, duplicated for the seamless wrap -->
       <div class="mood-line">
-        <div class="mood-line-label" aria-hidden="true"><i></i><span>Stone</span></div>
-  <div class="mood-row r1">        <div class="mood-item"><img src="assets/img/material/mood/st-stella-maestro.jpg" alt="Stella Maestro" loading="lazy"><span class="mood-cap">Stella Maestro</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-titanium.jpg" alt="Titanium" loading="lazy"><span class="mood-cap">Titanium</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-acqua-bella.jpg" alt="Acqua Bella" loading="lazy"><span class="mood-cap">Acqua Bella</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-vittara.jpg" alt="Vittara" loading="lazy"><span class="mood-cap">Vittara</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-fantasy-lux.jpg" alt="Fantasy Lux" loading="lazy"><span class="mood-cap">Fantasy Lux</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-sandalus.jpg" alt="Sandalus" loading="lazy"><span class="mood-cap">Sandalus</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-cristallo-diamond-crystal.jpg" alt="Cristallo Diamond" loading="lazy"><span class="mood-cap">Cristallo Diamond</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-belvedere-satin.jpg" alt="Belvedere Satin" loading="lazy"><span class="mood-cap">Belvedere Satin</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-blue-tahoe.jpg" alt="Blue Tahoe" loading="lazy"><span class="mood-cap">Blue Tahoe</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-tempest-blue.jpg" alt="Tempest Blue" loading="lazy"><span class="mood-cap">Tempest Blue</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-calacatta-taupe.jpg" alt="Calacatta Taupe" loading="lazy"><span class="mood-cap">Calacatta Taupe</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-ebon.jpg" alt="Ebon" loading="lazy"><span class="mood-cap">Ebon</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-stella-maestro.jpg" alt="Stella Maestro" loading="lazy"><span class="mood-cap">Stella Maestro</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-titanium.jpg" alt="Titanium" loading="lazy"><span class="mood-cap">Titanium</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-acqua-bella.jpg" alt="Acqua Bella" loading="lazy"><span class="mood-cap">Acqua Bella</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-vittara.jpg" alt="Vittara" loading="lazy"><span class="mood-cap">Vittara</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-fantasy-lux.jpg" alt="Fantasy Lux" loading="lazy"><span class="mood-cap">Fantasy Lux</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-sandalus.jpg" alt="Sandalus" loading="lazy"><span class="mood-cap">Sandalus</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-cristallo-diamond-crystal.jpg" alt="Cristallo Diamond" loading="lazy"><span class="mood-cap">Cristallo Diamond</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-belvedere-satin.jpg" alt="Belvedere Satin" loading="lazy"><span class="mood-cap">Belvedere Satin</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-blue-tahoe.jpg" alt="Blue Tahoe" loading="lazy"><span class="mood-cap">Blue Tahoe</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-tempest-blue.jpg" alt="Tempest Blue" loading="lazy"><span class="mood-cap">Tempest Blue</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-calacatta-taupe.jpg" alt="Calacatta Taupe" loading="lazy"><span class="mood-cap">Calacatta Taupe</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/st-ebon.jpg" alt="Ebon" loading="lazy"><span class="mood-cap">Ebon</span></div>      </div>
-      </div>
-      <!-- Tile — drifts left · set of 16, duplicated for the seamless wrap -->
-      <div class="mood-line">
-        <div class="mood-line-label" aria-hidden="true"><i></i><span>Tile</span></div>
-  <div class="mood-row r2">        <div class="mood-item"><img src="assets/img/material/mood/ti-marduk.jpg" alt="Marduk wave-relief tile" loading="lazy"><span class="mood-cap">Marduk</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-marduk.jpg" alt="Marduk wave-relief tile" loading="lazy"><span class="mood-cap">Marduk</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-marduk.jpg" alt="Marduk wave-relief tile" loading="lazy"><span class="mood-cap">Marduk</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-marduk.jpg" alt="Marduk wave-relief tile" loading="lazy"><span class="mood-cap">Marduk</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-thalia-3d-carved-rosette.jpg" alt="Thalia Carved" loading="lazy"><span class="mood-cap">Thalia Carved</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-santorini-petals.jpg" alt="Santorini Petals" loading="lazy"><span class="mood-cap">Santorini Petals</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-calacatta-monet-petite-lantern-mosaic.jpg" alt="Calacatta Lantern" loading="lazy"><span class="mood-cap">Calacatta Lantern</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-monet-mosaic.jpg" alt="Monet Mosaic" loading="lazy"><span class="mood-cap">Monet Mosaic</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-envy-chevron.jpg" alt="Envy Chevron" loading="lazy"><span class="mood-cap">Envy Chevron</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-illumine-silver-dust-mermaid-scale.jpg" alt="Illumine Mermaid" loading="lazy"><span class="mood-cap">Illumine Mermaid</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/ti-scalloped-field-tile.jpg" alt="Scalloped Field" loading="lazy"><span class="mood-cap">Scalloped Field</span></div>      </div>
-      </div>
-      <!-- Cabinetry — drifts right · set of 14, duplicated for the seamless wrap -->
-      <div class="mood-line">
-        <div class="mood-line-label" aria-hidden="true"><i></i><span>Cabinetry</span></div>
-  <div class="mood-row r3">        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-painted-shaker.jpg" alt="Painted Shaker" loading="lazy"><span class="mood-cap">Painted Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-shaker.jpg" alt="White Oak" loading="lazy"><span class="mood-cap">White Oak</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy.jpg" alt="Navy Cabinetry" loading="lazy"><span class="mood-cap">Navy Cabinetry</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-run.jpg" alt="Oak & Quartzite" loading="lazy"><span class="mood-cap">Oak & Quartzite</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-light-shaker.jpg" alt="Light Shaker" loading="lazy"><span class="mood-cap">Light Shaker</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-oak-tall.jpg" alt="Oak Tall Run" loading="lazy"><span class="mood-cap">Oak Tall Run</span></div>
-        <div class="mood-item"><img src="assets/img/material/mood/cb-navy-glass.jpg" alt="Navy & Glass" loading="lazy"><span class="mood-cap">Navy & Glass</span></div>      </div>
+  <div class="mood-row"><div class="mood-item"><img src="assets/img/kitchen/dark-dramatic-1.jpg" alt="Dark & Dramatic kitchen" loading="lazy"><span class="mood-cap">Dark & Dramatic</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/dark-dramatic-3.jpg" alt="Dark & Dramatic kitchen" loading="lazy"><span class="mood-cap">Dark & Dramatic</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/modern-oak-1.jpg" alt="Modern Oak kitchen" loading="lazy"><span class="mood-cap">Modern Oak</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/modern-oak-3.jpg" alt="Modern Oak kitchen" loading="lazy"><span class="mood-cap">Modern Oak</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/classic-refined-1.jpg" alt="Classic & Refined kitchen" loading="lazy"><span class="mood-cap">Classic & Refined</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/classic-refined-3.jpg" alt="Classic & Refined kitchen" loading="lazy"><span class="mood-cap">Classic & Refined</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/exotic-stone-1.jpg" alt="Exotic Stone kitchen" loading="lazy"><span class="mood-cap">Exotic Stone</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/exotic-stone-2.jpg" alt="Exotic Stone kitchen" loading="lazy"><span class="mood-cap">Exotic Stone</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/light-luxe-1.jpg" alt="Light & Luxe kitchen" loading="lazy"><span class="mood-cap">Light & Luxe</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/light-luxe-3.jpg" alt="Light & Luxe kitchen" loading="lazy"><span class="mood-cap">Light & Luxe</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/spanish-hacienda-1.jpg" alt="Spanish Hacienda kitchen" loading="lazy"><span class="mood-cap">Spanish Hacienda</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/spanish-hacienda-2.jpg" alt="Spanish Hacienda kitchen" loading="lazy"><span class="mood-cap">Spanish Hacienda</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/dark-dramatic-1.jpg" alt="Dark & Dramatic kitchen" loading="lazy"><span class="mood-cap">Dark & Dramatic</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/dark-dramatic-3.jpg" alt="Dark & Dramatic kitchen" loading="lazy"><span class="mood-cap">Dark & Dramatic</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/modern-oak-1.jpg" alt="Modern Oak kitchen" loading="lazy"><span class="mood-cap">Modern Oak</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/modern-oak-3.jpg" alt="Modern Oak kitchen" loading="lazy"><span class="mood-cap">Modern Oak</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/classic-refined-1.jpg" alt="Classic & Refined kitchen" loading="lazy"><span class="mood-cap">Classic & Refined</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/classic-refined-3.jpg" alt="Classic & Refined kitchen" loading="lazy"><span class="mood-cap">Classic & Refined</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/exotic-stone-1.jpg" alt="Exotic Stone kitchen" loading="lazy"><span class="mood-cap">Exotic Stone</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/exotic-stone-2.jpg" alt="Exotic Stone kitchen" loading="lazy"><span class="mood-cap">Exotic Stone</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/light-luxe-1.jpg" alt="Light & Luxe kitchen" loading="lazy"><span class="mood-cap">Light & Luxe</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/light-luxe-3.jpg" alt="Light & Luxe kitchen" loading="lazy"><span class="mood-cap">Light & Luxe</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/spanish-hacienda-1.jpg" alt="Spanish Hacienda kitchen" loading="lazy"><span class="mood-cap">Spanish Hacienda</span></div>
+        <div class="mood-item"><img src="assets/img/kitchen/spanish-hacienda-2.jpg" alt="Spanish Hacienda kitchen" loading="lazy"><span class="mood-cap">Spanish Hacienda</span></div>      </div>
       </div>
     </div>
   </section>
@@ -919,17 +800,9 @@
   </div>
 
 
-  <!-- FULL-BLEED STATEMENT (light) -->
+  <!-- FULL-BLEED STATEMENT -->
   <section class="statement">
-    <!-- No panoramic of the floor exists in the library — the stills are all 4:3
-         single bays and the only wide clip is the flythrough already used above.
-         So the statement is a three-way diagonal cut instead: stone / cabinetry /
-         tile, the three things the showroom is, split like [ / / ]. -->
-    <div class="st-cut" aria-hidden="true">
-      <figure class="cut c1"><img src="assets/img/material/cut-stone.jpg" alt=""></figure>
-      <figure class="cut c2"><img src="assets/img/material/cut-cabinetry.jpg" alt=""></figure>
-      <figure class="cut c3"><img src="assets/img/material/cut-tile.jpg" alt=""></figure>
-    </div>
+    <img class="st-img" src="assets/img/kitchen/dark-dramatic-2.jpg" alt="A finished kitchen built from the showroom's stone and cabinetry">
     <div class="st-cap reveal">
       <div class="label">The showroom</div>
       <div class="st-title">Seen best<br>in person.</div>
@@ -969,7 +842,7 @@
         <a href="/stone">Stone</a>
         <a href="/cabinetry">Cabinetry</a>
         <a href="/tile">Tile</a>
-        <a href="#sourcing">Sourcing</a>
+        <a href="#collection">Collection</a>
       </div>
     </div>
     <div class="foot-legal">
@@ -979,269 +852,6 @@
   </footer>
 
   <script>
-    // ── INLINE SOURCING MAP (data from the working slab list, Jul 2026) ──
-    (function () {
-      var stage = document.getElementById('mapstage');
-      if (!stage) return;
-      var LAT_TOP = 74, LAT_BOT = -56;
-      var ORIGIN = { name: 'Los Angeles', lat: 34.0, lon: -118.2 };
-      // Sourcing drawn from the working slab list (Jul 2026). Colour/pattern names
-      // only — no vendor names (per client: vendors may be shown for cabinetry only).
-      // Per client: do NOT show exact slab photos — origins are shown by REGION instead.
-      // prov = quarry province (blank => "Provenance on request"). PROVCOORD holds the
-      // motif coordinate. Provinces flagged * need Cal's confirmation.
-      var ORIGINS = [
-        { c: 'Italy', region: 'Europe', lat: 43.0, lon: 12.5,
-          lead: 'Quarried in the Apuan Alps of Carrara — Tuscan beds worked since Roman times.', mats: [
-          { n: 'Calacatta Antico', t: 'Marble', prov: 'Carrara' },
-          { n: 'Paonazzo Nero Extra', t: 'Marble', prov: 'Carrara' },
-          { n: 'Calacatta Viola Antico', t: 'Marble', prov: 'Carrara' },
-          { n: 'Arabescato', t: 'Marble', prov: 'Carrara', img: 'assets/img/slab/arabescato.jpg' },
-          { n: 'Cristallo Juliet', t: 'Quartzite', prov: '' },
-          { n: 'Cristallo Tiffany', t: 'Quartzite', prov: '' },
-          { n: 'Luminescence', t: 'Quartzite', prov: '' },
-          { n: 'Bianco Carrara', t: 'Marble', prov: 'Carrara', img: 'assets/img/slab/bianco-carrara-1.jpg' },
-          { n: 'Calacatta Viola', t: 'Marble', prov: 'Carrara' } ] },
-        { c: 'Brazil', region: 'South America', lat: -10.0, lon: -52.0,
-          lead: 'Cut from the quartzite and granite belts of Bahia and Espírito Santo.', mats: [
-          { n: 'Taj Mahal', t: 'Quartzite', prov: 'Bahia', img: 'assets/img/slab/taj-mahal.jpg' },
-          { n: 'Ocean Green', t: 'Quartzite', prov: 'Bahia', img: 'assets/img/slab/ocean-green.jpg' },
-          { n: 'Acqua Mare', t: 'Quartzite', prov: 'Bahia', img: 'assets/img/slab/acqua-mare.jpg' },
-          { n: 'Patagonia Sky', t: 'Granite', prov: 'Espírito Santo' },
-          { n: 'Arturo Crystal', t: 'Quartzite', prov: 'Espírito Santo', img: 'assets/img/slab/arturo-crystal.jpg' },
-          { n: 'Volcano', t: 'Granite', prov: 'Espírito Santo' },
-          { n: 'Aqua Venato', t: 'Quartzite', prov: '', img: 'assets/img/slab/aqua-venato.jpg' },
-          { n: 'Blue Tahoe', t: 'Quartzite', prov: '', img: 'assets/img/slab/blue-tahoe.jpg' },
-          { n: 'Calacatta Taupe', t: 'Quartzite', prov: '', img: 'assets/img/slab/calacatta-taupe.jpg' },
-          { n: 'Mystic Jade', t: 'Quartzite', prov: '', img: 'assets/img/slab/mystic-jade.jpg' },
-          { n: 'Fantasy Lux', t: 'Quartzite', prov: '', img: 'assets/img/slab/fantasy-lux.jpg' },
-          { n: 'Artemis', t: 'Quartzite', prov: '', img: 'assets/img/slab/artemis.jpg' },
-          { n: 'Gold Coast', t: 'Quartzite', prov: '', img: 'assets/img/slab/gold-coast.jpg' },
-          { n: 'Nickel', t: 'Quartzite', prov: '', img: 'assets/img/slab/nickel.jpg' },
-          { n: 'New Louise Blue', t: 'Quartzite', prov: '', img: 'assets/img/slab/new-louise-blue.jpg' },
-          { n: 'Utopia', t: 'Quartzite', prov: '', img: 'assets/img/slab/utopia.jpg' },
-          { n: 'Ebon', t: 'Quartzite', prov: '', img: 'assets/img/slab/ebon.jpg' },
-          { n: 'Avocatus Satin', t: 'Granite', prov: '', img: 'assets/img/slab/avocatus-satin.jpg' },
-          { n: 'Negresco Satin', t: 'Granite', prov: '', img: 'assets/img/slab/negresco-satin.jpg' },
-          { n: 'Titanium', t: 'Granite', prov: '', img: 'assets/img/slab/titanium.jpg' },
-          { n: 'Viridian', t: 'Granite', prov: '', img: 'assets/img/slab/viridian.jpg' },
-          { n: 'Riviera', t: 'Quartzite', prov: '', img: 'assets/img/slab/riviera.jpg' },
-          { n: 'Sandalus', t: 'Quartzite', prov: '', img: 'assets/img/slab/sandalus.jpg' },
-          { n: 'Nacarado', t: 'Quartzite', prov: '', img: 'assets/img/slab/nacarado.jpg' },
-          { n: 'Leblon', t: 'Quartzite', prov: '', img: 'assets/img/slab/leblon.jpg' },
-          { n: 'Cristallo Diamond Crystal', t: 'Quartzite', prov: '', img: 'assets/img/slab/cristallo-diamond-crystal.jpg' },
-          { n: 'Cristallo Vitrium', t: 'Quartzite', prov: '', img: 'assets/img/slab/cristallo-vitrium.jpg' },
-          { n: 'Acqua Bella', t: 'Quartzite', prov: '', img: 'assets/img/slab/acqua-bella.jpg' },
-          { n: 'Stella Maestro', t: 'Quartzite', prov: '', img: 'assets/img/slab/stella-maestro.jpg' },
-          { n: 'Jade Crystal', t: 'Quartzite', prov: '', img: 'assets/img/slab/jade-crystal.jpg' },
-          { n: 'Vittara', t: 'Quartzite', prov: '', img: 'assets/img/slab/vittara.jpg' },
-          { n: 'Tempest Blue', t: 'Quartzite', prov: '', img: 'assets/img/slab/tempest-blue.jpg' } ] },
-        { c: 'Turkey', region: 'Anatolia', lat: 39.0, lon: 35.0,
-          lead: 'Banded onyx from the Anatolian highlands.', mats: [
-          { n: 'Onyx Ivory', t: 'Onyx', prov: 'Afyon' } ] },
-        { c: 'Spain', region: 'Iberia', lat: 40.2, lon: -3.7,
-          lead: 'Engineered surfaces — pressed and fired in Castellón, Spain\'s ceramic heartland.', mats: [
-          { n: 'Trance', t: 'Sintered Stone', prov: 'Castellón' },
-          { n: 'Bergen', t: 'Porcelain', prov: 'Castellón' } ] },
-        { c: 'India', region: 'South Asia', lat: 22.0, lon: 79.0,
-          lead: 'Granite and marble from the Deccan plateau and the quarry belts of Rajasthan.', mats: [
-          { n: 'Blizzard', t: 'Granite', prov: '', img: 'assets/img/slab/blizzard.jpg' },
-          { n: 'Desert Canyon', t: 'Granite', prov: '', img: 'assets/img/slab/desert-canyon.jpg' },
-          { n: 'Kalahari', t: 'Granite', prov: '', img: 'assets/img/slab/kalahari.jpg' },
-          { n: 'Fantasy Black', t: 'Marble', prov: '', img: 'assets/img/slab/fantasy-black.jpg' } ] },
-        { c: 'Namibia', region: 'Southern Africa', lat: -22.0, lon: 17.0,
-          lead: 'Deep granite drawn from the Erongo highlands of the Namib interior.', mats: [
-          { n: 'Belvedere Satin', t: 'Granite', prov: '', img: 'assets/img/slab/belvedere-satin.jpg' } ] },
-        { c: 'Mexico', region: 'North America', lat: 20.5, lon: -99.0,
-          lead: 'Soft highland limestone, quarried and honed in central Mexico.', mats: [
-          { n: 'Crema Vosscione', t: 'Limestone', prov: '', img: 'assets/img/slab/crema-vosscione.jpg' } ] }
-      ];
-      var PROVCOORD = {
-        'Carrara': '44.08°N 10.10°E',
-        'Bahia': '12.97°S 41.50°W',
-        'Espírito Santo': '20.85°S 41.11°W',
-        'Afyon': '38.76°N 30.54°E',
-        'Castellón': '39.99°N 0.04°W'
-      };
-      // Simplified national marks (crest/lettering omitted) — small, subtle, greyed
-      // at rest via CSS; used only as a quiet origin cue beside each country name.
-      var FLAGS = {
-        'Italy': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="1" height="2" fill="#009246"/><rect x="1" width="1" height="2" fill="#F1F2F1"/><rect x="2" width="1" height="2" fill="#CE2B37"/></svg>',
-        'Brazil': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#009C3B"/><polygon points="1.5,0.25 2.72,1 1.5,1.75 0.28,1" fill="#FFDF00"/><circle cx="1.5" cy="1" r="0.42" fill="#002776"/></svg>',
-        'Turkey': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#E30A17"/><circle cx="1.35" cy="1" r="0.42" fill="#fff"/><circle cx="1.5" cy="1" r="0.34" fill="#E30A17"/><polygon points="1.95,0.80 2.00,0.935 2.14,0.938 2.03,1.025 2.07,1.162 1.95,1.08 1.83,1.162 1.87,1.025 1.76,0.938 1.90,0.935" fill="#fff"/></svg>',
-        'Spain': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#AA151B"/><rect y="0.5" width="3" height="1" fill="#F1BF00"/></svg>',
-        'India': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#FF9933"/><rect y="0.667" width="3" height="0.666" fill="#fff"/><rect y="1.333" width="3" height="0.667" fill="#138808"/><circle cx="1.5" cy="1" r="0.2" fill="none" stroke="#054A91" stroke-width="0.05"/></svg>',
-        'Namibia': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="3" height="2" fill="#009543"/><polygon points="0,0 3,0 0,2" fill="#0033A0"/><line x1="0" y1="2" x2="3" y2="0" stroke="#fff" stroke-width="0.62"/><line x1="0" y1="2" x2="3" y2="0" stroke="#D21034" stroke-width="0.4"/><circle cx="0.82" cy="0.6" r="0.17" fill="#FFCE00"/></svg>',
-        'Mexico': '<svg viewBox="0 0 3 2" preserveAspectRatio="none"><rect width="1" height="2" fill="#006847"/><rect x="1" width="1" height="2" fill="#F1F2F1"/><rect x="2" width="1" height="2" fill="#CE1126"/><circle cx="1.5" cy="1" r="0.22" fill="none" stroke="#8a5a2b" stroke-width="0.06"/></svg>'
-      };
-      function fmtCoord(lat, lon) {
-        return Math.abs(lat).toFixed(2) + '°' + (lat >= 0 ? 'N' : 'S') + '   ' + Math.abs(lon).toFixed(2) + '°' + (lon >= 0 ? 'E' : 'W');
-      }
-      // Generative topographic-contour motif — a cartographic stand-in for the region
-      // (no slab photo). Built once; the coordinate label makes each drawer feel distinct.
-      function makeTopo() {
-        var cx = 100, cy = 60, rings = 8, seg = 46, out = '';
-        for (var k = 0; k < rings; k++) {
-          var base = 8 + k * 10, d = '';
-          for (var i = 0; i <= seg; i++) {
-            var a = i / seg * Math.PI * 2;
-            var rr = base + Math.sin(a * 3 + k * 0.9) * 3.2 + Math.cos(a * 2 - k * 0.6) * 2.2;
-            var x = cx + Math.cos(a) * rr * 1.7, y = cy + Math.sin(a) * rr;
-            d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1);
-          }
-          out += '<path class="' + (k === 2 ? 'lead-ring' : '') + '" d="' + d + 'Z"/>';
-        }
-        return '<svg class="origin-topo" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + out + '</svg>';
-      }
-      var TOPO_SVG = makeTopo();
-      // Type → generic swatch fallback (for stones we don't yet have a photo of).
-      var TYPE_SWATCH = { 'Onyx': 'onyx', 'Marble': 'marble', 'Quartzite': 'marble',
-        'Granite': 'marble', 'Limestone': 'marble', 'Sintered Stone': 'tile', 'Porcelain': 'tile' };
-      // The image behind a stone: its real slab photo if we have one, else a type swatch.
-      function stoneSlab(m) {
-        return m.img || ('assets/img/material/swatch/' + (TYPE_SWATCH[m.t] || 'marble') + '.jpg');
-      }
-      function projX(lon) { return (lon + 180) / 360; }
-      function projY(lat) { return (LAT_TOP - lat) / (LAT_TOP - LAT_BOT); }
-      var arcs = document.getElementById('arcs'), VB_W = 1000, VB_H = 361;
-      var ox = projX(ORIGIN.lon), oy = projY(ORIGIN.lat);
-      ORIGINS.forEach(function (o, i) {
-        var px = projX(o.lon), py = projY(o.lat);
-        var x1 = ox * VB_W, y1 = oy * VB_H, x2 = px * VB_W, y2 = py * VB_H;
-        var cx = (x1 + x2) / 2, cy = Math.min(y1, y2) - Math.abs(x2 - x1) * 0.16 - 20;
-        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', 'M' + x1 + ' ' + y1 + ' Q' + cx + ' ' + cy + ' ' + x2 + ' ' + y2);
-        path.setAttribute('class', 'arc');
-        arcs.appendChild(path);
-        var pin = document.createElement('button');
-        pin.className = 'pin';
-        pin.style.left = (px * 100) + '%'; pin.style.top = (py * 100) + '%';
-        pin.setAttribute('aria-label', o.c);
-        pin.innerHTML = '<span class="pin-label">' + o.c + '</span><span class="pin-dot"></span>';
-        pin.addEventListener('click', function () { openRegion(i, pin); });
-        stage.appendChild(pin);
-      });
-      // Keep the legend count in step with the data (region -> continent).
-      (function () {
-        var el = document.getElementById('mapCount');
-        if (!el) return;
-        var toCont = { 'Europe': 'Europe', 'Iberia': 'Europe', 'South America': 'South America',
-          'Anatolia': 'Asia', 'South Asia': 'Asia', 'Southern Africa': 'Africa', 'North America': 'North America' };
-        var conts = {};
-        ORIGINS.forEach(function (o) { conts[toCont[o.region] || o.region] = 1; });
-        var ns = ORIGINS.length, nc = Object.keys(conts).length;
-        el.textContent = ns + (ns === 1 ? ' source · ' : ' sources · ') + nc + (nc === 1 ? ' continent' : ' continents');
-      })();
-      (function () {
-        var pin = document.createElement('div');
-        pin.className = 'pin origin';
-        pin.style.left = (ox * 100) + '%'; pin.style.top = (oy * 100) + '%';
-        pin.innerHTML = '<span class="pin-label">Los Angeles</span><span class="pin-dot"></span>';
-        stage.appendChild(pin);
-      })();
-      // ── REGION MODAL — near-fullpage bento of a region's stones ──
-      var modal = document.getElementById('regionModal');
-      var rmRegion = document.getElementById('rmRegion'), rmName = document.getElementById('rmName'),
-        rmLead = document.getElementById('rmLead'), rmFlag = document.getElementById('rmFlag'),
-        rmCoord = document.getElementById('rmCoord'), rmCount = document.getElementById('rmCount'),
-        rmBento = document.getElementById('rmBento');
-      var activePin = null;
-      // Deterministic bento sizing — feels art-directed but auto-fills any stone count.
-      function bentoClass(i, n) {
-        if (n === 1) return 'feature';
-        if (n === 2) return 'wide';
-        if (n <= 4) return i === 0 ? 'big' : '';
-        if (i % 7 === 0) return 'big';        // periodic hero tile
-        if (i % 7 === 3) return 'wide';       // periodic wide accent
-        if (i % 11 === 6) return 'tall';
-        return '';
-      }
-      function bentoTile(m, i, n) {
-        var size = bentoClass(i, n);
-        var prov = m.prov ? m.prov : 'Provenance on request';
-        var meta = m.t + ' <span class="dotsep"></span> ' + prov;
-        var media, cls = 'b-tile' + (size ? ' ' + size : '');
-        if (m.img) {
-          media = '<img class="b-img" src="' + m.img + '" alt="' + m.n + ' slab" loading="lazy">';
-        } else {
-          cls += ' noimg';
-          media = '<span class="b-req">On request</span>' + TOPO_SVG.replace('origin-topo', 'origin-topo b-topo');
-        }
-        return '<figure class="' + cls + '">' + media +
-          '<figcaption class="b-cap"><div class="b-name">' + m.n + '</div>' +
-          '<div class="b-meta">' + meta + '</div></figcaption></figure>';
-      }
-      function openRegion(i, pin) {
-        var o = ORIGINS[i], n = o.mats.length;
-        rmRegion.textContent = o.region;
-        rmName.textContent = o.c;
-        rmLead.textContent = o.lead || '';
-        rmFlag.innerHTML = FLAGS[o.c] || '';
-        rmCoord.textContent = fmtCoord(o.lat, o.lon);
-        rmCount.textContent = n + (n === 1 ? ' stone' : ' stones');
-        rmBento.innerHTML = o.mats.map(function (m, k) { return bentoTile(m, k, n); }).join('');
-        modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('modal-lock');
-        var sc = modal.querySelector('.rmodal-scroll'); if (sc) sc.scrollTop = 0;
-        if (activePin) activePin.classList.remove('active');
-        if (pin) { pin.classList.add('active'); activePin = pin; }
-      }
-      function closeRegion() {
-        modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('modal-lock');
-        if (activePin) { activePin.classList.remove('active'); activePin = null; }
-      }
-      modal.querySelectorAll('[data-rclose]').forEach(function (el) { el.addEventListener('click', closeRegion); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeRegion(); });
-
-      // ── FULL LIST: three columns — Italy, Brazil, everywhere else ──
-      //    Was a seven-panel accordion that ran well past a screen. Same ORIGINS
-      //    data, but grouped so the whole section holds one viewport; each column
-      //    scrolls internally rather than growing the page.
-      (function () {
-        var clist = document.getElementById('countryList');
-        if (!clist) return;
-
-        var by = {};
-        ORIGINS.forEach(function (o) { by[o.c] = o; });
-        var rest = ORIGINS.filter(function (o) { return o.c !== 'Italy' && o.c !== 'Brazil'; });
-
-        function rowsFor(mats) {
-          return mats.map(function (m) {
-            return '<div class="pb-row" data-type="' + m.t + '" style="--slab:url(\'' + stoneSlab(m) + '\')">' +
-                   '<span class="pb-mat">' + m.n + '</span><span class="pb-type">' + m.t + '</span></div>';
-          }).join('');
-        }
-        function column(name, flagKey, count, inner, wide) {
-          var el = document.createElement('div');
-          el.className = 'ocol' + (wide ? ' wide' : '');
-          el.innerHTML =
-            '<div class="ocol-head">' +
-              (flagKey && FLAGS[flagKey] ? '<span class="c-flag" aria-hidden="true">' + FLAGS[flagKey] + '</span>' : '') +
-              '<span class="o-name">' + name + '</span>' +
-              '<span class="o-count">' + count + (count === 1 ? ' stone' : ' stones') + '</span>' +
-            '</div>' +
-            '<div class="ocol-list"><div class="prov-block">' + inner + '</div></div>';
-          clist.appendChild(el);
-        }
-
-        ['Italy', 'Brazil'].forEach(function (c) {
-          var o = by[c];
-          if (o) column(o.c, o.c, o.mats.length, rowsFor(o.mats), c === 'Brazil');
-        });
-
-        var otherCount = rest.reduce(function (n, o) { return n + o.mats.length; }, 0);
-        var otherInner = rest.map(function (o) {
-          return '<div class="ocol-sub">' + o.c + ' · ' + o.region + '</div>' + rowsFor(o.mats);
-        }).join('');
-        column('Other origins', null, otherCount, otherInner);
-
-        var note = document.getElementById('ohNote');
-        if (note) note.textContent = ORIGINS.reduce(function (n, o) { return n + o.mats.length; }, 0) +
-                                     ' stones · ' + ORIGINS.length + ' origins';
-      })();
-    })();
-
     // ── FULL-BLEED / MOTION VIDEOS: lazy-load + play only while in view ──
     (function () {
       var vids = [].slice.call(document.querySelectorAll('video[data-autoplay]'));
