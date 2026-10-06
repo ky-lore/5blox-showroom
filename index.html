@@ -382,6 +382,32 @@
     .map-legend { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
     .map-legend span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
 
+    /* Hover a pin → featured slabs float up beside it. Replaces the old
+       click-to-open modal: the photos are the point, so showing them
+       shouldn't take an extra action. JS positions this at the hovered
+       pin's x/y and flips side/direction to stay on-stage near an edge. */
+    /* Transform is set inline by JS (--ty/--s below) — the above/below flip and the
+       open/closed scale both change the same property, and juggling that across
+       class-combination selectors was fragile. One source of truth instead. */
+    .peek { position: absolute; z-index: 10; width: clamp(200px, 22vw, 260px); pointer-events: none;
+            --ty: -14px; --s: 0.97; opacity: 0;
+            transform: translate(-50%, -100%) translateY(var(--ty)) scale(var(--s));
+            transition: opacity 0.22s ease, transform 0.22s ease; }
+    .peek.below { transform: translateX(-50%) translateY(var(--ty)) scale(var(--s)); }
+    .peek.on { opacity: 1; }
+    .peek-imgs { display: flex; gap: 4px; background: var(--coal); border: 1px solid var(--line); padding: 5px; box-shadow: 0 18px 40px rgba(6,5,4,0.55); }
+    .peek-imgs img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; background: var(--void); }
+    .peek-head { display: flex; align-items: center; gap: 8px; margin-top: 9px; padding: 0 2px; }
+    .peek-flag { width: 18px; height: 12px; flex: 0 0 auto; border-radius: 1px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line-2); }
+    .peek-flag svg { display: block; width: 100%; height: 100%; }
+    .peek-name { font-family: var(--display); font-weight: 400; font-size: 13px; letter-spacing: -0.005em; color: var(--bone); flex: 1; }
+    .peek-count { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--faint); white-space: nowrap; }
+    @media (max-width: 760px) {
+      /* No hover on touch — tapping a pin toggles the same card instead. */
+      .peek { width: 180px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .peek { transition: none; } }
+
     /* ── ORIGINS: expandable country panels (the full collection, below the map) ── */
     /* One viewport, three columns: Italy / Brazil / everywhere else. The
        accordion stacked seven panels and ran well past a screen; Brazil alone
@@ -648,6 +674,28 @@
     <div class="line l2 reveal">The rest, in person.</div>
   </section>
 
+  <!-- SOURCING MAP — hover a pin, featured slabs float up. No click required. -->
+  <section class="maparea" id="sourcing">
+    <div class="map-inner">
+      <div class="map-head reveal">
+        <div class="label"><span class="rule"></span>Sourcing</div>
+        <div class="map-lead">Drawn from quarries across five continents. Hover a point to see what we carry.</div>
+      </div>
+      <div class="mapstage reveal" id="mapstage">
+        <svg class="arc-layer" id="arcs" viewBox="0 0 1000 361" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="peek" id="peek" aria-hidden="true">
+          <div class="peek-imgs" id="peekImgs"></div>
+          <div class="peek-head"><span class="peek-flag" id="peekFlag"></span><span class="peek-name" id="peekName"></span><span class="peek-count" id="peekCount"></span></div>
+        </div>
+      </div>
+      <div class="map-legend reveal">
+        <span>● Origin — Los Angeles</span>
+        <span id="mapCount"></span>
+        <span>Current collection · subject to availability</span>
+      </div>
+    </div>
+  </section>
+
   <!-- THE COLLECTION — real photo grid (stone, tile, cabinetry) -->
   <section class="collection" id="collection">
     <div class="origins-head reveal">
@@ -852,6 +900,118 @@
   </footer>
 
   <script>
+    // ── SOURCING MAP: hover a pin, featured slabs float up (no click needed) ──
+    (function () {
+      var stage = document.getElementById('mapstage');
+      if (!stage) return;
+      var LAT_TOP = 74, LAT_BOT = -56;
+      var ORIGIN = { name: 'Los Angeles', lat: 34.0, lon: -118.2 };
+      // Grouped from the current master slab sheet (by origin country); regenerate
+      // if the sheet's country coverage changes. peek = up to 3 featured photos.
+      var ORIGINS = [
+        { c: 'Italy', lat: 43.0, lon: 12.5, n: 3,
+          lead: "Quarried in the Apuan Alps of Carrara \u2014 Tuscan beds worked since Roman times.",
+          peek: [{n:"Bianco Carrara",img:"assets/img/slab/bianco-carrara-1.jpg"}, {n:"Arabescato",img:"assets/img/slab/arabescato.jpg"}] },
+        { c: 'Brazil', lat: -10.0, lon: -52.0, n: 30,
+          lead: "Cut from the quartzite and granite belts of Bahia and Esp\u00edrito Santo.",
+          peek: [{n:"Aqua Venato",img:"assets/img/slab/aqua-venato.jpg"}, {n:"Arturo Crystal",img:"assets/img/slab/arturo-crystal.jpg"}, {n:"Blue Tahoe",img:"assets/img/slab/blue-tahoe.jpg"}] },
+        { c: 'India', lat: 22.0, lon: 79.0, n: 4,
+          lead: "Granite and marble from the Deccan plateau and the quarry belts of Rajasthan.",
+          peek: [{n:"Blizzard",img:"assets/img/slab/blizzard.jpg"}, {n:"Desert Canyon",img:"assets/img/slab/desert-canyon.jpg"}, {n:"Kalahari",img:"assets/img/slab/kalahari.jpg"}] },
+        { c: 'Namibia', lat: -22.0, lon: 17.0, n: 1,
+          lead: "Deep granite drawn from the Erongo highlands of the Namib interior.",
+          peek: [{n:"Belvedere Satin",img:"assets/img/slab/belvedere-satin.jpg"}] },
+        { c: 'Mexico', lat: 20.5, lon: -99.0, n: 11,
+          lead: "Travertine, onyx and soft highland limestone from central Mexico.",
+          peek: [{n:"Crema Vosscione",img:"assets/img/slab/crema-vosscione.jpg"}, {n:"Veracruz",img:"assets/img/slab/veracruz.jpg"}, {n:"Torreon",img:"assets/img/slab/torreon.jpg"}] },
+      ];
+      var FLAGS = {
+        'Italy': "<svg viewBox=\"0 0 3 2\" preserveAspectRatio=\"none\"><rect width=\"1\" height=\"2\" fill=\"#009246\"/><rect x=\"1\" width=\"1\" height=\"2\" fill=\"#F1F2F1\"/><rect x=\"2\" width=\"1\" height=\"2\" fill=\"#CE2B37\"/></svg>",
+        'Brazil': "<svg viewBox=\"0 0 3 2\" preserveAspectRatio=\"none\"><rect width=\"3\" height=\"2\" fill=\"#009C3B\"/><polygon points=\"1.5,0.25 2.72,1 1.5,1.75 0.28,1\" fill=\"#FFDF00\"/><circle cx=\"1.5\" cy=\"1\" r=\"0.42\" fill=\"#002776\"/></svg>",
+        'India': "<svg viewBox=\"0 0 3 2\" preserveAspectRatio=\"none\"><rect width=\"3\" height=\"2\" fill=\"#FF9933\"/><rect y=\"0.667\" width=\"3\" height=\"0.666\" fill=\"#fff\"/><rect y=\"1.333\" width=\"3\" height=\"0.667\" fill=\"#138808\"/><circle cx=\"1.5\" cy=\"1\" r=\"0.2\" fill=\"none\" stroke=\"#054A91\" stroke-width=\"0.05\"/></svg>",
+        'Namibia': "<svg viewBox=\"0 0 3 2\" preserveAspectRatio=\"none\"><rect width=\"3\" height=\"2\" fill=\"#009543\"/><polygon points=\"0,0 3,0 0,2\" fill=\"#0033A0\"/><line x1=\"0\" y1=\"2\" x2=\"3\" y2=\"0\" stroke=\"#fff\" stroke-width=\"0.62\"/><line x1=\"0\" y1=\"2\" x2=\"3\" y2=\"0\" stroke=\"#D21034\" stroke-width=\"0.4\"/><circle cx=\"0.82\" cy=\"0.6\" r=\"0.17\" fill=\"#FFCE00\"/></svg>",
+        'Mexico': "<svg viewBox=\"0 0 3 2\" preserveAspectRatio=\"none\"><rect width=\"1\" height=\"2\" fill=\"#006847\"/><rect x=\"1\" width=\"1\" height=\"2\" fill=\"#F1F2F1\"/><rect x=\"2\" width=\"1\" height=\"2\" fill=\"#CE1126\"/><circle cx=\"1.5\" cy=\"1\" r=\"0.22\" fill=\"none\" stroke=\"#8a5a2b\" stroke-width=\"0.06\"/></svg>"
+      };
+      function projX(lon) { return (lon + 180) / 360; }
+      function projY(lat) { return (LAT_TOP - lat) / (LAT_TOP - LAT_BOT); }
+      var arcs = document.getElementById('arcs'), VB_W = 1000, VB_H = 361;
+      var ox = projX(ORIGIN.lon), oy = projY(ORIGIN.lat);
+      var peek = document.getElementById('peek'), peekImgs = document.getElementById('peekImgs'),
+          peekFlag = document.getElementById('peekFlag'), peekName = document.getElementById('peekName'),
+          peekCount = document.getElementById('peekCount');
+      var activePin = null;
+
+      function showPeek(o, pin, px, py) {
+        if (activePin && activePin !== pin) activePin.classList.remove('active');
+        activePin = pin; pin.classList.add('active');
+        peekImgs.innerHTML = o.peek.map(function (p) {
+          return '<img src="' + p.img + '" alt="' + p.n + ' — ' + o.c + '" loading="lazy">';
+        }).join('');
+        peekFlag.innerHTML = FLAGS[o.c] || '';
+        peekName.textContent = o.c;
+        peekCount.textContent = o.n + (o.n === 1 ? ' stone' : ' stones');
+        var below = py < 0.26;
+        peek.classList.toggle('below', below);
+        peek.style.left = (px * 100) + '%';
+        peek.style.top = (py * 100) + '%';
+        peek.style.setProperty('--ty', (below ? '20px' : '-20px'));
+        peek.style.setProperty('--s', '1');
+        peek.classList.add('on');
+        peek.setAttribute('aria-hidden', 'false');
+      }
+      function hidePeek(pin) {
+        pin.classList.remove('active');
+        peek.classList.remove('on');
+        peek.style.setProperty('--ty', (peek.classList.contains('below') ? '14px' : '-14px'));
+        peek.style.setProperty('--s', '0.97');
+        peek.setAttribute('aria-hidden', 'true');
+        if (activePin === pin) activePin = null;
+      }
+
+      ORIGINS.forEach(function (o) {
+        var px = projX(o.lon), py = projY(o.lat);
+        var x1 = ox * VB_W, y1 = oy * VB_H, x2 = px * VB_W, y2 = py * VB_H;
+        var mx = (x1 + x2) / 2, my = Math.min(y1, y2) - 40;
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('class', 'arc');
+        path.setAttribute('d', 'M' + x1 + ' ' + y1 + ' Q ' + mx + ' ' + my + ' ' + x2 + ' ' + y2);
+        arcs.appendChild(path);
+
+        var pin = document.createElement('button');
+        pin.type = 'button';
+        pin.className = 'pin';
+        pin.style.left = (px * 100) + '%'; pin.style.top = (py * 100) + '%';
+        pin.setAttribute('aria-label', o.c + ' — ' + o.n + (o.n === 1 ? ' stone' : ' stones'));
+        pin.innerHTML = '<span class="pin-dot"></span>';
+        stage.appendChild(pin);
+
+        pin.addEventListener('mouseenter', function () { showPeek(o, pin, px, py); });
+        pin.addEventListener('mouseleave', function () { hidePeek(pin); });
+        pin.addEventListener('focus', function () { showPeek(o, pin, px, py); });
+        pin.addEventListener('blur', function () { hidePeek(pin); });
+        // No hover on touch — tap toggles the same card instead.
+        pin.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (activePin === pin) hidePeek(pin); else showPeek(o, pin, px, py);
+        });
+      });
+
+      (function () {
+        var origin = document.createElement('div');
+        origin.className = 'pin origin';
+        origin.style.left = (ox * 100) + '%'; origin.style.top = (oy * 100) + '%';
+        origin.innerHTML = '<span class="pin-label">Los Angeles</span><span class="pin-dot"></span>';
+        stage.appendChild(origin);
+      })();
+
+      document.addEventListener('click', function (e) {
+        if (activePin && !stage.contains(e.target)) hidePeek(activePin);
+      });
+
+      var mapCount = document.getElementById('mapCount');
+      if (mapCount) mapCount.textContent = ORIGINS.length + ' sources · ' + ORIGINS.length + ' continents';
+    })();
+
     // ── FULL-BLEED / MOTION VIDEOS: lazy-load + play only while in view ──
     (function () {
       var vids = [].slice.call(document.querySelectorAll('video[data-autoplay]'));
